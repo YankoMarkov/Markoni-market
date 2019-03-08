@@ -1,0 +1,22 @@
+.bg-markoni {
+    background-color: #17a2b8;
+}
+
+.text-markoni {
+    color: #17a2b8;
+}
+
+.hr-2 {
+    height: 2px;
+}
+
+textarea {
+    resize: none;
+}
+
+.home-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 1.5rem 3rem;
+}
