@@ -16,11 +16,12 @@
 			</button>
 			<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
 
-				<!--<select class="btn btn-info" th:field="*{type}">-->
-					<!--<option th:each="type : ${allTypes}"-->
-					        <!--th:value="${type}"-->
-					        <!--th:text="#{${'seedstarter.type.' + type}}">Wireframe</option>-->
-				<!--</select>-->
+				<div class="form-group blu-margin">
+					<select class="form-control" th:field="*{id}">
+						<option value="0">Select category</option>
+						<option th:each="category : ${categoryes}" th:value="${category.id}" th:text="${category.name}"></option>
+					</select>
+				</div>
 
 				<ul class="navbar-nav">
 					<li class="nav-item">
