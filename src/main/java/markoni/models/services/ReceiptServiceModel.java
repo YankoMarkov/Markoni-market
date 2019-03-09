@@ -1,18 +1,24 @@
-package markoni.entities;
+package markoni.models.services;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-public class Receipt extends BaseEntity {
+public class ReceiptServiceModel {
 
+    private String id;
     private BigDecimal fee;
     private LocalDateTime issuedOn;
-    private User recipient;
-    private Package aPackage;
+    private UserServiceModel recipient;
+    private PackageServiceModel aPackage;
 
-    @Column(name = "fee", nullable = false)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public BigDecimal getFee() {
         return this.fee;
     }
@@ -21,7 +27,6 @@ public class Receipt extends BaseEntity {
         this.fee = fee;
     }
 
-    @Column(name = "issued_on", nullable = false)
     public LocalDateTime getIssuedOn() {
         return this.issuedOn;
     }
@@ -30,22 +35,19 @@ public class Receipt extends BaseEntity {
         this.issuedOn = issuedOn;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id", referencedColumnName = "id")
-    public User getRecipient() {
+    public UserServiceModel getRecipient() {
         return this.recipient;
     }
 
-    public void setRecipient(User recipient) {
+    public void setRecipient(UserServiceModel recipient) {
         this.recipient = recipient;
     }
 
-    @OneToOne(mappedBy = "receipt")
-    public Package getaPackage() {
+    public PackageServiceModel getaPackage() {
         return this.aPackage;
     }
 
-    public void setaPackage(Package aPackage) {
+    public void setaPackage(PackageServiceModel aPackage) {
         this.aPackage = aPackage;
     }
 }

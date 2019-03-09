@@ -1,18 +1,24 @@
-package markoni.entities;
+package markoni.models.services;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Entity
-public class Part extends BaseEntity {
+public class PartServiceModel {
 
+    private String id;
     private String name;
     private BigDecimal price;
     private Integer quantity;
-    private Set<Product> products;
+    private Set<ProductServiceModel> products;
 
-    @Column(name = "name", nullable = false)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -21,7 +27,6 @@ public class Part extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "price", nullable = false)
     public BigDecimal getPrice() {
         return this.price;
     }
@@ -30,7 +35,6 @@ public class Part extends BaseEntity {
         this.price = price;
     }
 
-    @Column(name = "quantity", nullable = false)
     public Integer getQuantity() {
         return this.quantity;
     }
@@ -39,15 +43,11 @@ public class Part extends BaseEntity {
         this.quantity = quantity;
     }
 
-    @ManyToMany
-    @JoinTable(name = "parts_products",
-            joinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-    public Set<Product> getProducts() {
+    public Set<ProductServiceModel> getProducts() {
         return this.products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(Set<ProductServiceModel> products) {
         this.products = products;
     }
 }

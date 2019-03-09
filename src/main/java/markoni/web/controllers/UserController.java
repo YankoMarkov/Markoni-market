@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 		if (bindingResult.hasErrors() ||
 				this.userService.userExist(userRegister.getUsername()) ||
 				!userRegister.getPassword().equals(userRegister.getConfirmPassword()) ||
-				!this.userService.saveUser(userServiceModel)) {
+				this.userService.saveUser(userServiceModel) == null) {
 			
 			redirectAttributes.addFlashAttribute("register", userRegister);
 			redirectAttributes.addFlashAttribute("errors", bindingResult.getFieldErrors().stream()

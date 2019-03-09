@@ -1,22 +1,30 @@
-package markoni.entities;
+package markoni.models.services;
 
-import javax.persistence.*;
+import markoni.entities.Status;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-public class Package extends BaseEntity {
+public class PackageServiceModel {
 
+    private String id;
     private String description;
     private Double weight;
     private String shippingAddress;
     private Status status;
     private LocalDateTime estimatedDeliveryDay;
-    private User recipient;
-    private Receipt receipt;
-    private List<Product> products;
+    private UserServiceModel recipient;
+    private ReceiptServiceModel receipt;
+    private List<ProductServiceModel> products;
 
-    @Column(name = "description", nullable = false)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getDescription() {
         return this.description;
     }
@@ -25,7 +33,6 @@ public class Package extends BaseEntity {
         this.description = description;
     }
 
-    @Column(name = "weight", nullable = false)
     public Double getWeight() {
         return this.weight;
     }
@@ -34,7 +41,6 @@ public class Package extends BaseEntity {
         this.weight = weight;
     }
 
-    @Column(name = "shipping_address", nullable = false)
     public String getShippingAddress() {
         return this.shippingAddress;
     }
@@ -43,8 +49,6 @@ public class Package extends BaseEntity {
         this.shippingAddress = shippingAddress;
     }
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return this.status;
     }
@@ -53,7 +57,6 @@ public class Package extends BaseEntity {
         this.status = status;
     }
 
-    @Column(name = "estimated_delivery_day", nullable = false)
     public LocalDateTime getEstimatedDeliveryDay() {
         return this.estimatedDeliveryDay;
     }
@@ -62,35 +65,27 @@ public class Package extends BaseEntity {
         this.estimatedDeliveryDay = estimatedDeliveryDay;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id", referencedColumnName = "id")
-    public User getRecipient() {
+    public UserServiceModel getRecipient() {
         return this.recipient;
     }
 
-    public void setRecipient(User recipient) {
+    public void setRecipient(UserServiceModel recipient) {
         this.recipient = recipient;
     }
 
-    @OneToOne
-    @JoinColumn(name = "receipt_id", referencedColumnName = "id")
-    public Receipt getReceipt() {
+    public ReceiptServiceModel getReceipt() {
         return this.receipt;
     }
 
-    public void setReceipt(Receipt receipt) {
+    public void setReceipt(ReceiptServiceModel receipt) {
         this.receipt = receipt;
     }
 
-    @ManyToMany
-    @JoinTable(name = "packages_products",
-            joinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-    public List<Product> getProducts() {
+    public List<ProductServiceModel> getProducts() {
         return this.products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductServiceModel> products) {
         this.products = products;
     }
 }

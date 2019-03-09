@@ -20,7 +20,7 @@ public class Category extends BaseEntity {
 		this.name = name;
 	}
 	
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	public Set<Product> getProducts() {
 		return this.products;
 	}

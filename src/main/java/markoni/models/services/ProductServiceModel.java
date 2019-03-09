@@ -1,21 +1,27 @@
-package markoni.entities;
+package markoni.models.services;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-public class Product extends BaseEntity {
+public class ProductServiceModel {
 
+    private String id;
     private String name;
     private String image;
     private BigDecimal price;
-    private List<Part> parts;
-    private Category category;
-    private Set<Package> packages;
+    private List<PartServiceModel> parts;
+    private CategoryServiceModel category;
+    private Set<PackageServiceModel> packages;
 
-    @Column(name = "name", nullable = false)
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -24,7 +30,6 @@ public class Product extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "image")
     public String getImage() {
         return this.image;
     }
@@ -33,7 +38,6 @@ public class Product extends BaseEntity {
         this.image = image;
     }
 
-    @Column(name = "price", nullable = false)
     public BigDecimal getPrice() {
         return this.price;
     }
@@ -42,31 +46,27 @@ public class Product extends BaseEntity {
         this.price = price;
     }
 
-    @ManyToMany(mappedBy = "products")
-    public List<Part> getParts() {
+    public List<PartServiceModel> getParts() {
         return this.parts;
     }
 
-    public void setParts(List<Part> parts) {
+    public void setParts(List<PartServiceModel> parts) {
         this.parts = parts;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    public Category getCategory() {
+    public CategoryServiceModel getCategory() {
         return this.category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryServiceModel category) {
         this.category = category;
     }
 
-    @ManyToMany(mappedBy = "products")
-    public Set<Package> getPackages() {
+    public Set<PackageServiceModel> getPackages() {
         return this.packages;
     }
 
-    public void setPackages(Set<Package> packages) {
+    public void setPackages(Set<PackageServiceModel> packages) {
         this.packages = packages;
     }
 }
