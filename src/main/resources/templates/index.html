@@ -16,19 +16,19 @@
 			</button>
 			<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
 
-				<div class="form-group blu-margin">
-					<select class="form-control" th:field="*{id}">
-						<option value="0">Select category</option>
-						<option th:each="category : ${categoryes}" th:value="${category.id}" th:text="${category.name}"></option>
-					</select>
-				</div>
+				<!--<div class="form-group blu-margin">-->
+					<!--<select class="form-control" th:field="*{id}">-->
+						<!--<option value="0">Select category</option>-->
+						<!--<option th:each="category : ${categoryes}" th:value="${category.id}" th:text="${category.name}"></option>-->
+					<!--</select>-->
+				<!--</div>-->
 
-				<ul class="navbar-nav">
+				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<a class="nav-link nav-link-white" th:href="@{/}">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link nav-link-white active" th:href="@{/user/login}">Login</a>
+						<a class="nav-link nav-link-white" th:href="@{/user/login}">Login</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link nav-link-white" th:href="@{/user/register}">Register</a>

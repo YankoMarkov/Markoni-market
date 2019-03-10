@@ -1,5 +1,7 @@
 package markoni.models.bindings;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,6 +15,7 @@ public class UserRegisterBindingModel {
 
     @NotNull
     @NotEmpty(message = "missing username")
+    @Length(min = 3, message = "Username must by minimum 3 symbols")
     public String getUsername() {
         return this.username;
     }
