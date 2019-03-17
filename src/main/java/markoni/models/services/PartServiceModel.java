@@ -1,6 +1,7 @@
 package markoni.models.services;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PartServiceModel {
@@ -9,8 +10,7 @@ public class PartServiceModel {
     private String name;
     private BigDecimal price;
     private Integer quantity;
-    private Set<ProductServiceModel> products;
-
+    
     public String getId() {
         return this.id;
     }
@@ -41,13 +41,5 @@ public class PartServiceModel {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Set<ProductServiceModel> getProducts() {
-        return this.products;
-    }
-
-    public void setProducts(Set<ProductServiceModel> products) {
-        this.products = products;
     }
 }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/head"/>
+</head>
+<body>
+<div class="container-fluid">
+	<header>
+		<th:block th:if="${session.role.equals('ADMIN')}">
+			<th:block th:replace="fragments/adminNavbarWithCategory"/>
+		</th:block>
+		<th:block th:unless="${session.role.equals('ADMIN')}">
+			<th:block th:replace="fragments/userNavbarWithCategory"/>
+		</th:block>
+	</header>
+	<main class="mt-3">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<article class="gallery-wrap">
+						<div class="img-big-wrap">
+							<div><a href="#"><img class="img-thumbnail"
+							                      src="https://s9.postimg.org/tupxkvfj3/image.jpg"></a></div>
+						</div> <!-- slider-product.// -->
+						<div class="img-small-wrap">
+							<div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
+							<div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
+							<div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
+							<div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
+						</div> <!-- slider-nav.// -->
+					</article>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12">
+							<h2>Kodak 'Brownie' Flash B Camera</h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<p class="description">
+								Classic film camera. Uses 620 roll film.
+								Has a 2&frac14; x 3&frac14; inch image size.
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<span class="sr-only">Four out of Five Stars</span>
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+							<span class="label label-success">61</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 bottom-rule">
+							<h3 class="product-price">$129.00</h3>
+						</div>
+					</div>
+					<div class="row add-to-cart">
+						<div class="col-md-5 product-qty">
+							<span class="btn btn-default btn-lg btn-qty">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</span>
+							<input class="btn btn-default btn-lg btn-qty" value="1"/>
+							
+							<span class="btn btn-default btn-lg btn-qty">
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							</span>
+						</div>
+						<div class="col-md-4">
+							<button class="btn btn-lg btn-brand btn-full-width">
+								Add to Cart
+							</button>
+						</div>
+					</div><!-- end row -->
+					<div class="row">
+						<div class="col-md-4 text-center">
+							<span class="monospaced">In Stock</span>
+						</div>
+					</div><!-- end row -->
+					<div class="row">
+						<div class="col-md-12 bottom-rule top-10"></div>
+					</div><!-- end row -->
+					<div class="row">
+						<div class="col-md-12 top-10">
+							<p>To order by telephone, <a href="tel:18005551212">please call 1-800-555-1212</a></p>
+						</div>
+					</div>
+					<div class="container">
+						<h2>Toggleable Tabs</h2>
+						<br>
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#home">Description</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
+							</li>
+						</ul>
+						
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div id="home" class="container tab-pane active"><br>
+								<h3>Description:</h3>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+									incididunt ut labore et dolore magna aliqua.</p>
+							</div>
+							<div id="menu1" class="container tab-pane fade"><br>
+								<h3>Menu 1</h3>
+								<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+									ea commodo consequat.</p>
+							</div>
+							<div id="menu2" class="container tab-pane fade"><br>
+								<h3>Menu 2</h3>
+								<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+									laudantium, totam rem aperiam.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer>
+		<th:block th:replace="fragments/footer"/>
+	</footer>
+</div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package markoni.models.services;
 import markoni.entities.Status;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PackageServiceModel {
@@ -16,7 +17,11 @@ public class PackageServiceModel {
     private UserServiceModel recipient;
     private ReceiptServiceModel receipt;
     private List<ProductServiceModel> products;
-
+    
+    public PackageServiceModel() {
+        this.products = new ArrayList<>();
+    }
+    
     public String getId() {
         return this.id;
     }

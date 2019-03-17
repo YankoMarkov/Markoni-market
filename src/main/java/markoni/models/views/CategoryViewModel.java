@@ -1,6 +1,6 @@
 package markoni.models.views;
 
-public class CategoryAllViewModel {
+public class CategoryViewModel {
 
     private String id;
     private String name;

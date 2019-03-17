@@ -1,6 +1,6 @@
 package markoni.models.bindings;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class UserLoginBindingModel {
@@ -8,8 +8,8 @@ public class UserLoginBindingModel {
 	private String username;
 	private String password;
 	
-	@NotNull
-	@NotEmpty(message = "missing username")
+	@NotNull(message = "Username cannot be null.")
+	@NotBlank(message = "Username cannot be empty.")
 	public String getUsername() {
 		return this.username;
 	}
@@ -18,8 +18,8 @@ public class UserLoginBindingModel {
 		this.username = username;
 	}
 	
-	@NotNull
-	@NotEmpty(message = "missing password")
+	@NotNull(message = "Password cannot be null.")
+	@NotBlank(message = "Password cannot be empty.")
 	public String getPassword() {
 		return this.password;
 	}

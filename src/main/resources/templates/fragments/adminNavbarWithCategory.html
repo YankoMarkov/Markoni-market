@@ -6,12 +6,15 @@
 	</button>
 	<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
 		<div class="btn-group">
-			<select id="category" type="button" class="btn btn-info dropdown-toggle" th:field="${categories}">
-				<option value="" disabled>Select Category...</option>
-				<option th:each="category : ${categories}"
-				        th:value="${category.id}"
-				        th:text="${category.name}"></option>
-			</select>
+			<form th:action="@{/home}" th:method="get">
+				<select type="button" class="btn btn-info dropdown-toggle" onchange="submit();" th:name="categoryId">
+					<option value="">Select Category...</option>
+					<option th:each="category : ${categories}"
+					        th:value="${category.id}"
+					        th:text="${category.name}"
+					        th:selected="${category.id == categoryId}"></option>
+				</select>
+			</form>
 		</div>
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item">
@@ -24,7 +27,13 @@
 				<a class="nav-link nav-link-white" th:href="@{/packages/delivered}">Delivered</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link nav-link-white" th:href="@{/packages/create}">Create</a>
+				<a class="nav-link nav-link-white" th:href="@{/packages/create}">Package</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link nav-link-white" th:href="@{/category/create}">Category</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link nav-link-white" th:href="@{/product/create}">Product</a>
 			</li>
 		</ul>
 		<ul class="navbar-nav ml-auto">
@@ -36,9 +45,6 @@
 			</li>
 			<li class="nav-item">
 				<a class="nav-link nav-link-white" th:href="@{/receipt}">Receipt</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link nav-link-white" th:href="@{/category/create}">Category</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link nav-link-white" th:href="@{/user/logout}">Logout</a>

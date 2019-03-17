@@ -9,27 +9,16 @@
 <div class="container-fluid">
 	<header>
 		<th:block th:if="${session.role.equals('ADMIN')}">
-			<th:block th:replace="fragments/adminNavbarWithCategory"/>
+			<th:block th:replace="fragments/adminNavbarWithoutCategory"/>
 		</th:block>
 		<th:block th:unless="${session.role.equals('ADMIN')}">
-			<th:block th:replace="fragments/userNavbarWithCategory"/>
+			<th:block th:replace="fragments/userNavbarWithoutCategory"/>
 		</th:block>
 	</header>
 	<main class="mt-3">
 		<hr class="bg-markoni hr-2"/>
 		<div class="jumbotron bg-markoni">
-			<th:block th:if="${categoryName == null}">
-				<h1 class="text-white d-flex justify-content-center">All Products.</h1>
-			</th:block>
-			<th:block th:if="${categoryName != null}">
-				<h1 class="text-white d-flex justify-content-center" th:text="|All ${categoryName} Products.|"></h1>
-			</th:block>
-			<hr class="bg-white hr-2"/>
-			<form class="mx-auto w-25" th:action="@{/product/searched}" th:method="get">
-				<div class="d-flex justify-content-center active-cyan-3 active-cyan-4 mb-4">
-					<input class="form-control" type="text" placeholder="Search" aria-label="Search" name="searchName"/>
-				</div>
-			</form>
+			<h1 class="text-white d-flex justify-content-center">All Searched Products.</h1>
 			<hr class="bg-white hr-2"/>
 			<div class="print-container container-fluid">
 				<div class="row mb-4 home-container">

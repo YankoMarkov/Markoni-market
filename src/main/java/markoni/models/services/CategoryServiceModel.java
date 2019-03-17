@@ -1,5 +1,6 @@
 package markoni.models.services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class CategoryServiceModel {
@@ -7,7 +8,11 @@ public class CategoryServiceModel {
     private String id;
     private String name;
     private Set<ProductServiceModel> products;
-
+    
+    public CategoryServiceModel() {
+        this.products = new HashSet<>();
+    }
+    
     public String getId() {
         return this.id;
     }

@@ -9,7 +9,6 @@ public class ReceiptServiceModel {
     private BigDecimal fee;
     private LocalDateTime issuedOn;
     private UserServiceModel recipient;
-    private PackageServiceModel aPackage;
 
     public String getId() {
         return this.id;
@@ -41,13 +40,5 @@ public class ReceiptServiceModel {
 
     public void setRecipient(UserServiceModel recipient) {
         this.recipient = recipient;
-    }
-
-    public PackageServiceModel getaPackage() {
-        return this.aPackage;
-    }
-
-    public void setaPackage(PackageServiceModel aPackage) {
-        this.aPackage = aPackage;
     }
 }

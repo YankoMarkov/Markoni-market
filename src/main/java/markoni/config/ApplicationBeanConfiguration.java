@@ -14,9 +14,4 @@ public class ApplicationBeanConfiguration {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-	
-	@Bean
-	public Validator validator() {
-		return Validation.buildDefaultValidatorFactory().getValidator();
-	}
 }
