@@ -35,8 +35,8 @@ public class ProductController extends BaseController {
 	}
 	
 	@GetMapping("/create")
-	public ModelAndView product(@ModelAttribute("productCreate") ProductCreateBindingModel productCreate,
-	                            ModelAndView modelAndView) {
+	public ModelAndView productCreate(@ModelAttribute("productCreate") ProductCreateBindingModel productCreate,
+	                                  ModelAndView modelAndView) {
 		List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
 				.map(category -> this.modelMapper.map(category, CategoryViewModel.class))
 				.collect(Collectors.toList());
@@ -45,8 +45,8 @@ public class ProductController extends BaseController {
 	}
 	
 	@PostMapping("/create")
-	public ModelAndView productConfirm(@Valid @ModelAttribute("productCreate") ProductCreateBindingModel productCreate,
-	                                   BindingResult bindingResult) {
+	public ModelAndView productCreateConfirm(@Valid @ModelAttribute("productCreate") ProductCreateBindingModel productCreate,
+	                                         BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return this.view("productCreate");
 		}
@@ -62,7 +62,7 @@ public class ProductController extends BaseController {
 	}
 	
 	@GetMapping("/details")
-	public ModelAndView details() {
+	public ModelAndView productDetails() {
 		return this.view("productDetails");
 	}
 	

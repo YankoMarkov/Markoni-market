@@ -2,8 +2,6 @@ package markoni.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Package extends BaseEntity {
@@ -15,11 +13,6 @@ public class Package extends BaseEntity {
 	private LocalDateTime estimatedDeliveryDay;
 	private User recipient;
 	private Receipt receipt;
-	private List<Product> products;
-	
-	public Package() {
-		this.products = new ArrayList<>();
-	}
 	
 	@Column(name = "description", nullable = false)
 	public String getDescription() {
@@ -77,25 +70,12 @@ public class Package extends BaseEntity {
 		this.recipient = recipient;
 	}
 	
-	@OneToOne(targetEntity = Receipt.class)
-	@JoinColumn(name = "receipt_id", referencedColumnName = "id")
+	@OneToOne(mappedBy = "aPackage")
 	public Receipt getReceipt() {
 		return this.receipt;
 	}
 	
 	public void setReceipt(Receipt receipt) {
 		this.receipt = receipt;
-	}
-	
-	@ManyToMany(targetEntity = Product.class)
-	@JoinTable(name = "packages_products",
-			joinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-	public List<Product> getProducts() {
-		return this.products;
-	}
-	
-	public void setProducts(List<Product> products) {
-		this.products = products;
 	}
 }

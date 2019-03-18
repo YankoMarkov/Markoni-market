@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Controller
@@ -57,6 +59,7 @@ public class PackageController extends BaseController {
 		packageServiceModel.setRecipient(userServiceModel);
 		packageServiceModel.setProducts(userServiceModel.getProducts());
 		packageServiceModel.setStatus(Status.PENDING);
+		packageServiceModel.setEstimatedDeliveryDay(LocalDateTime.now());
 		if (this.packageService.savePackage(packageServiceModel) == null) {
 			return this.view("packageCreate");
 		}

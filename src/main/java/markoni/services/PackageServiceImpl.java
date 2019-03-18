@@ -1,11 +1,16 @@
 package markoni.services;
 
 import markoni.entities.Package;
+import markoni.entities.Status;
 import markoni.models.services.PackageServiceModel;
 import markoni.repositories.PackageRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PackageServiceImpl implements PackageService {
@@ -23,6 +28,37 @@ public class PackageServiceImpl implements PackageService {
 	public PackageServiceModel savePackage(PackageServiceModel packageService) {
 		Package aPackage = this.modelMapper.map(packageService, Package.class);
 		aPackage = this.packageRepository.saveAndFlush(aPackage);
+		if (aPackage == null) {
+			return null;
+		}
+		return this.modelMapper.map(aPackage, PackageServiceModel.class);
+	}
+	
+	@Override
+	public List<PackageServiceModel> getAllPackagesByStatus(Status status) {
+		List<Package> packages = this.packageRepository.findAllByStatus(status);
+		if (packages == null) {
+			return new ArrayList<>();
+		}
+		return packages.stream()
+				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
+				.collect(Collectors.toUnmodifiableList());
+	}
+	
+	@Override
+	public List<PackageServiceModel> getAllPackagesByUserAndStatus(String username, Status status) {
+		List<Package> packages = this.packageRepository.findAllByRecipientAndStatus(username, status);
+		if (packages == null) {
+			return new ArrayList<>();
+		}
+		return packages.stream()
+				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
+				.collect(Collectors.toUnmodifiableList());
+	}
+	
+	@Override
+	public PackageServiceModel getPackageById(String id) {
+		Package aPackage = this.packageRepository.findById(id).orElse(null);
 		if (aPackage == null) {
 			return null;
 		}
