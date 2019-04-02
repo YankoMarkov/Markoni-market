@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/head"/>
+</head>
+<body>
+<div class="container-fluid">
+	<header>
+		<th:block th:if="${session.role.equals('ADMIN')}">
+			<th:block th:replace="fragments/adminNavbarWithoutCategory"/>
+		</th:block>
+		<th:block th:unless="${session.role.equals('ADMIN')}">
+			<th:block th:replace="fragments/userNavbarWithoutCategory"/>
+		</th:block>
+	</header>
+	<main class="mt-3">
+		<hr class="bg-org.yanmark.markoni hr-2"/>
+		<div class="jumbotron bg-org.yanmark.markoni">
+			<h1 class="text-white d-flex justify-content-center">All Searched Products.</h1>
+			<hr class="bg-white hr-2"/>
+			<div class="print-container container-fluid">
+				<div class="row mb-4 home-container">
+					<th:block th:each="product : ${products}">
+						<div class="panel panel-primary">
+							<div class="panel-heading mb-3">
+								<h5 class="text-white" th:text="${product.name}"></h5>
+							</div>
+							<div class="panel-body">
+								<a th:href="@{/product/details}">
+									<img th:src="${product.image}" class="img-thumbnail" alt="Image">
+								</a>
+							</div>
+							<div class="panel-footer mt-2">
+								<p class="text-white" th:text="|Price: ${product.price}|"></p>
+							</div>
+							<div class="panel-footer">
+								<p class="text-white" th:text="|Description: ${product.description}|"></p>
+							</div>
+						</div>
+					</th:block>
+				</div>
+			</div>
+		</div>
+		<hr class="bg-org.yanmark.markoni hr-2 mt-5"/>
+	</main>
+	<footer>
+		<th:block th:replace="fragments/footer"/>
+	</footer>
+</div>
+</body>
+</html>
