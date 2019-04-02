@@ -69,6 +69,12 @@
 				       th:field="*{image}"/>
 				<h6 th:each="error : ${#fields.errors('image')}" th:text="${error}"></h6>
 			</div>
+			<div class="form-group" th:classappend="${#fields.hasErrors('weight')}? 'text-danger'">
+				<label for="weight" class="text-markoni">Weight</label>
+				<input type="number" step=".01" class="form-control" id="weight" placeholder="Weight..." name="weight"
+				       th:field="*{weight}"/>
+				<h6 th:each="error : ${#fields.errors('weight')}" th:text="${error}"></h6>
+			</div>
 			<div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'text-danger'">
 				<label for="description" class="text-markoni">Description</label>
 				<textarea class="form-control" id="description" name="description" rows="5"

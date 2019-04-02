@@ -1,9 +1,10 @@
 package markoni.web.controllers;
 
-import markoni.models.services.CategoryServiceModel;
-import markoni.models.services.ProductServiceModel;
-import markoni.models.views.CategoryViewModel;
-import markoni.models.views.ProductHomeViewModel;
+import markoni.domain.models.services.CategoryServiceModel;
+import markoni.domain.models.services.ProductServiceModel;
+import markoni.domain.models.views.CategoryViewModel;
+import markoni.domain.models.views.ProductHomeViewModel;
+import markoni.domain.models.views.ProductIndexViewModel;
 import markoni.services.CategoryService;
 import markoni.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -32,8 +33,31 @@ public class HomeController extends BaseController {
 	}
 	
 	@GetMapping("/")
-	public ModelAndView index() {
-		return this.view("index");
+	public ModelAndView index(ModelAndView modelAndView,
+	                          @RequestParam(required = false) String categoryId) {
+		List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
+				.map(category -> this.modelMapper.map(category, CategoryViewModel.class))
+				.collect(Collectors.toList());
+		
+		Collection<ProductServiceModel> products = null;
+		
+		if (categoryId != null && categoryId.length() > 0) {
+			CategoryServiceModel selectedCategory = this.categoryService.getCategoryById(categoryId);
+			if (selectedCategory != null) {
+				products = selectedCategory.getProducts();
+				modelAndView.addObject("categoryName", selectedCategory.getName());
+			}
+		}
+		if (products == null) {
+			products = this.productService.getAllProducts();
+		}
+		List<ProductIndexViewModel> productIndexViewModels = products.stream()
+				.map(product -> this.modelMapper.map(product, ProductIndexViewModel.class))
+				.collect(Collectors.toList());
+		
+		modelAndView.addObject("products", productIndexViewModels);
+		modelAndView.addObject("categories", categoryViewModels);
+		return view("index", modelAndView);
 	}
 	
 	@GetMapping("/home")

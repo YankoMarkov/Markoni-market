@@ -1,7 +1,7 @@
 package markoni.repositories;
 
-import markoni.entities.Package;
-import markoni.entities.Status;
+import markoni.domain.entities.Package;
+import markoni.domain.entities.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

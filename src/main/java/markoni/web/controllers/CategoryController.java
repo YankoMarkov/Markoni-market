@@ -1,7 +1,7 @@
 package markoni.web.controllers;
 
-import markoni.models.bindings.CategoryCreateBindingModel;
-import markoni.models.services.CategoryServiceModel;
+import markoni.domain.models.bindings.CategoryCreateBindingModel;
+import markoni.domain.models.services.CategoryServiceModel;
 import markoni.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

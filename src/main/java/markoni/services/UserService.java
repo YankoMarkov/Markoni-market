@@ -1,6 +1,6 @@
 package markoni.services;
 
-import markoni.models.services.UserServiceModel;
+import markoni.domain.models.services.UserServiceModel;
 
 import java.util.List;
 

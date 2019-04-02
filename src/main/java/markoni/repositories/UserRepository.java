@@ -1,6 +1,6 @@
 package markoni.repositories;
 
-import markoni.entities.User;
+import markoni.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

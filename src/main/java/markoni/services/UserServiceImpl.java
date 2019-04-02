@@ -1,8 +1,8 @@
 package markoni.services;
 
-import markoni.entities.Role;
-import markoni.entities.User;
-import markoni.models.services.UserServiceModel;
+import markoni.domain.entities.Role;
+import markoni.domain.entities.User;
+import markoni.domain.models.services.UserServiceModel;
 import markoni.repositories.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
@@ -30,8 +30,10 @@ public class UserServiceImpl implements UserService {
 		User user = this.modelMapper.map(userService, User.class);
 		user.setPassword(DigestUtils.sha256Hex(userService.getPassword()));
 		setUserRole(user);
-		user = this.userRepository.saveAndFlush(user);
-		if (user == null) {
+		try {
+			user = this.userRepository.saveAndFlush(user);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 		return this.modelMapper.map(user, UserServiceModel.class);

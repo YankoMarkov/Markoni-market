@@ -1,7 +1,7 @@
 package markoni.services;
 
-import markoni.entities.Category;
-import markoni.models.services.CategoryServiceModel;
+import markoni.domain.entities.Category;
+import markoni.domain.models.services.CategoryServiceModel;
 import markoni.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

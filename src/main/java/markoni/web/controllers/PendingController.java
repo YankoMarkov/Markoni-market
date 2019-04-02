@@ -1,8 +1,8 @@
 package markoni.web.controllers;
 
-import markoni.entities.Status;
-import markoni.models.services.PackageServiceModel;
-import markoni.models.views.PendingViewModel;
+import markoni.domain.entities.Status;
+import markoni.domain.models.services.PackageServiceModel;
+import markoni.domain.models.views.PendingAndDeliveredViewModel;
 import markoni.services.PackageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +32,15 @@ public class PendingController extends BaseController {
 	}
 	
 	@GetMapping("/pending")
-	public ModelAndView showPackages(ModelAndView modelAndView) {
-		List<PendingViewModel> pendingViewModels = this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
+	public ModelAndView pendingPackages(ModelAndView modelAndView) {
+		List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
 				.map(pack -> {
-					PendingViewModel pendingViewModel = this.modelMapper.map(pack, PendingViewModel.class);
-					pendingViewModel.setRecipient(pack.getRecipient().getUsername());
-					return pendingViewModel;
+					PendingAndDeliveredViewModel pendingAndDeliveredViewModel = this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
+					pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
+					return pendingAndDeliveredViewModel;
 				})
 				.collect(Collectors.toList());
-		modelAndView.addObject("pendings", pendingViewModels);
+		modelAndView.addObject("pendings", pendingAndDeliveredViewModels);
 		return this.view("pending", modelAndView);
 	}
 	

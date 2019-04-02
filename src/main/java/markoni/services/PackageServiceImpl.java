@@ -1,8 +1,8 @@
 package markoni.services;
 
-import markoni.entities.Package;
-import markoni.entities.Status;
-import markoni.models.services.PackageServiceModel;
+import markoni.domain.entities.Package;
+import markoni.domain.entities.Status;
+import markoni.domain.models.services.PackageServiceModel;
 import markoni.repositories.PackageRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

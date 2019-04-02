@@ -60,19 +60,19 @@
 			<table class="table table-hover table-bordered">
 				<thead>
 				<tr class="row">
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h3>#</h3></th>
-					<th scope="col" class="col-lg-4 d-flex justify-content-center"><h3>Description</h3></th>
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h3>Weight</h3></th>
-					<th scope="col" class="col-lg-3 d-flex justify-content-center"><h3>Shipping Address</h3></th>
-					<th scope="col" class="col-lg-2 d-flex justify-content-center"><h3>Recipient</h3></th>
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h3>Actions</h3></th>
+					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>#</h4></th>
+					<th scope="col" class="col-lg-4 d-flex justify-content-center"><h4>Description</h4></th>
+					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>Weight</h4></th>
+					<th scope="col" class="col-lg-3 d-flex justify-content-center"><h4>Shipping Address</h4></th>
+					<th scope="col" class="col-lg-2 d-flex justify-content-center"><h4>Recipient</h4></th>
+					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>Actions</h4></th>
 				</tr>
 				</thead>
 				<tbody>
 				<th:block th:each="pending,iter : ${pendings}">
 					<tr class="row">
 						<th scope="row" class="col-lg-1 d-flex justify-content-center">
-							<h5 th:text="${iter.index}"></h5>
+							<h5 th:text="${iter.index + 1}"></h5>
 						</th>
 						<td class="col-lg-4 d-flex justify-content-center">
 							<h5 th:text="${pending.description}"></h5>

@@ -1,7 +1,7 @@
 package markoni.services;
 
-import markoni.entities.Status;
-import markoni.models.services.PackageServiceModel;
+import markoni.domain.entities.Status;
+import markoni.domain.models.services.PackageServiceModel;
 
 import java.util.List;
 

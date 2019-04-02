@@ -1,7 +1,7 @@
 package markoni.services;
 
-import markoni.entities.Product;
-import markoni.models.services.ProductServiceModel;
+import markoni.domain.entities.Product;
+import markoni.domain.models.services.ProductServiceModel;
 import markoni.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +52,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductServiceModel getProductByName(String name) {
 		Product product = this.productRepository.findByName(name).orElse(null);
+		if (product == null) {
+			return null;
+		}
+		return this.modelMapper.map(product, ProductServiceModel.class);
+	}
+	
+	@Override
+	public ProductServiceModel getProductById(String id) {
+		Product product = this.productRepository.findById(id).orElse(null);
 		if (product == null) {
 			return null;
 		}

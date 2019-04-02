@@ -1,8 +1,12 @@
 package markoni.web.controllers;
 
-import markoni.models.bindings.UserLoginBindingModel;
-import markoni.models.bindings.UserRegisterBindingModel;
-import markoni.models.services.UserServiceModel;
+import markoni.domain.entities.Status;
+import markoni.domain.models.bindings.UserLoginBindingModel;
+import markoni.domain.models.bindings.UserRegisterBindingModel;
+import markoni.domain.models.services.PackageServiceModel;
+import markoni.domain.models.services.UserServiceModel;
+import markoni.domain.models.views.ProductHomeViewModel;
+import markoni.services.PackageService;
 import markoni.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +20,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
 	
 	private final UserService userService;
+	private final PackageService packageService;
 	private final ModelMapper modelMapper;
 	
 	@Autowired
-	public UserController(UserService userService, ModelMapper modelMapper) {
+	public UserController(UserService userService, PackageService packageService, ModelMapper modelMapper) {
 		this.userService = userService;
+		this.packageService = packageService;
 		this.modelMapper = modelMapper;
 	}
 	
@@ -63,6 +71,18 @@ public class UserController extends BaseController {
 		return this.redirect("/home");
 	}
 	
+	@GetMapping("/account")
+	public ModelAndView userAccount(HttpSession session, ModelAndView modelAndView) {
+		UserServiceModel userServiceModel = this.userService.getUserByUsername(session.getAttribute("username").toString());
+		List<ProductHomeViewModel> pendingHomeModels = getProductHomeViewModels(userServiceModel, Status.PENDING);
+		List<ProductHomeViewModel> shippedHomeModels = getProductHomeViewModels(userServiceModel, Status.SHIPPED);
+		List<ProductHomeViewModel> deliveredHomeModels = getProductHomeViewModels(userServiceModel, Status.DELIVERED);
+		modelAndView.addObject("pendingModels", pendingHomeModels);
+		modelAndView.addObject("shippedModels", shippedHomeModels);
+		modelAndView.addObject("deliveredModels", deliveredHomeModels);
+		return this.view("userAccount", modelAndView);
+	}
+	
 	@GetMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		if (session.getAttribute("username") == null) {
@@ -70,5 +90,12 @@ public class UserController extends BaseController {
 		}
 		session.invalidate();
 		return this.redirect("/");
+	}
+	
+	private List<ProductHomeViewModel> getProductHomeViewModels(UserServiceModel userServiceModel, Status status) {
+		List<PackageServiceModel> packageServiceModels = this.packageService.getAllPackagesByUserAndStatus(userServiceModel.getUsername(), status);
+		return packageServiceModels.stream()
+				.map(pack -> this.modelMapper.map(pack, ProductHomeViewModel.class))
+				.collect(Collectors.toList());
 	}
 }

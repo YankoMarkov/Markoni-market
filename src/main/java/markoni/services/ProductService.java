@@ -1,6 +1,6 @@
 package markoni.services;
 
-import markoni.models.services.ProductServiceModel;
+import markoni.domain.models.services.ProductServiceModel;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ public interface ProductService {
 	List<ProductServiceModel> getAllProducts();
 	
 	ProductServiceModel getProductByName(String name);
+	
+	ProductServiceModel getProductById(String id);
 	
 	List<ProductServiceModel> getAllProductsByName(String name);
 	

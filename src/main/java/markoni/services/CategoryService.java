@@ -1,6 +1,6 @@
 package markoni.services;
 
-import markoni.models.services.CategoryServiceModel;
+import markoni.domain.models.services.CategoryServiceModel;
 
 import java.util.List;
 
