@@ -93,7 +93,7 @@ public class User extends BaseEntity implements UserDetails {
         this.address = address;
     }
 
-    @OneToMany(targetEntity = Package.class)
+    @OneToMany(targetEntity = Package.class, mappedBy = "recipient", cascade = CascadeType.ALL)
     public Set<Package> getPackages() {
         return this.packages;
     }
@@ -102,7 +102,7 @@ public class User extends BaseEntity implements UserDetails {
         this.packages = packages;
     }
 
-    @OneToMany(targetEntity = Receipt.class)
+    @OneToMany(targetEntity = Receipt.class, mappedBy = "recipient", cascade = CascadeType.ALL)
     public Set<Receipt> getReceipts() {
         return this.receipts;
     }
@@ -123,7 +123,7 @@ public class User extends BaseEntity implements UserDetails {
         this.products = products;
     }
 
-    @OneToMany(targetEntity = Comment.class)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "user", cascade = CascadeType.ALL)
     public Set<Comment> getComments() {
         return this.comments;
     }

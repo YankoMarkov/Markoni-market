@@ -12,7 +12,6 @@ public class Package extends BaseEntity {
 	private Status status;
 	private LocalDateTime estimatedDeliveryDay;
 	private User recipient;
-	private Receipt receipt;
 	
 	@Column(name = "description", nullable = false)
 	public String getDescription() {
@@ -68,14 +67,5 @@ public class Package extends BaseEntity {
 	
 	public void setRecipient(User recipient) {
 		this.recipient = recipient;
-	}
-	
-	@OneToOne(targetEntity = Receipt.class)
-	public Receipt getReceipt() {
-		return this.receipt;
-	}
-	
-	public void setReceipt(Receipt receipt) {
-		this.receipt = receipt;
 	}
 }

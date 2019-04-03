@@ -66,7 +66,7 @@ public class Product extends BaseEntity {
         this.price = price;
     }
 
-    @OneToMany(targetEntity = Comment.class)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "product", cascade = CascadeType.ALL)
     public Set<Comment> getComments() {
         return this.comments;
     }

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController extends BaseController {
 	
 	private final CategoryService categoryService;
