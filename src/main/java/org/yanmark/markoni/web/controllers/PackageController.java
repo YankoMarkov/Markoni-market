@@ -1,5 +1,6 @@
 package org.yanmark.markoni.web.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.models.bindings.packages.PackageCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
@@ -38,6 +39,7 @@ public class PackageController extends BaseController {
 	}
 	
 	@GetMapping("/create")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView create(@ModelAttribute("packageCreate") PackageCreateBindingModel packageCreate,
 	                           ModelAndView modelAndView) {
 		List<UserViewModel> userViewModels = this.userService.getAllUsers().stream()
