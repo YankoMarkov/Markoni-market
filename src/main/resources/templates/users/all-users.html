@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head"/>
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        <th:block th:replace="fragments/navbar"/>
+    </header>
+    <main class="mt-3">
+        <h1 class="text-center text-dark">All Users</h1>
+        <hr class="hr-2 bg-dark w-75">
+        <table class="table table-hover w-75 mx-auto">
+            <thead>
+            <tr class="text-center">
+                <th scope="col">Username</th>
+                <th scope="col">Authorities</th>
+                <th scope="col">Modify authorities</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user, iter : ${allUsers}" th:object="${user}">
+                <tr class="text-center" th:if="${user.username != #authentication.getPrincipal().getUsername()}">
+                    <td th:text="*{username}"></td>
+                    <td th:if="*{#lists.contains(authorities, 'ROOT')}" colspan="2">
+                        <strong>Sorry I am ROOT may be next time!!!</strong>
+                    </td>
+                    <td th:unless="*{#lists.contains(authorities, 'ROOT')}" colspan="2"
+                        th:id="'form-role-' + ${iter.index}" style="display: none;">
+                        <form th:action="@{/users/changeRole(id=${user.id})}" th:method="post"
+                              class="form-inline justify-content-around">
+                            <select class="form-control" id="authority" name="authority">
+                                <option th:value="ADMIN">ADMIN</option>
+                                <option th:value="MODERATOR">MODERATOR</option>
+                                <option th:value="USER">USER</option>
+                            </select>
+                            <button type="submit">Change Role</button>
+                        </form>
+                    </td>
+                    <td th:unless="*{#lists.contains(authorities, 'ROOT')}" th:id="'user-' + ${iter.index}"
+                        th:text="*{#strings.listJoin(authorities, ' | ')}"></td>
+                    <td th:unless="*{#lists.contains(authorities, 'ROOT')}" th:id="'button-' + ${iter.index}">
+                        <a th:id="'change-role-' + ${iter.index}" class="btn btn-outline-secondary"
+                           th:onclick="'changeRole(\'' + ${iter.index} + '\')'" th:text="Modify"></a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <hr class="hr-2 bg-dark">
+    </main>
+    <footer>
+        <th:block th:replace="fragments/footer"/>
+    </footer>
+</div>
+<script>
+    function changeRole(index) {
+        const roleElement = document.getElementById(`user-${index}`);
+        const buttonElement = document.getElementById(`button-${index}`);
+        let form = document.getElementById(`form-role-${index}`);
+        if (roleElement.style.display === "none") {
+            roleElement.style.display = "block";
+            buttonElement.style.display = "block";
+            form.style.display = "none";
+        } else {
+            roleElement.style.display = "none";
+            buttonElement.style.display = "none";
+            form.style.display = "table-cell";
+        }
+    }
+</script>
+</body>
+</html>

@@ -154,6 +154,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/account")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView userAccount(HttpSession session, ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(session.getAttribute("username").toString());
         List<ProductHomeViewModel> pendingHomeModels = getProductHomeViewModels(userServiceModel, Status.PENDING);
@@ -162,7 +163,7 @@ public class UserController extends BaseController {
         modelAndView.addObject("pendingModels", pendingHomeModels);
         modelAndView.addObject("shippedModels", shippedHomeModels);
         modelAndView.addObject("deliveredModels", deliveredHomeModels);
-        return this.view("userAccount", modelAndView);
+        return this.view("/users/user-account", modelAndView);
     }
 
     private List<ProductHomeViewModel> getProductHomeViewModels(UserServiceModel userServiceModel, Status status) {

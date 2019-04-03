@@ -1,5 +1,6 @@
 package org.yanmark.markoni.web.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.views.categories.CategoryViewModel;
@@ -33,6 +34,7 @@ public class HomeController extends BaseController {
 	}
 	
 	@GetMapping("/")
+	@PreAuthorize("isAnonymous()")
 	public ModelAndView index(ModelAndView modelAndView,
 	                          @RequestParam(required = false) String categoryId) {
 		List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
@@ -61,6 +63,7 @@ public class HomeController extends BaseController {
 	}
 	
 	@GetMapping("/home")
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView home(ModelAndView modelAndView,
 	                         @RequestParam(required = false) String categoryId) {
 		List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()

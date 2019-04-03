@@ -1,0 +1,84 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-markoni rounded"
+     xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <a class="navbar-brand nav-link-white" th:href="@{/}">𝓜𝓐𝓡𝓚𝓞𝓝𝓘</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+        <div class="btn-group">
+            <form th:action="@{/home}" th:method="get">
+                <select type="button" class="btn btn-info dropdown-toggle" onchange="submit();" th:name="categoryId">
+                    <option value="">Select Category...</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                            th:selected="${category.id == categoryId}"></option>
+                </select>
+            </form>
+        </div>
+        <th:block sec:authorize="isAnonymous()">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-white" th:href="@{/users/login}">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-white" th:href="@{/users/register}">Register</a>
+                </li>
+            </ul>
+        </th:block>
+        <th:block sec:authorize="isAuthenticated()">
+            <ul class="navbar-nav mr-auto">
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <li class="nav-item active">
+                        <a class="nav-link nav-link-white" th:href="@{/packages/pending}">Pending</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link nav-link-white" th:href="@{/packages/shipped}">Shipped</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link nav-link-white" th:href="@{/packages/delivered}">Delivered</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link nav-link-white" th:href="@{/packages/create}">Package</a>
+                    </li>
+                </th:block>
+                <th:block sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
+                    <li class="nav-item active">
+                        <div class="dropdown show">
+                            <a class="nav-link active dropdown-toggle" th:href="@{#}" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="moderatorDropdown">
+                                Category And Product
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="moderatorDropdown">
+                                <a class="dropdown-item" th:href="@{/categories/add}">Add Category</a>
+                                <a class="dropdown-item" th:href="@{/categories/all}">All Categories</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/products/add}">Add Product</a>
+                                <a class="dropdown-item" th:href="@{/products/all}">All Products</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-white" th:href="@{/home}">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-white" th:href="@{/users/account}">My Account</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link nav-link-white" th:href="@{/receipts}">Receipt</a>
+                </li>
+                <li class="nav-item active">
+                    <form th:action="@{/logout?login}" th:method="post">
+                        <input type="hidden" name="_csrf" value="80417983-fe8b-45c7-963e-31f6915a1560">
+                        <button class="logout-button nav-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </th:block>
+    </div>
+</nav>
