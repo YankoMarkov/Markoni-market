@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
@@ -47,7 +44,7 @@ public class CategoryController extends BaseController {
 		}
 		CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryCreate, CategoryServiceModel.class);
 		this.categoryService.saveCategory(categoryServiceModel);
-		return this.redirect("/home");
+		return this.redirect("/categories/all");
 	}
 	
 	@GetMapping("/all")
@@ -58,5 +55,52 @@ public class CategoryController extends BaseController {
 				.collect(Collectors.toList());
 		modelAndView.addObject("categories", categoryViewModels);
 		return this.view("/categories/all-categories", modelAndView);
+	}
+	
+	@GetMapping("/edit/{id}")
+	@PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+	public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
+		CategoryViewModel categoryViewModel = this.modelMapper
+				.map(this.categoryService.getCategoryById(id), CategoryViewModel.class);
+		modelAndView.addObject("category", categoryViewModel);
+		return this.view("/categories/edit-category", modelAndView);
+	}
+	
+	@PostMapping("/edit/{id}")
+	@PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+	public ModelAndView editConfirm(@Valid @ModelAttribute("categoryCreate") CategoryCreateBindingModel categoryCreate,
+	                                @PathVariable String id, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return this.view("/categories/edit-category");
+		}
+		CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryById(id);
+		categoryServiceModel.setName(categoryCreate.getName());
+		this.categoryService.saveCategory(categoryServiceModel);
+		return this.redirect("/categories/all");
+	}
+	
+	@GetMapping("/delete/{id}")
+	@PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+	public ModelAndView delete(@PathVariable String id, ModelAndView modelAndView) {
+		CategoryViewModel categoryViewModel = this.modelMapper
+				.map(this.categoryService.getCategoryById(id), CategoryViewModel.class);
+		modelAndView.addObject("category", categoryViewModel);
+		return this.view("/categories/delete-category", modelAndView);
+	}
+	
+	@PostMapping("/delete/{id}")
+	@PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+	public ModelAndView deleteConfirm(@PathVariable String id) {
+		this.categoryService.deleteCategory(id);
+		return this.redirect("/categories/all");
+	}
+	
+	@GetMapping("/fetch")
+	@PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+	@ResponseBody
+	public List<CategoryViewModel> fetch() {
+		return this.categoryService.getAllCategories().stream()
+				.map(category -> this.modelMapper.map(category, CategoryViewModel.class))
+				.collect(Collectors.toList());
 	}
 }
