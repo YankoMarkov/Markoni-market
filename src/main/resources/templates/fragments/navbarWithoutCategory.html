@@ -52,11 +52,23 @@
                 </th:block>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item active" sec:authorize="hasAuthority('ROOT')">
+                    <a class="nav-link nav-link-white" th:href="@{/users/all}">All Users</a>
+                </li>
                 <li class="nav-item active">
                     <a class="nav-link nav-link-white" th:href="@{/home}">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link nav-link-white" th:href="@{/users/account}">My Account</a>
+                    <div class="dropdown show">
+                        <a class="nav-link active dropdown-toggle" th:href="@{#}" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userDropdown">
+                            Profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" th:href="@{/users/profile}">Edit</a>
+                            <a class="dropdown-item" th:href="@{/users/storage}">Storage</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link nav-link-white" th:href="@{/receipts}">Receipt</a>
