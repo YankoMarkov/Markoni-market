@@ -65,9 +65,7 @@ public class UserController extends BaseController {
 			return this.view("/users/register");
 		}
 		UserServiceModel userServiceModel = this.modelMapper.map(userRegister, UserServiceModel.class);
-		if (this.userService.saveUser(userServiceModel) == null) {
-			return this.view("/users/register");
-		}
+		this.userService.saveUser(userServiceModel);
 		return this.redirect("/users/login");
 	}
 	
@@ -147,7 +145,6 @@ public class UserController extends BaseController {
 			return this.redirect("/users/all");
 		}
 		UserRoleServiceModel userRoleServiceModel = this.userRoleService.getRoleByName(role.getAuthority());
-		
 		this.userService.updateUsersRole(userServiceModel, userRoleServiceModel);
 		return this.redirect("/users/all");
 	}
