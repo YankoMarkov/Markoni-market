@@ -39,7 +39,6 @@ public class PackageController extends BaseController {
 	}
 	
 	@GetMapping("/create")
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView create(@ModelAttribute("packageCreate") PackageCreateBindingModel packageCreate,
 	                           ModelAndView modelAndView) {
 		List<UserViewModel> userViewModels = this.userService.getAllUsers().stream()

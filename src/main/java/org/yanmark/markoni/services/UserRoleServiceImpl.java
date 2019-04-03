@@ -26,10 +26,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public UserRoleServiceModel getRoleByName(String name) {
-        UserRole role = this.userRoleRepository.findByAuthority(name).orElse(null);
-        if (role == null) {
-            return null;
-        }
+        UserRole role = this.userRoleRepository.findByAuthority(name)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found!"));
         return this.modelMapper.map(role, UserRoleServiceModel.class);
     }
 

@@ -15,6 +15,4 @@ public interface ProductService {
 	ProductServiceModel getProductById(String id);
 	
 	List<ProductServiceModel> getAllProductsByName(String name);
-	
-	boolean productExist(String name);
 }
