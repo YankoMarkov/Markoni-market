@@ -3,57 +3,58 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<th:block th:replace="fragments/head"/>
+    <th:block th:replace="fragments/head"/>
 </head>
 <body>
 <div class="container-fluid">
-	<header>
-		<th:block th:replace="fragments/navbarWithCategory"/>
-	</header>
-	<main class="mt-3">
-		<hr class="bg-markoni hr-2"/>
-		<div class="jumbotron bg-markoni">
-			<th:block th:if="${categoryName == null}">
-				<h1 class="text-white d-flex justify-content-center">All Products.</h1>
-			</th:block>
-			<th:block th:if="${categoryName != null}">
-				<h1 class="text-white d-flex justify-content-center" th:text="|All ${categoryName} Products.|"></h1>
-			</th:block>
-			<hr class="bg-white hr-2"/>
-			<form class="mx-auto w-25" th:action="@{/products/search}" th:method="get">
-				<div class="d-flex justify-content-center active-cyan-3 active-cyan-4 mb-4">
-					<input class="form-control" type="text" placeholder="Search..." aria-label="Search" name="searchName"/>
-				</div>
-			</form>
-			<hr class="bg-white hr-2"/>
-			<div class="print-container container-fluid">
-				<div class="row mb-4 home-container">
-					<th:block th:each="product : ${products}">
-						<div class="panel panel-primary">
-							<div class="panel-heading mb-3">
-								<h5 class="text-white" th:text="${product.name}"></h5>
-							</div>
-							<div class="home-image panel-body">
-								<a th:href="@{/product/details(id=${product.id})}">
-									<img th:src="${product.image}" class="img-thumbnail" alt="Image">
-								</a>
-							</div>
-							<div class="panel-footer mt-2">
-								<p class="text-white" th:text="|Price: ${product.price}|"></p>
-							</div>
-							<div class="panel-footer">
-								<p class="text-white" th:text="|Description: ${product.description}|"></p>
-							</div>
-						</div>
-					</th:block>
-				</div>
-			</div>
-		</div>
-		<hr class="bg-markoni hr-2 mt-5"/>
-	</main>
-	<footer>
-		<th:block th:replace="fragments/footer"/>
-	</footer>
+    <header>
+        <th:block th:replace="fragments/navbarWithCategory"/>
+    </header>
+    <main class="mt-3">
+        <hr class="bg-markoni hr-2"/>
+        <div class="jumbotron bg-markoni">
+            <th:block th:if="${categoryName == null}">
+                <h1 class="text-white d-flex justify-content-center">All Products.</h1>
+            </th:block>
+            <th:block th:if="${categoryName != null}">
+                <h1 class="text-white d-flex justify-content-center" th:text="|All ${categoryName} Products.|"></h1>
+            </th:block>
+            <hr class="bg-white hr-2"/>
+            <form class="mx-auto w-25" th:action="@{/search}" th:method="get">
+                <div class="d-flex justify-content-center active-cyan-3 active-cyan-4 mb-4">
+                    <input class="form-control" type="text" placeholder="Search..." aria-label="Search"
+                           name="searchName"/>
+                </div>
+            </form>
+            <hr class="bg-white hr-2"/>
+            <div class="print-container container-fluid">
+                <div class="row mb-4 home-container">
+                    <th:block th:each="product : ${products}">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading mb-3">
+                                <h5 class="text-white" th:text="${product.name}"></h5>
+                            </div>
+                            <div class="home-image panel-body">
+                                <a th:href="@{/product/details(id=${product.id})}">
+                                    <img th:src="${product.image}" class="img-thumbnail" alt="Image">
+                                </a>
+                            </div>
+                            <div class="panel-footer mt-2">
+                                <p class="text-white" th:text="|Price: ${product.price}|"></p>
+                            </div>
+                            <div class="panel-footer">
+                                <p class="text-white" th:text="|Description: ${product.description}|"></p>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-markoni hr-2 mt-5"/>
+    </main>
+    <footer>
+        <th:block th:replace="fragments/footer"/>
+    </footer>
 </div>
 </body>
 </html>

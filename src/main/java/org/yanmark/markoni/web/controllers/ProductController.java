@@ -112,16 +112,4 @@ public class ProductController extends BaseController {
     public ModelAndView productDelete() {
         return null;
     }
-
-    @GetMapping("/search")
-    public ModelAndView search(Principal principal, ModelAndView modelAndView,
-                               @RequestParam(required = false) String searchName) {
-        List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
-                .map(category -> this.modelMapper.map(category, CategoryViewModel.class))
-                .collect(Collectors.toList());
-        System.out.println(principal);
-        System.out.println();
-
-            return this.view("/products/products-search", modelAndView);
-    }
 }

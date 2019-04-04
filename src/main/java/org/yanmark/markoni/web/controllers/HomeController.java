@@ -15,6 +15,7 @@ import org.yanmark.markoni.domain.models.views.products.ProductIndexViewModel;
 import org.yanmark.markoni.services.CategoryService;
 import org.yanmark.markoni.services.ProductService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,5 +89,19 @@ public class HomeController extends BaseController {
         modelAndView.addObject("products", productHomeViewModels);
         modelAndView.addObject("categories", categoryViewModels);
         return view("home", modelAndView);
+    }
+
+    @GetMapping("/search")
+    public ModelAndView search(Principal principal, ModelAndView modelAndView,
+                               @RequestParam(required = false) String searchName) {
+        List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
+                .map(category -> this.modelMapper.map(category, CategoryViewModel.class))
+                .collect(Collectors.toList());
+        List<ProductHomeViewModel> productHomeViewModels = this.productService.getAllProductsByName(searchName).stream()
+                .map(product -> this.modelMapper.map(product, ProductHomeViewModel.class))
+                .collect(Collectors.toList());
+        modelAndView.addObject("products", productHomeViewModels);
+        modelAndView.addObject("categories", categoryViewModels);
+        return this.view("home", modelAndView);
     }
 }
