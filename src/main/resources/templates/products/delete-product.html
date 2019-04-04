@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head"/>
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        <th:block th:replace="fragments/navbar"/>
+    </header>
+    <main class="mt-3">
+        <hr class="bg-markoni hr-2"/>
+        <h1 class="text-center text-markoni">Delete Product</h1>
+        <hr class="bg-markoni w-25 hr-2"/>
+        <form th:action="@{/products/delete/{id}(id=${product.id})}" th:method="post" th:object="${product}"
+              enctype="multipart/form-data"
+              id="add-product-form" class="form w-25 mx-auto">
+            <input type="hidden" name="_csrf" value="c686cd14-a7f9-4216-8009-c093b7d3df86">
+            <div class="form-group">
+                <label for="name" class="text-markoni">Name</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       th:field="*{name}" disabled/>
+            </div>
+            <div class="form-group">
+                <label for="weight" class="text-markoni">Weight</label>
+                <input type="number" step=".01" class="form-control" id="weight" name="weight"
+                       th:field="*{weight}" disabled/>
+            </div>
+            <div class="form-group">
+                <label for="description" class="text-markoni">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="5"
+                          th:field="*{description}" disabled></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price" class="text-markoni">Price</label>
+                <input type="number" step=".01" class="form-control" id="price" name="price"
+                       th:field="*{price}" disabled/>
+            </div>
+            <div class="form-group">
+                <label for="add-product-categories" class="text-markoni">Categories</label>
+                <select multiple="" class="form-control" id="add-product-categories" name="categories"
+                        th:field="*{categories}"></select>
+            </div>
+            <hr class="bg-markoni hr-2"/>
+            <div class="button-holder mt-4 d-flex justify-content-center">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+        <hr class="bg-markoni hr-2 mt-5"/>
+    </main>
+    <footer>
+        <th:block th:replace="fragments/footer"/>
+    </footer>
+</div>
+<script th:inline="javascript">
+    fetch('/categories/fetch')
+        .then((response) => response.json())
+        .then((json) => {
+            let categories = [[${product.categories}]];
+            console.log(categories);
+            json.forEach((category) => {
+                if (categories.includes(category.name)) {
+                    $('#add-product-categories')
+                        .append(`<option value="${category.id}" disabled>${category.name}</option>`)
+                }
+            })
+        })
+        .catch((err) => console.log(err));
+</script>
+</body>
+</html>

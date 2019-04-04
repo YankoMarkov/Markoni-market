@@ -1,24 +1,24 @@
 package org.yanmark.markoni.domain.models.views.products;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ProductDetailsViewModel {
+public class ProductEditViewModel {
 
     private String id;
     private String name;
-    private String image;
+    private Double weight;
     private String description;
     private BigDecimal price;
-    private List<String> categories;
+    private Set<String> categories;
 
-    public ProductDetailsViewModel() {
-        this.categories = new ArrayList<>();
+    public ProductEditViewModel() {
+        this.categories = new HashSet<>();
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
@@ -26,23 +26,23 @@ public class ProductDetailsViewModel {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getImage() {
-        return this.image;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
@@ -50,18 +50,18 @@ public class ProductDetailsViewModel {
     }
 
     public BigDecimal getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public List<String> getCategories() {
+    public Set<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(Set<String> categories) {
         this.categories = categories;
     }
 }

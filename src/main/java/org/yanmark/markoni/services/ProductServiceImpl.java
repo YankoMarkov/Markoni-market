@@ -36,6 +36,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteProduct(String id) {
+        try {
+            this.productRepository.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<ProductServiceModel> getAllProducts() {
         List<Product> products = this.productRepository.findAllOrdered();
         if (products == null) {
