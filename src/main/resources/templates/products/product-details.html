@@ -50,12 +50,8 @@
 						</div>
 					</div>
 					<div class="mt-4">
-						<a class="btn bg-markoni text-white" th:href="@{/products/buy(id=${product.id})}"
+						<a class="btn bg-markoni text-white" th:href="@{/products/buy/{id}(id=${product.id})}"
 						   th:text="Buy"></a>
-						<th:block sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
-							<a class="btn btn-danger text-white ml-5" th:href="@{/products/delete(id=${product.id})}"
-							   th:text="Delete"></a>
-						</th:block>
 					</div>
 					<div class="container mt-5">
 						<ul class="nav nav-tabs" role="tablist">
@@ -72,9 +68,7 @@
 						<div class="tab-content">
 							<div id="home" class="container tab-pane active"><br>
 								<h3>Description:</h3>
-								<p th:text="${product.description}">Lorem ipsum dolor sit amet, consectetur adipisicing
-									elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua.</p>
+								<p th:text="${product.description}"></p>
 							</div>
 							<div id="comment" class="container tab-pane fade"><br>
 								<h3>Comment</h3>

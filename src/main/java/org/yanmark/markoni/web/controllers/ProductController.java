@@ -123,9 +123,9 @@ public class ProductController extends BaseController {
         return this.redirect("/products/details/" + id);
     }
 
-    @GetMapping("/buy")
+    @GetMapping("/buy/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView productBuy(@RequestParam("id") String id, ModelAndView modelAndView) {
+    public ModelAndView productBuy(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductBuyViewModel productBuyViewModel = this.modelMapper.map(productServiceModel, ProductBuyViewModel.class);
         modelAndView.addObject("product", productBuyViewModel);
@@ -139,7 +139,7 @@ public class ProductController extends BaseController {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         userServiceModel.getProducts().add(productServiceModel);
         this.userService.saveUser(userServiceModel);
-        return this.redirect("/users/account");
+        return this.redirect("/users/storage");
     }
 
     @GetMapping("/delete/{id}")

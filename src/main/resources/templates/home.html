@@ -35,7 +35,7 @@
                                 <h5 class="text-white" th:text="${product.name}"></h5>
                             </div>
                             <div class="home-image panel-body">
-                                <a th:href="@{/product/details(id=${product.id})}">
+                                <a th:href="@{/products/details/{id}(id=${product.id})}">
                                     <img th:src="${product.image}" class="img-thumbnail" alt="Image">
                                 </a>
                             </div>
