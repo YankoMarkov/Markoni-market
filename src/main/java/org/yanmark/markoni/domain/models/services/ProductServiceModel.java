@@ -2,6 +2,7 @@ package org.yanmark.markoni.domain.models.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 public class ProductServiceModel extends BaseServiceModel {
 
@@ -11,7 +12,7 @@ public class ProductServiceModel extends BaseServiceModel {
     private String description;
     private BigDecimal price;
     private List<CommentServiceModel> comments;
-    private CategoryServiceModel category;
+    private Set<CategoryServiceModel> categories;
 
     public String getName() {
         return this.name;
@@ -61,11 +62,11 @@ public class ProductServiceModel extends BaseServiceModel {
         this.comments = comments;
     }
 
-    public CategoryServiceModel getCategory() {
-        return this.category;
+    public Set<CategoryServiceModel> getCategories() {
+        return categories;
     }
 
-    public void setCategory(CategoryServiceModel category) {
-        this.category = category;
+    public void setCategories(Set<CategoryServiceModel> categories) {
+        this.categories = categories;
     }
 }

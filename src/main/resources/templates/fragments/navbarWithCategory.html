@@ -7,17 +7,32 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-		<div class="btn-group">
-			<form th:action="@{/home}" th:method="get">
-				<select type="button" class="btn btn-info dropdown-toggle" onchange="submit();" th:name="categoryId">
-					<option value="">Select Category...</option>
-					<option th:each="category : ${categories}"
-					        th:value="${category.id}"
-					        th:text="${category.name}"
-					        th:selected="${category.id == categoryId}"></option>
-				</select>
-			</form>
-		</div>
+		<th:block th:if="${#authentication.getName() == 'anonymousUser'}">
+			<div class="btn-group">
+				<form th:action="@{/}" th:method="get">
+					<select type="button" class="btn btn-info dropdown-toggle" onchange="submit();" th:name="categoryId">
+						<option value="">Select Category...</option>
+						<option th:each="categories : ${categories}"
+								th:value="${categories.id}"
+								th:text="${categories.name}"
+								th:selected="${categories.id == categoryId}"></option>
+					</select>
+				</form>
+			</div>
+		</th:block>
+		<th:block th:unless="${#authentication.getName() == 'anonymousUser'}">
+			<div class="btn-group">
+				<form th:action="@{/home}" th:method="get">
+					<select type="button" class="btn btn-info dropdown-toggle" onchange="submit();" th:name="categoryId">
+						<option value="">Select Category...</option>
+						<option th:each="categories : ${categories}"
+								th:value="${categories.id}"
+								th:text="${categories.name}"
+								th:selected="${categories.id == categoryId}"></option>
+					</select>
+				</form>
+			</div>
+		</th:block>
 		<ul class="navbar-nav ml-auto" sec:authorize="isAnonymous()">
 			<li class="nav-item active">
 				<a class="nav-link nav-link-white" th:href="@{/users/login}">Login</a>

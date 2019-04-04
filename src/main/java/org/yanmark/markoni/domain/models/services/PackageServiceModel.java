@@ -12,7 +12,6 @@ public class PackageServiceModel extends BaseServiceModel {
     private Status status;
     private LocalDateTime estimatedDeliveryDay;
     private UserServiceModel recipient;
-    private ReceiptServiceModel receipt;
 
     public String getDescription() {
         return this.description;
@@ -60,13 +59,5 @@ public class PackageServiceModel extends BaseServiceModel {
 
     public void setRecipient(UserServiceModel recipient) {
         this.recipient = recipient;
-    }
-
-    public ReceiptServiceModel getReceipt() {
-        return this.receipt;
-    }
-
-    public void setReceipt(ReceiptServiceModel receipt) {
-        this.receipt = receipt;
     }
 }

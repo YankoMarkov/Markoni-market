@@ -23,13 +23,13 @@
 			</tr>
 			</thead>
 			<tbody>
-			<th:block th:each="category,iter : ${categories}">
+			<th:block th:each="categories,iter : ${categories}">
 				<tr class="row mx-auto">
 					<th class="col-md-2 text-center" th:text="${iter.index + 1}"></th>
-					<td class="col-md-5 text-center" th:text="${category.name}"></td>
+					<td class="col-md-5 text-center" th:text="${categories.name}"></td>
 					<td class="col-md-5 text-center">
-						<a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-primary">Edit</a>
-						<a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger">Delete</a>
+						<a th:href="@{/categories/edit/{id}(id=${categories.id})}" class="btn btn-primary">Edit</a>
+						<a th:href="@{/categories/delete/{id}(id=${categories.id})}" class="btn btn-danger">Delete</a>
 					</td>
 				</tr>
 			</th:block>

@@ -8,12 +8,7 @@
 <body>
 <div class="container-fluid">
 	<header>
-		<th:block th:if="${session.role.equals('ADMIN')}">
-			<th:block th:replace="fragments/adminNavbarWithCategory"/>
-		</th:block>
-		<th:block th:unless="${session.role.equals('ADMIN')}">
-			<th:block th:replace="fragments/userNavbarWithCategory"/>
-		</th:block>
+		<th:block th:replace="fragments/navbarWithCategory"/>
 	</header>
 	<main class="mt-3">
 		<div class="container">

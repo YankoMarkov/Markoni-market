@@ -8,7 +8,7 @@ public class ReceiptServiceModel extends BaseServiceModel {
     private BigDecimal fee;
     private LocalDateTime issuedOn;
     private UserServiceModel recipient;
-    private PackageServiceModel aPackage;
+    private PackageServiceModel pakage;
 
     public BigDecimal getFee() {
         return this.fee;
@@ -34,11 +34,11 @@ public class ReceiptServiceModel extends BaseServiceModel {
         this.recipient = recipient;
     }
 
-    public PackageServiceModel getaPackage() {
-        return this.aPackage;
+    public PackageServiceModel getPakage() {
+        return this.pakage;
     }
 
-    public void setaPackage(PackageServiceModel aPackage) {
-        this.aPackage = aPackage;
+    public void setPakage(PackageServiceModel pakage) {
+        this.pakage = pakage;
     }
 }

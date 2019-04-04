@@ -55,13 +55,14 @@ public class DeliveredController extends BaseController {
 	
 	@PostMapping("/acquire")
 	public ModelAndView acquirePackage(@RequestParam String deliveredId, HttpSession session) {
-		String username = session.getAttribute("username").toString();
-		PackageServiceModel packageServiceModel = this.packageService.getPackageById(deliveredId);
-		packageServiceModel.setStatus(Status.ACQUIRED);
-		ReceiptServiceModel receiptServiceModel = createReceipt(username, packageServiceModel);
-		packageServiceModel.setReceipt(receiptServiceModel);
-		this.packageService.savePackage(packageServiceModel);
-		return this.redirect("/home");
+//		String username = session.getAttribute("username").toString();
+//		PackageServiceModel packageServiceModel = this.packageService.getPackageById(deliveredId);
+//		packageServiceModel.setStatus(Status.ACQUIRED);
+//		ReceiptServiceModel receiptServiceModel = createReceipt(username, packageServiceModel);
+//		packageServiceModel.setReceipt(receiptServiceModel);
+//		this.packageService.savePackage(packageServiceModel);
+//		return this.redirect("/home");
+		return null;
 	}
 	
 	private ReceiptServiceModel createReceipt(String username, PackageServiceModel packageServiceModel) {
@@ -70,7 +71,7 @@ public class DeliveredController extends BaseController {
 		receiptServiceModel.setFee(BigDecimal.valueOf(packageServiceModel.getWeight()).multiply(BigDecimal.valueOf(2.67)));
 		receiptServiceModel.setIssuedOn(LocalDateTime.now());
 		receiptServiceModel.setRecipient(userServiceModel);
-		receiptServiceModel.setaPackage(packageServiceModel);
+		receiptServiceModel.setPakage(packageServiceModel);
 		return this.receiptService.saveReceipt(receiptServiceModel);
 	}
 }
