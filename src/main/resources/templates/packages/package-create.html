@@ -11,9 +11,9 @@
 		<th:block th:replace="fragments/navbar"/>
 	</header>
 	<main class="mt-3">
-		<hr class="bg-org.yanmark.markoni hr-2"/>
-		<h1 class="text-center text-org.yanmark.markoni">Package</h1>
-		<hr class="bg-org.yanmark.markoni w-25 hr-2"/>
+		<hr class="bg-markoni hr-2"/>
+		<h1 class="text-center text-markoni">Package</h1>
+		<hr class="bg-markoni w-25 hr-2"/>
 		<form class="mx-auto w-25" th:method="post" th:action="@{/packages/create}" th:object="${packageCreate}">
 			<!--<div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'text-danger'">-->
 				<!--<label for="description" class="text-org.yanmark.markoni">Description</label>-->
@@ -34,21 +34,21 @@
 				<!--<h6 th:each="error : ${#fields.errors('shippingAddress')}" th:text="${error}"></h6>-->
 			<!--</div>-->
 			<div class="form-group" th:classappend="${#fields.hasErrors('recipient')}? 'text-danger'">
-				<label for="recipient" class="text-org.yanmark.markoni">Recipient</label>
+				<label for="recipient" class="text-markoni">Recipient</label>
 				<select id="recipient" class="form-control" name="recipient" th:field="*{recipient}">
-					<option value="">Select Recipient...</option>
+					<option value="" disabled>Select Recipient...</option>
 					<option th:each="user : ${users}"
 					        th:value="${user.id}"
 					        th:text="${user.username}"></option>
 				</select>
 				<h6 th:each="error : ${#fields.errors('recipient')}" th:text="${error}"></h6>
 			</div>
-			<hr class="bg-org.yanmark.markoni hr-2"/>
+			<hr class="bg-markoni hr-2"/>
 			<div class="button-holder mt-4 d-flex justify-content-center">
-				<button type="submit" class="btn bg-org.yanmark.markoni text-white">Create</button>
+				<button type="submit" class="btn bg-markoni text-white">Create</button>
 			</div>
 		</form>
-		<hr class="bg-org.yanmark.markoni hr-2 mt-5"/>
+		<hr class="bg-markoni hr-2 mt-5"/>
 	</main>
 	<footer>
 		<th:block th:replace="fragments/footer"/>
