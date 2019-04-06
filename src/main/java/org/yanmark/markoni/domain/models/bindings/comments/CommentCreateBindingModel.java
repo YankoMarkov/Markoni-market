@@ -7,7 +7,6 @@ public class CommentCreateBindingModel {
 
     private int rating;
     private String comment;
-    private String product;
 
     @NotNull(message = "Rating cannot be null.")
     public int getRating() {
@@ -26,15 +25,5 @@ public class CommentCreateBindingModel {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @NotNull(message = "Product cannot be null.")
-    @NotBlank(message = "Product cannot be empty.")
-    public String getProduct() {
-        return product;
-    }
-
-    public void setProduct(String product) {
-        this.product = product;
     }
 }

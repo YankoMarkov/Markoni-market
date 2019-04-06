@@ -1,11 +1,9 @@
 package org.yanmark.markoni.domain.models.views.Comments;
 
-import java.time.LocalDateTime;
-
 public class CommentsViewModel {
 
     private String user;
-    private LocalDateTime time;
+    private String time;
     private String comment;
 
     public String getUser() {
@@ -16,11 +14,11 @@ public class CommentsViewModel {
         this.user = user;
     }
 
-    public LocalDateTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

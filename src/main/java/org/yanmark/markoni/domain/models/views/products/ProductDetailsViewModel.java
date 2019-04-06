@@ -11,6 +11,7 @@ public class ProductDetailsViewModel {
     private String image;
     private String description;
     private BigDecimal price;
+    private int rating;
     private List<String> categories;
 
     public ProductDetailsViewModel() {
@@ -55,6 +56,14 @@ public class ProductDetailsViewModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public List<String> getCategories() {

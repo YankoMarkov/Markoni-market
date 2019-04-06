@@ -18,6 +18,7 @@ import org.yanmark.markoni.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,14 @@ public class CommentController extends BaseController {
     @ResponseBody
     public List<CommentsViewModel> fetch() {
         return this.commentService.getAllComments().stream()
-                .map(comment -> this.modelMapper.map(comment, CommentsViewModel.class))
+                .map(comment -> {
+                    CommentsViewModel commentsViewModel = this.modelMapper.map(comment, CommentsViewModel.class);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
+                    String date = comment.getTime().format(formatter);
+                    commentsViewModel.setTime(date);
+                    commentsViewModel.setUser(comment.getUser().getUsername());
+                    return commentsViewModel;
+                })
                 .collect(Collectors.toList());
     }
 }

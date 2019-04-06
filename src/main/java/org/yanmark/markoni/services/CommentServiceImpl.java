@@ -19,13 +19,15 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserService userService;
+    private final ProductService productService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, ModelMapper modelMapper) {
+    public CommentServiceImpl(CommentRepository commentRepository,
+                              ProductService productService,
+                              ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
-        this.userService = userService;
+        this.productService = productService;
         this.modelMapper = modelMapper;
     }
 
@@ -36,6 +38,8 @@ public class CommentServiceImpl implements CommentService {
                                            ProductServiceModel productService) {
         commentService.setTime(LocalDateTime.now());
         commentService.setUser(userService);
+        productService.setRating(productService.getRating() + commentCreate.getRating());
+        this.productService.editProduct(productService);
         commentService.setProduct(productService);
         Comment comment = this.modelMapper.map(commentService, Comment.class);
         try {
@@ -49,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentServiceModel> getAllComments() {
-        List<Comment> comments = this.commentRepository.findAllByOrderByTimeAsc();
+        List<Comment> comments = this.commentRepository.findAllByOrderByTimeDesc();
         if (comments == null) {
             return new ArrayList<>();
         }

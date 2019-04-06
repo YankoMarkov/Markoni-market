@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
 
-    List<Comment> findAllByOrderByTimeAsc();
+    List<Comment> findAllByOrderByTimeDesc();
 }
