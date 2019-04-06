@@ -13,6 +13,7 @@ public class Product extends BaseEntity {
     private Double weight;
     private String description;
     private BigDecimal price;
+    private int rating;
     private Set<Comment> comments;
     private Set<Category> categories;
 
@@ -60,6 +61,15 @@ public class Product extends BaseEntity {
     @Column(name = "price", nullable = false)
     public BigDecimal getPrice() {
         return this.price;
+    }
+
+    @Column(name = "ratings", nullable = false)
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public void setPrice(BigDecimal price) {

@@ -1,6 +1,8 @@
 package org.yanmark.markoni.services;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
+import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserRoleServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
 
@@ -12,11 +14,13 @@ public interface UserService extends UserDetailsService {
 
     UserServiceModel updateUsersRole(UserServiceModel userService, UserRoleServiceModel userRoleService);
 
-    UserServiceModel updateUser(UserServiceModel userService, String oldPassword);
+    UserServiceModel updateUser(UserServiceModel userService, UserEditBindingModel userEdit);
 
     UserServiceModel getUserById(String id);
 
     UserServiceModel getUserByUsername(String username);
 
     List<UserServiceModel> getAllUsers();
+
+    UserServiceModel userBuyProduct(ProductServiceModel productService, UserServiceModel userService);
 }

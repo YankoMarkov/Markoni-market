@@ -11,43 +11,43 @@
 		<th:block th:replace="fragments/navbar"/>
 	</header>
 	<main class="mt-3">
-		<hr class="bg-org.yanmark.markoni hr-2"/>
-		<h1 class="text-center text-org.yanmark.markoni">Pending Shipment</h1>
-		<hr class="bg-org.yanmark.markoni w-25 hr-2"/>
+		<hr class="bg-markoni hr-2"/>
+		<h1 class="text-center text-markoni">Pending Shipment</h1>
+		<hr class="bg-markoni w-25 hr-2"/>
 		<div class="d-flex justify-content-between">
-			<table class="table table-hover table-bordered">
+			<table class="table table-hover mx-auto">
 				<thead>
-				<tr class="row">
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>#</h4></th>
-					<th scope="col" class="col-lg-4 d-flex justify-content-center"><h4>Description</h4></th>
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>Weight</h4></th>
-					<th scope="col" class="col-lg-3 d-flex justify-content-center"><h4>Shipping Address</h4></th>
-					<th scope="col" class="col-lg-2 d-flex justify-content-center"><h4>Recipient</h4></th>
-					<th scope="col" class="col-lg-1 d-flex justify-content-center"><h4>Actions</h4></th>
+				<tr class="row mx-auto">
+					<th class="col-lg-1 text-center"><h4>#</h4></th>
+					<th class="col-lg-4 text-center"><h4>Description</h4></th>
+					<th class="col-lg-1 text-center"><h4>Weight</h4></th>
+					<th class="col-lg-3 text-center"><h4>Shipping Address</h4></th>
+					<th class="col-lg-2 text-center"><h4>Recipient</h4></th>
+					<th class="col-lg-1 text-center"><h4>Actions</h4></th>
 				</tr>
 				</thead>
 				<tbody>
 				<th:block th:each="pending,iter : ${pendings}">
-					<tr class="row">
-						<th scope="row" class="col-lg-1 d-flex justify-content-center">
+					<tr class="row mx-auto">
+						<th class="col-lg-1 text-center">
 							<h5 th:text="${iter.index + 1}"></h5>
 						</th>
-						<td class="col-lg-4 d-flex justify-content-center">
+						<td class="col-lg-4 text-center">
 							<h5 th:text="${pending.description}"></h5>
 						</td>
-						<td class="col-lg-1 d-flex justify-content-center">
+						<td class="col-lg-1 text-center">
 							<h5 th:text="${pending.weight}"></h5>
 						</td>
-						<td class="col-lg-3 d-flex justify-content-center">
+						<td class="col-lg-3 text-center">
 							<h5 th:text="${pending.shippingAddress}"></h5>
 						</td>
-						<td class="col-lg-2 d-flex justify-content-center">
+						<td class="col-lg-2 text-center">
 							<h5 th:text="${pending.recipient}"></h5>
 						</td>
-						<td class="col-lg-1 d-flex justify-content-center">
+						<td class="col-lg-1 text-center">
 							<form th:action="@{/packages/pending}" th:method="post">
 								<input type="hidden" th:value="${pending.id}" name="pendingId">
-								<button type="submit" class="btn bg-org.yanmark.markoni text-white">Ship</button>
+								<button type="submit" class="btn bg-markoni text-white">Ship</button>
 							</form>
 						</td>
 					</tr>
@@ -55,7 +55,7 @@
 				</tbody>
 			</table>
 		</div>
-		<hr class="bg-org.yanmark.markoni hr-2 mt-5"/>
+		<hr class="bg-markoni hr-2 mt-5"/>
 	</main>
 	<footer>
 		<th:block th:replace="fragments/footer"/>

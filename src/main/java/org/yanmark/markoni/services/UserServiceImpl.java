@@ -8,12 +8,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.entities.UserRole;
+import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
+import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserRoleServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.UserRepository;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,10 +84,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceModel updateUser(UserServiceModel userService, String oldPassword) {
+    public UserServiceModel updateUser(UserServiceModel userService, UserEditBindingModel userEdit) {
+        if (!userEdit.getNewPassword().equals("") && userEdit.getNewPassword() != null) {
+            userService.setPassword(userEdit.getNewPassword());
+        }
         User user = this.userRepository.findByUsername(userService.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-        if (!this.passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!this.passwordEncoder.matches(userEdit.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Incorrect password!");
         }
         if (!this.passwordEncoder.matches(userService.getPassword(), user.getPassword())) {
@@ -127,11 +131,23 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
+    public UserServiceModel userBuyProduct(ProductServiceModel productService, UserServiceModel userService) {
+        userService.getProducts().add(productService);
+        User user = this.modelMapper.map(userService, User.class);
+        try {
+            user = this.userRepository.saveAndFlush(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
     private UserServiceModel giveRolesToUser(UserServiceModel userService) {
         if (this.userRepository.count() == 0) {
             userService.setAuthorities(this.userRoleService.getAllRoles());
         } else {
-            userService.setAuthorities(new HashSet<>());
             userService.getAuthorities().add(this.userRoleService.getRoleByName("USER"));
         }
         return userService;

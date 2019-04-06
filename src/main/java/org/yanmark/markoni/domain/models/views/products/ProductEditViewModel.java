@@ -1,8 +1,8 @@
 package org.yanmark.markoni.domain.models.views.products;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductEditViewModel {
 
@@ -11,10 +11,10 @@ public class ProductEditViewModel {
     private Double weight;
     private String description;
     private BigDecimal price;
-    private Set<String> categories;
+    private List<String> categories;
 
     public ProductEditViewModel() {
-        this.categories = new HashSet<>();
+        this.categories = new ArrayList<>();
     }
 
     public String getId() {
@@ -57,11 +57,11 @@ public class ProductEditViewModel {
         this.price = price;
     }
 
-    public Set<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<String> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 }

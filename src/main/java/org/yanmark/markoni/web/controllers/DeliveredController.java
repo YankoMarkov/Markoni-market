@@ -1,5 +1,6 @@
 package org.yanmark.markoni.web.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
 import org.yanmark.markoni.domain.models.services.ReceiptServiceModel;
@@ -41,6 +42,7 @@ public class DeliveredController extends BaseController {
 	}
 	
 	@GetMapping("/delivered")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView deliveredPackages(ModelAndView modelAndView) {
 		List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.DELIVERED).stream()
 				.map(pack -> {
@@ -50,10 +52,11 @@ public class DeliveredController extends BaseController {
 				})
 				.collect(Collectors.toList());
 		modelAndView.addObject("delivering", pendingAndDeliveredViewModels);
-		return this.view("delivered", modelAndView);
+		return this.view("/packages/delivered", modelAndView);
 	}
 	
 	@PostMapping("/acquire")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView acquirePackage(@RequestParam String deliveredId, HttpSession session) {
 //		String username = session.getAttribute("username").toString();
 //		PackageServiceModel packageServiceModel = this.packageService.getPackageById(deliveredId);

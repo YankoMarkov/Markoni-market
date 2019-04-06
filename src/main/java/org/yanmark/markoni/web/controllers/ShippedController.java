@@ -1,5 +1,6 @@
 package org.yanmark.markoni.web.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
 import org.yanmark.markoni.domain.models.views.packages.ShippedViewModel;
@@ -31,6 +32,7 @@ public class ShippedController extends BaseController {
 	}
 	
 	@GetMapping("/shipped")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView shippedPackages(ModelAndView modelAndView) {
 		List<ShippedViewModel> shippedViewModels = this.packageService.getAllPackagesByStatus(Status.SHIPPED).stream()
 				.map(pack -> {
@@ -43,14 +45,15 @@ public class ShippedController extends BaseController {
 				})
 				.collect(Collectors.toList());
 		modelAndView.addObject("shipping", shippedViewModels);
-		return this.view("shipped", modelAndView);
+		return this.view("/packages/shipped", modelAndView);
 	}
 	
 	@PostMapping("/shipped")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ModelAndView deliverPackage(@RequestParam String shippedId) {
 		PackageServiceModel packageServiceModel = this.packageService.getPackageById(shippedId);
 		packageServiceModel.setStatus(Status.DELIVERED);
 		this.packageService.savePackage(packageServiceModel);
-		return this.redirect("/packages/shipped");
+		return this.redirect("/packages/delivered");
 	}
 }

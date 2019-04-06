@@ -53,7 +53,7 @@ public class PendingController extends BaseController {
         packageServiceModel.setStatus(Status.SHIPPED);
         packageServiceModel.setEstimatedDeliveryDay(LocalDateTime.now().plusDays(getRandomDays()));
         this.packageService.savePackage(packageServiceModel);
-        return this.redirect("/packages/pending");
+        return this.redirect("/packages/shipped");
     }
 
     private int getRandomDays() {

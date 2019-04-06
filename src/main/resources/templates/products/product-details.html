@@ -17,7 +17,7 @@
                     <article class="gallery-wrap">
                         <div class="img-big-wrap">
                             <img class="img-thumbnail" th:src="${product.image}">
-                        </div> <!-- slider-productCreate.// -->
+                        </div> <!-- slider-add.// -->
                         <div class="img-small-wrap">
                             <div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
                             <div class="item-gallery"><img src="https://s9.postimg.org/tupxkvfj3/image.jpg"></div>
@@ -73,17 +73,26 @@
                             </div>
                             <div id="comment" class="container tab-pane fade"><br>
                                 <h3>Comment</h3>
-                                <div class="form-group">
-                                    <label class="form-control-label" for="new-rating">Rating</label>
-                                    <input class="form-control" id="new-rating" type="number" min="1" max="5"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label" for="new-comment">Your comment</label>
-                                    <textarea class="form-control" id="new-comment" name="comment" rows="5"></textarea>
-                                </div>
+                                <form id="data-comment" th:action="@{/comments/add}" method="post">
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="new-rating">Rating</label>
+                                        <input class="form-control" id="new-rating" type="number" name="rating" min="1"
+                                               max="5"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="new-comment">Your comment</label>
+                                        <textarea class="form-control" id="new-comment" name="comment"
+                                                  rows="5"></textarea>
+                                    </div>
+                                    <div class="button-holder d-flex justify-content-center mb-3">
+                                        <button type="submit" class="btn bg-markoni text-white">Add</button>
+                                    </div>
+                                </form>
                             </div>
                             <div id="allComments" class="container tab-pane fade"><br>
                                 <h3>All Comments</h3>
+                                <p>test<span class="ml-5">test</span></p>
                                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
                                     laudantium, totam rem aperiam.</p>
                             </div>
@@ -97,5 +106,21 @@
         <th:block th:replace="fragments/footer"/>
     </footer>
 </div>
+<script>
+    // fetch('/comments/fetch')
+    //     .then((response) => response.json())
+    //     .then((json) => {
+    //
+    //         let comments =
+    //             `<h3>All Comments</h3>` +
+    //             `<hr class="bg-markoni hr-2"/>` +
+    //                 ``;
+    //
+    //             json.forEach((categories) => $('#allComments')
+    //                 .append(`<h3>All Comments</h3>`)
+    //                 .append(`<option value="${categories.id}">${categories.name}</option>`));
+    //     })
+    //     .catch((err) => console.log(err));
+</script>
 </body>
 </html>
