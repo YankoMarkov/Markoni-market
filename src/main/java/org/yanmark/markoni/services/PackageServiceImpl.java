@@ -32,8 +32,7 @@ public class PackageServiceImpl implements PackageService {
 		try {
 			aPackage = this.packageRepository.saveAndFlush(aPackage);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new IllegalArgumentException(e.getMessage());
 		}
 		return this.modelMapper.map(aPackage, PackageServiceModel.class);
 	}
@@ -42,7 +41,7 @@ public class PackageServiceImpl implements PackageService {
 	public List<PackageServiceModel> getAllPackagesByStatus(Status status) {
 		List<Package> packages = this.packageRepository.findAllByStatus(status);
 		if (packages == null) {
-			return new ArrayList<>();
+			throw new IllegalArgumentException("Packages was not found!");
 		}
 		return packages.stream()
 				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
@@ -54,7 +53,7 @@ public class PackageServiceImpl implements PackageService {
 		User user = this.modelMapper.map(userService, User.class);
 		List<Package> packages = this.packageRepository.findAllByRecipientAndStatus(user, status);
 		if (packages == null) {
-			return new ArrayList<>();
+			throw new IllegalArgumentException("Packages was not found!");
 		}
 		return packages.stream()
 				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
@@ -64,7 +63,7 @@ public class PackageServiceImpl implements PackageService {
 	@Override
 	public PackageServiceModel getPackageById(String id) {
 		Package aPackage = this.packageRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Package not found!"));
+				.orElseThrow(() -> new IllegalArgumentException("Package was not found!"));
 		return this.modelMapper.map(aPackage, PackageServiceModel.class);
 	}
 }

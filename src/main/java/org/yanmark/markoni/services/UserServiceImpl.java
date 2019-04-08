@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("User was not found!"));
     }
 
     @Override
@@ -50,8 +50,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(user, UserServiceModel.class);
     }
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel updateUsersRole(UserServiceModel userService, UserRoleServiceModel userRoleService) {
         User user = this.userRepository.findById(userService.getId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("User was not found!"));
         try {
             UserRole userRole = this.modelMapper.map(userRoleService, UserRole.class);
             List<String> roles = user.getAuthorities().stream()
@@ -77,8 +76,7 @@ public class UserServiceImpl implements UserService {
             }
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(user, UserServiceModel.class);
     }
@@ -89,7 +87,7 @@ public class UserServiceImpl implements UserService {
             userService.setPassword(userEdit.getNewPassword());
         }
         User user = this.userRepository.findByUsername(userService.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("User was not found!"));
         if (!this.passwordEncoder.matches(userEdit.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Incorrect password!");
         }
@@ -100,8 +98,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(user, UserServiceModel.class);
     }
@@ -110,21 +107,21 @@ public class UserServiceImpl implements UserService {
     public UserServiceModel getUserById(String id) {
         return this.userRepository.findById(id)
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
-                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("User was not found!"));
     }
 
     @Override
     public UserServiceModel getUserByUsername(String username) {
         return this.userRepository.findByUsername(username)
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("User was not found!"));
     }
 
     @Override
     public List<UserServiceModel> getAllUsers() {
         List<User> users = this.userRepository.findAllOrderByUsername();
         if (users == null) {
-            return new ArrayList<>();
+            throw new IllegalArgumentException("Users was not found!");
         }
         return users.stream()
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
@@ -138,8 +135,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(user, UserServiceModel.class);
     }

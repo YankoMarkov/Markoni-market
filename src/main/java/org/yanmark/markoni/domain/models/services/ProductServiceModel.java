@@ -14,6 +14,7 @@ public class ProductServiceModel extends BaseServiceModel {
     private String description;
     private BigDecimal price;
     private int rating;
+    private int quantity;
     private List<CommentServiceModel> comments;
     private Set<CategoryServiceModel> categories;
 
@@ -68,6 +69,14 @@ public class ProductServiceModel extends BaseServiceModel {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public List<CommentServiceModel> getComments() {

@@ -45,8 +45,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             comment = this.commentRepository.saveAndFlush(comment);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(comment, CommentServiceModel.class);
     }
@@ -55,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentServiceModel> getAllComments() {
         List<Comment> comments = this.commentRepository.findAllByOrderByTimeDesc();
         if (comments == null) {
-            return new ArrayList<>();
+            throw new IllegalArgumentException("comments was not found!");
         }
         return comments.stream()
                 .map(comment -> this.modelMapper.map(comment, CommentServiceModel.class))

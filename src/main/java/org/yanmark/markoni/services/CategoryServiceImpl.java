@@ -26,15 +26,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryServiceModel saveCategory(CategoryServiceModel categoryService) {
-        if (categoryExist(categoryService.getName())) {
-            throw new IllegalArgumentException("Category name almost exist!");
-        }
         Category category = this.modelMapper.map(categoryService, Category.class);
         try {
             category = this.categoryRepository.saveAndFlush(category);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(category, CategoryServiceModel.class);
     }
@@ -50,21 +46,21 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             this.categoryRepository.deleteById(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
     @Override
     public CategoryServiceModel getCategoryById(String id) {
         Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Category was not found!"));
         return this.modelMapper.map(category, CategoryServiceModel.class);
     }
 
     @Override
     public CategoryServiceModel getCategoryByName(String name) {
         Category category = this.categoryRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Category was not found!"));
         return this.modelMapper.map(category, CategoryServiceModel.class);
     }
 
@@ -72,16 +68,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryServiceModel> getAllCategories() {
         List<Category> categories = this.categoryRepository.findAllOrderByName();
         if (categories == null) {
-            return new ArrayList<>();
+            throw new IllegalArgumentException("Categories was not found!");
         }
         return categories.stream()
                 .map(category -> this.modelMapper.map(category, CategoryServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
-    public boolean categoryExist(String name) {
-        Category category = this.categoryRepository.findByName(name).orElse(null);
-        return category != null;
     }
 }

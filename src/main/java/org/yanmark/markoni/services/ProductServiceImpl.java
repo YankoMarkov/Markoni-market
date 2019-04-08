@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             this.productRepository.deleteById(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -72,14 +72,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductServiceModel getProductByName(String name) {
         Product product = this.productRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Product was not found!"));
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     @Override
     public ProductServiceModel getProductById(String id) {
         Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Product was not found!"));
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
@@ -94,15 +94,14 @@ public class ProductServiceImpl implements ProductService {
         try {
             product = this.productRepository.saveAndFlush(product);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     private List<ProductServiceModel> takeProductServices(List<Product> products) {
         if (products == null) {
-            return new ArrayList<>();
+            throw new IllegalArgumentException("Products was not found!");
         }
         return products.stream()
                 .map(product -> {

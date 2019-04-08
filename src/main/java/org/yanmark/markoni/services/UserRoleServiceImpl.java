@@ -27,7 +27,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public UserRoleServiceModel getRoleByName(String name) {
         UserRole role = this.userRoleRepository.findByAuthority(name)
-                .orElseThrow(() -> new IllegalArgumentException("Role not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Role was not found!"));
         return this.modelMapper.map(role, UserRoleServiceModel.class);
     }
 
@@ -35,7 +35,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Set<UserRoleServiceModel> getAllRoles() {
         List<UserRole> roles = this.userRoleRepository.findAll();
         if (roles == null) {
-            return new HashSet<>();
+            throw new IllegalArgumentException("Roles was not found!");
         }
         return roles.stream()
                 .map(role -> this.modelMapper.map(role, UserRoleServiceModel.class))

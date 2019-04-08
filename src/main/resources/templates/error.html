@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Oops 404</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{//fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister}" rel="stylesheet"/>
+    <link th:href="@{/css/error-css.css}" rel="stylesheet" media="all"/>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">
+        <p>OOPS! - Could not Find it</p>
+        <img th:src="@{/images/404-1.png}" alt="Image"/>
+        <div class="sub">
+            <p th:text="${message}"></p>
+            <p><a th:href="@{/home}">Go To Homepage</a></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

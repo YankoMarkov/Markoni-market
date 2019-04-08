@@ -14,6 +14,7 @@ public class Product extends BaseEntity {
     private String description;
     private BigDecimal price;
     private int rating;
+    private int quantity;
     private Set<Comment> comments;
     private Set<Category> categories;
 
@@ -63,6 +64,10 @@ public class Product extends BaseEntity {
         return this.price;
     }
 
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     @Column(name = "ratings", nullable = false)
     public int getRating() {
         return rating;
@@ -72,8 +77,13 @@ public class Product extends BaseEntity {
         this.rating = rating;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    @Column(name = "quantity", nullable = false)
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "product", cascade = CascadeType.ALL)

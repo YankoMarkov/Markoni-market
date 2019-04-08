@@ -18,6 +18,4 @@ public interface CategoryService {
     CategoryServiceModel getCategoryByName(String name);
 
     List<CategoryServiceModel> getAllCategories();
-
-    boolean categoryExist(String name);
 }

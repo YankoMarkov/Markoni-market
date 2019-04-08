@@ -13,6 +13,7 @@ public class ProductCreateBindingModel {
     private Double weight;
     private String description;
     private BigDecimal price;
+    private int quantity;
     private Set<String> categories;
 
     @NotNull(message = "Name cannot be null.")
@@ -61,6 +62,16 @@ public class ProductCreateBindingModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @NotNull(message = "Quantity cannot be null.")
+    @Min(1)
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @NotNull(message = "Category cannot be null.")

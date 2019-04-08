@@ -28,7 +28,7 @@
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-12 bottom-rule">
-                            <h5 class="product-price" th:text="|Price: ${product.price}|"></h5>
+                            <h5 class="product-price">Price: <span th:text="${product.price}"></span></h5>
                         </div>
                     </div>
                     <div class="row mt-2 d-flex justify-content-center">
@@ -36,9 +36,14 @@
                             <p>Rating: <span th:text="${product.rating}"></span></p>
                         </div>
                     </div>
+                    <div class="row mt-2 d-flex justify-content-center">
+                        <div class="col-md-3">
+                            <p><span th:text="${product.quantity}"></span> In Stock</p>
+                        </div>
+                    </div>
                     <div class="row mt-4 d-flex justify-content-center">
-                        <a class="btn bg-markoni text-white" th:href="@{/products/buy/{id}(id=${product.id})}"
-                           th:text="Buy"></a>
+                        <a class="btn bg-markoni text-white" th:href="@{/orders/add/{id}(id=${product.id})}"
+                           th:text="Order"></a>
                         <a class="btn btn-dark text-white ml-5" th:href="@{/home}"
                            th:text="Back"></a>
                     </div>
@@ -56,11 +61,11 @@
                         </ul>
                         <div class="tab-content">
                             <div id="home" class="container tab-pane active"><br>
-                                <h4>Description:</h4>
+                                <h4>Description</h4>
                                 <p th:text="${product.description}"></p>
                             </div>
                             <div id="comment" class="container tab-pane fade"><br>
-                                <h4>Comment:</h4>
+                                <h4>Comment</h4>
                                 <form id="data-comment" th:action="@{/comments/add}" method="post">
                                     <input type="hidden" name="productId" th:value="${product.id}">
                                     <div class="form-group">
@@ -98,7 +103,7 @@
             $('#allComments').empty();
             let comments = $('#allComments')
                 .append(`<br>`)
-                .append(`<h4>All Comments:</h4>`)
+                .append(`<h4>All Comments</h4>`)
                 .append(`<hr class="bg-markoni hr-2"/>`);
 
             json.forEach((comment) => comments

@@ -1,4 +1,4 @@
-package org.yanmark.markoni.domain.models.views.Comments;
+package org.yanmark.markoni.domain.models.views.comments;
 
 public class CommentsViewModel {
 

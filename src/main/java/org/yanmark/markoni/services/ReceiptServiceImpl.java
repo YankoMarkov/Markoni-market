@@ -25,8 +25,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         try {
             receipt = this.receiptRepository.saveAndFlush(receipt);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(receipt, ReceiptServiceModel.class);
     }

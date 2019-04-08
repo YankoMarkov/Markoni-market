@@ -11,7 +11,7 @@ import org.yanmark.markoni.domain.models.bindings.comments.CommentCreateBindingM
 import org.yanmark.markoni.domain.models.services.CommentServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
-import org.yanmark.markoni.domain.models.views.Comments.CommentsViewModel;
+import org.yanmark.markoni.domain.models.views.comments.CommentsViewModel;
 import org.yanmark.markoni.services.CommentService;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
