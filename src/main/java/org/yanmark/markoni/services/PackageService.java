@@ -7,12 +7,14 @@ import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import java.util.List;
 
 public interface PackageService {
-	
-	PackageServiceModel savePackage(PackageServiceModel packageService);
-	
-	List<PackageServiceModel> getAllPackagesByStatus(Status status);
-	
-	List<PackageServiceModel> getAllPackagesByUserAndStatus(UserServiceModel userService, Status status);
-	
-	PackageServiceModel getPackageById(String id);
+
+    PackageServiceModel savePackage(PackageServiceModel packageService);
+
+    PackageServiceModel createPackage(PackageServiceModel packageService, UserServiceModel userService);
+
+    List<PackageServiceModel> getAllPackagesByStatus(Status status);
+
+    List<PackageServiceModel> getAllPackagesByUserAndStatus(UserServiceModel userService, Status status);
+
+    PackageServiceModel getPackageById(String id);
 }

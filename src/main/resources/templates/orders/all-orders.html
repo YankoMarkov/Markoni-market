@@ -19,41 +19,47 @@
             <h1 class="text-center text-markoni">My Orders</h1>
         </th:block>
         <hr class="bg-markoni w-25 hr-2"/>
-        <table class="table table-hover w-75 mx-auto">
+        <table class="table table-hover mx-auto">
             <thead>
             <tr class="row mx-auto">
                 <th class="col-md-1 text-center">#</th>
-                <th class="col-md-2 text-center">Image</th>
+                <th class="col-md-1 text-center">Image</th>
                 <th class="col-md-3 text-center">Name</th>
                 <th class="col-md-2 text-center">Price</th>
-                <th class="col-md-3 text-center">Date</th>
+                <th class="col-md-2 text-center">Date</th>
+                <th class="col-md-3 text-center">Action</th>
             </tr>
             </thead>
             <tbody>
             <th:block th:each="order,iter : ${orders}">
                 <tr class="row mx-auto">
                     <th class="col-md-1 text-center" th:text="${iter.index + 1}"></th>
-                    <td class="col-md-2">
-                        <div class="text-center">
-                            <img th:src="${order.image}" width="auto" height="40" alt="Product">
-                        </div>
+                    <td class="col-md-1 text-center">
+                        <img th:src="${order.image}" width="auto" height="40" alt="Product">
                     </td>
                     <td class="col-md-3 text-center" th:text="${order.product}"></td>
                     <td class="col-md-2 text-center" th:text="${order.price}"></td>
-                    <td class="col-md-3 text-center" th:text="${order.orderedOn}"></td>
+                    <td class="col-md-2 text-center" th:text="${order.orderedOn}"></td>
+                    <td class="col-md-3 text-center">
+                        <a th:href="@{/orders/buy/{id}(id=${order.id})}"
+                           class="btn btn-success font-weight-bold text-white">Buy</a>
+                        <a th:href="@{/orders/delete/{id}(id=${order.id})}"
+                           class="btn btn-danger font-weight-bold text-white">Delete</a>
+                    </td>
                 </tr>
             </th:block>
             <tr class="row mx-auto">
                 <th class="col-md-1 text-center"></th>
-                <td class="col-md-2 text-center"></td>
+                <td class="col-md-1 text-center"></td>
                 <td class="col-md-3 text-center"></td>
                 <td class="col-md-2 text-center">Total: <span
                         th:text="${#numbers.formatDecimal(totalPrice, 0, 2)}"></span></td>
+                <td class="col-md-2 text-center"></td>
                 <td class="col-md-3 text-center"></td>
             </tr>
             </tbody>
         </table>
-        <hr class="bg-markoni hr-2 mt-5"/>
+        <hr class="bg-markoni hr-3 mt-5"/>
     </main>
     <footer>
         <th:block th:replace="fragments/footer"/>

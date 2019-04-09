@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.models.bindings.packages.PackageCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
-import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.domain.models.views.packages.PackageDetailsViewModel;
 import org.yanmark.markoni.domain.models.views.users.UserViewModel;
@@ -18,7 +17,6 @@ import org.yanmark.markoni.services.PackageService;
 import org.yanmark.markoni.services.UserService;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,22 +54,9 @@ public class PackageController extends BaseController {
         if (bindingResult.hasErrors()) {
             return this.view("/packages/package-create");
         }
-        UserServiceModel userServiceModel = this.userService.getUserById(packageCreate.getRecipient());
-        if (userServiceModel.getProducts().isEmpty()) {
-            return this.view("/packages/package-create");
-        }
         PackageServiceModel packageServiceModel = this.modelMapper.map(packageCreate, PackageServiceModel.class);
-        packageServiceModel.setRecipient(userServiceModel);
-        packageServiceModel.setShippingAddress(userServiceModel.getAddress());
-        packageServiceModel.setStatus(Status.PENDING);
-        packageServiceModel.setEstimatedDeliveryDay(LocalDateTime.now());
-        double weight = userServiceModel.getProducts().stream()
-                .mapToDouble(ProductServiceModel::getWeight).sum();
-        packageServiceModel.setWeight(weight);
-        StringBuilder description = new StringBuilder();
-        userServiceModel.getProducts().forEach(product -> description.append(product.getName()).append(System.lineSeparator()));
-        packageServiceModel.setDescription(description.toString());
-        this.packageService.savePackage(packageServiceModel);
+        UserServiceModel userServiceModel = this.userService.getUserById(packageCreate.getRecipient());
+        this.packageService.createPackage(packageServiceModel, userServiceModel);
         return this.redirect("/packages/pending");
     }
 

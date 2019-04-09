@@ -12,6 +12,7 @@ public class Order extends BaseEntity {
     private Product product;
     private User customer;
     private LocalDate orderedOn;
+    private Integer quantity;
 
     @ManyToOne(targetEntity = Product.class)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -40,5 +41,14 @@ public class Order extends BaseEntity {
 
     public void setOrderedOn(LocalDate orderedOn) {
         this.orderedOn = orderedOn;
+    }
+
+    @Column(name = "quantity", nullable = false)
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

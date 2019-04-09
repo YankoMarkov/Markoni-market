@@ -2,7 +2,6 @@ package org.yanmark.markoni.services;
 
 import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
-import org.yanmark.markoni.domain.models.services.UserServiceModel;
 
 import java.io.IOException;
 import java.util.List;

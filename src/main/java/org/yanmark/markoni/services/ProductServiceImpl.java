@@ -20,19 +20,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
-    private final UserService userService;
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
                               CategoryService categoryService,
-                              UserService userService,
                               CloudinaryService cloudinaryService,
                               ModelMapper modelMapper) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
-        this.userService = userService;
         this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
     }
@@ -45,12 +42,24 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toSet());
         productService.setCategories(categoriesServiceModels);
         productService.setImage(this.cloudinaryService.uploadImage(productCreate.getImage()));
-        return saveProductService(productService);
+        Product product = this.modelMapper.map(productService, Product.class);
+        try {
+            product = this.productRepository.saveAndFlush(product);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     @Override
     public ProductServiceModel editProduct(ProductServiceModel productService) {
-        return saveProductService(productService);
+        Product product = this.modelMapper.map(productService, Product.class);
+        try {
+            product = this.productRepository.saveAndFlush(product);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     @Override
@@ -106,15 +115,5 @@ public class ProductServiceImpl implements ProductService {
                     return this.modelMapper.map(product, ProductServiceModel.class);
                 })
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    private ProductServiceModel saveProductService(ProductServiceModel productService) {
-        Product product = this.modelMapper.map(productService, Product.class);
-        try {
-            product = this.productRepository.saveAndFlush(product);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        return this.modelMapper.map(product, ProductServiceModel.class);
     }
 }

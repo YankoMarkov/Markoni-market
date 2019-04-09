@@ -10,7 +10,8 @@ public interface OrderService {
 
     OrderServiceModel saveOrder(OrderServiceModel orderService,
                                 ProductServiceModel productService,
-                                UserServiceModel userService);
+                                UserServiceModel userService,
+                                Integer quantity);
 
     void deleteOrder(String id);
 

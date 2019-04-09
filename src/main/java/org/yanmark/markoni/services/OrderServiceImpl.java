@@ -18,22 +18,37 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ProductService productService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
+                            ProductService productService,
                             ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
+        this.productService = productService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     public OrderServiceModel saveOrder(OrderServiceModel orderService,
                                        ProductServiceModel productService,
-                                       UserServiceModel userService) {
+                                       UserServiceModel userService,
+                                       Integer quantity) {
+        List<OrderServiceModel> orderServiceModels = getAllOrdersByCustomer(userService.getUsername());
+        if (!orderServiceModels.isEmpty()) {
+            orderServiceModels
+                    .forEach(order -> {
+                        if (order.getProduct().getId().equals(productService.getId()) &&
+                                order.getCustomer().getId().equals(userService.getId())) {
+                            throw new IllegalArgumentException("The customer already has this order!");
+                        }
+                    });
+        }
         orderService.setOrderedOn(LocalDate.now());
         orderService.setCustomer(userService);
         orderService.setProduct(productService);
+        orderService.setQuantity(quantity);
         Order order = this.modelMapper.map(orderService, Order.class);
         try {
             order = this.orderRepository.saveAndFlush(order);
@@ -58,7 +73,13 @@ public class OrderServiceImpl implements OrderService {
         if (orders.isEmpty()) {
             return new ArrayList<>();
         }
-        orders = takeOrders(orders);
+        orders = orders.stream()
+                .peek(order -> {
+                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
+                        deleteOrder(order.getId());
+                    }
+                })
+                .collect(Collectors.toList());
         return orders.stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -70,7 +91,13 @@ public class OrderServiceImpl implements OrderService {
         if (orders.isEmpty()) {
             return new ArrayList<>();
         }
-        orders = takeOrders(orders);
+        orders = orders.stream()
+                .peek(order -> {
+                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
+                        deleteOrder(order.getId());
+                    }
+                })
+                .collect(Collectors.toList());
         return orders.stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -80,20 +107,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceModel getOrderById(String id) {
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order was not found!"));
-        if (order.getOrderedOn().plusMonths(1).isAfter(LocalDate.now())) {
+        if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
             deleteOrder(order.getId());
-            throw new IllegalArgumentException("Order was not found!");
+            throw new IllegalArgumentException("The order had expired and was deleted!");
         }
         return this.modelMapper.map(order, OrderServiceModel.class);
-    }
-
-    private List<Order> takeOrders(List<Order> orders) {
-        return orders.stream()
-                .peek(order -> {
-                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
-                        deleteOrder(order.getId());
-                    }
-                })
-                .collect(Collectors.toList());
     }
 }

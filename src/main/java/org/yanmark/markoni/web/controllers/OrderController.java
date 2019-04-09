@@ -4,18 +4,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.yanmark.markoni.domain.models.bindings.orders.OrderBindingModel;
 import org.yanmark.markoni.domain.models.services.OrderServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
+import org.yanmark.markoni.domain.models.views.orders.OrderProductViewModel;
 import org.yanmark.markoni.domain.models.views.orders.OrderViewModel;
 import org.yanmark.markoni.services.OrderService;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
@@ -43,14 +45,42 @@ public class OrderController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/add/{id}")
+    @GetMapping("/order/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView add(@PathVariable String id,
-                            Principal principal) {
+    public ModelAndView order(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
+        OrderProductViewModel orderProductViewModel = this.modelMapper.map(productServiceModel, OrderProductViewModel.class);
+        modelAndView.addObject("product", orderProductViewModel);
+        return this.view("/orders/order-product", modelAndView);
+    }
+
+    @PostMapping("/order")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView orderConfirm(@Valid @ModelAttribute("productOrder") OrderBindingModel productOrder,
+                                     Principal principal, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return this.view("/orders/order-product");
+        }
+        ProductServiceModel productServiceModel = this.productService.getProductById(productOrder.getId());
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         OrderServiceModel orderServiceModel = new OrderServiceModel();
-        this.orderService.saveOrder(orderServiceModel, productServiceModel, userServiceModel);
+        this.orderService.saveOrder(orderServiceModel, productServiceModel, userServiceModel, productOrder.getQuantity());
+        return this.redirect("/orders/my");
+    }
+
+    @GetMapping("/buy/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView buyConfirm(@PathVariable String id, Principal principal) {
+        OrderServiceModel orderServiceModel = this.orderService.getOrderById(id);
+        UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
+        this.userService.buyOrder(orderServiceModel, userServiceModel);
+        return this.redirect("/home");
+    }
+
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView delete(@PathVariable String id) {
+        this.orderService.deleteOrder(id);
         return this.redirect("/orders/my");
     }
 

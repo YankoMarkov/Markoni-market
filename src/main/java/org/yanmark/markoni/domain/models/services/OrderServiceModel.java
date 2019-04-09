@@ -7,6 +7,7 @@ public class OrderServiceModel extends BaseServiceModel {
     private ProductServiceModel product;
     private UserServiceModel customer;
     private LocalDate orderedOn;
+    private Integer quantity;
 
     public ProductServiceModel getProduct() {
         return product;
@@ -30,5 +31,13 @@ public class OrderServiceModel extends BaseServiceModel {
 
     public void setOrderedOn(LocalDate orderedOn) {
         this.orderedOn = orderedOn;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

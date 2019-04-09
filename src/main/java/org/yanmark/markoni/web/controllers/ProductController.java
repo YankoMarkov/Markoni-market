@@ -12,9 +12,9 @@ import org.yanmark.markoni.domain.models.bindings.products.ProductEditBindingMod
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
-import org.yanmark.markoni.domain.models.views.products.ProductBuyViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductDetailsViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductEditViewModel;
+import org.yanmark.markoni.domain.models.views.products.ProductOrderViewModel;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
 
@@ -63,8 +63,8 @@ public class ProductController extends BaseController {
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
     public ModelAndView all(ModelAndView modelAndView) {
         List<ProductServiceModel> productServiceModels = this.productService.getAllProducts();
-        List<ProductBuyViewModel> productAllViewModels = productServiceModels.stream()
-                .map(product -> this.modelMapper.map(product, ProductBuyViewModel.class))
+        List<ProductOrderViewModel> productAllViewModels = productServiceModels.stream()
+                .map(product -> this.modelMapper.map(product, ProductOrderViewModel.class))
                 .collect(Collectors.toList());
         modelAndView.addObject("products", productAllViewModels);
         return this.view("/products/all-products", modelAndView);
@@ -102,24 +102,6 @@ public class ProductController extends BaseController {
         this.modelMapper.map(productEdit, productServiceModel);
         this.productService.editProduct(productServiceModel);
         return this.redirect("/products/details/" + id);
-    }
-
-    @GetMapping("/buy/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView buy(@PathVariable String id, ModelAndView modelAndView) {
-        ProductServiceModel productServiceModel = this.productService.getProductById(id);
-        ProductBuyViewModel productBuyViewModel = this.modelMapper.map(productServiceModel, ProductBuyViewModel.class);
-        modelAndView.addObject("product", productBuyViewModel);
-        return this.view("/products/buy-product", modelAndView);
-    }
-
-    @PostMapping("/buy")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView buyConfirm(@RequestParam String productId, Principal principal) {
-        ProductServiceModel productServiceModel = this.productService.getProductById(productId);
-        UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
-        this.userService.userBuyProduct(productServiceModel, userServiceModel);
-        return this.redirect("/users/storage");
     }
 
     @GetMapping("/delete/{id}")

@@ -14,19 +14,19 @@ public class UserServiceModel extends BaseServiceModel {
     private Set<UserRoleServiceModel> authorities;
     private Set<PackageServiceModel> packages;
     private Set<ReceiptServiceModel> receipts;
-    private List<ProductServiceModel> products;
+    private Set<OrderServiceModel> orders;
     private List<CommentServiceModel> comments;
 
     public UserServiceModel() {
         this.authorities = new HashSet<>();
         this.packages = new HashSet<>();
         this.receipts = new HashSet<>();
-        this.products = new ArrayList<>();
+        this.orders = new HashSet<>();
         this.comments = new ArrayList<>();
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -34,7 +34,7 @@ public class UserServiceModel extends BaseServiceModel {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
@@ -42,7 +42,7 @@ public class UserServiceModel extends BaseServiceModel {
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
@@ -50,7 +50,7 @@ public class UserServiceModel extends BaseServiceModel {
     }
 
     public String getAddress() {
-        return this.address;
+        return address;
     }
 
     public void setAddress(String address) {
@@ -66,7 +66,7 @@ public class UserServiceModel extends BaseServiceModel {
     }
 
     public Set<PackageServiceModel> getPackages() {
-        return this.packages;
+        return packages;
     }
 
     public void setPackages(Set<PackageServiceModel> packages) {
@@ -74,23 +74,23 @@ public class UserServiceModel extends BaseServiceModel {
     }
 
     public Set<ReceiptServiceModel> getReceipts() {
-        return this.receipts;
+        return receipts;
     }
 
     public void setReceipts(Set<ReceiptServiceModel> receipts) {
         this.receipts = receipts;
     }
 
-    public List<ProductServiceModel> getProducts() {
-        return this.products;
+    public Set<OrderServiceModel> getOrders() {
+        return orders;
     }
 
-    public void setProducts(List<ProductServiceModel> products) {
-        this.products = products;
+    public void setOrders(Set<OrderServiceModel> orders) {
+        this.orders = orders;
     }
 
     public List<CommentServiceModel> getComments() {
-        return this.comments;
+        return comments;
     }
 
     public void setComments(List<CommentServiceModel> comments) {
