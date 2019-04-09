@@ -14,7 +14,7 @@ public class Product extends BaseEntity {
     private String description;
     private BigDecimal price;
     private int rating;
-    private int quantity;
+    private Integer quantity;
     private Set<Comment> comments;
     private Set<Category> categories;
 
@@ -78,11 +78,11 @@ public class Product extends BaseEntity {
     }
 
     @Column(name = "quantity", nullable = false)
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

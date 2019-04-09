@@ -16,16 +16,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class PackageServiceImpl implements PackageService {
-	
+
 	private final PackageRepository packageRepository;
 	private final ModelMapper modelMapper;
-	
+
 	@Autowired
 	public PackageServiceImpl(PackageRepository packageRepository, ModelMapper modelMapper) {
 		this.packageRepository = packageRepository;
 		this.modelMapper = modelMapper;
 	}
-	
+
 	@Override
 	public PackageServiceModel savePackage(PackageServiceModel packageService) {
 		Package aPackage = this.modelMapper.map(packageService, Package.class);
@@ -36,30 +36,22 @@ public class PackageServiceImpl implements PackageService {
 		}
 		return this.modelMapper.map(aPackage, PackageServiceModel.class);
 	}
-	
+
 	@Override
 	public List<PackageServiceModel> getAllPackagesByStatus(Status status) {
-		List<Package> packages = this.packageRepository.findAllByStatus(status);
-		if (packages == null) {
-			throw new IllegalArgumentException("Packages was not found!");
-		}
-		return packages.stream()
+		return this.packageRepository.findAllByStatus(status).stream()
 				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
 				.collect(Collectors.toUnmodifiableList());
 	}
-	
+
 	@Override
 	public List<PackageServiceModel> getAllPackagesByUserAndStatus(UserServiceModel userService, Status status) {
 		User user = this.modelMapper.map(userService, User.class);
-		List<Package> packages = this.packageRepository.findAllByRecipientAndStatus(user, status);
-		if (packages == null) {
-			throw new IllegalArgumentException("Packages was not found!");
-		}
-		return packages.stream()
+		return this.packageRepository.findAllByRecipientAndStatus(user, status).stream()
 				.map(pack -> this.modelMapper.map(pack, PackageServiceModel.class))
 				.collect(Collectors.toUnmodifiableList());
 	}
-	
+
 	@Override
 	public PackageServiceModel getPackageById(String id) {
 		Package aPackage = this.packageRepository.findById(id)

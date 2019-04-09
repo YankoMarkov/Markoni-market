@@ -66,11 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryServiceModel> getAllCategories() {
-        List<Category> categories = this.categoryRepository.findAllOrderByName();
-        if (categories == null) {
-            throw new IllegalArgumentException("Categories was not found!");
-        }
-        return categories.stream()
+        return this.categoryRepository.findAllOrderByName().stream()
                 .map(category -> this.modelMapper.map(category, CategoryServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }

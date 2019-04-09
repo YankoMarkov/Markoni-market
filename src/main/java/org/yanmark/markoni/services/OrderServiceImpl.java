@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.Order;
 import org.yanmark.markoni.domain.models.services.OrderServiceModel;
+import org.yanmark.markoni.domain.models.services.ProductServiceModel;
+import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.OrderRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +28,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderServiceModel saveOrder(OrderServiceModel orderService) {
-        orderService.setOrderedOn(LocalDateTime.now().plusMonths(1));
+    public OrderServiceModel saveOrder(OrderServiceModel orderService,
+                                       ProductServiceModel productService,
+                                       UserServiceModel userService) {
+        orderService.setOrderedOn(LocalDate.now());
+        orderService.setCustomer(userService);
+        orderService.setProduct(productService);
         Order order = this.modelMapper.map(orderService, Order.class);
         try {
             order = this.orderRepository.saveAndFlush(order);
@@ -37,11 +44,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void deleteOrder(String id) {
+        try {
+            this.orderRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    @Override
     public List<OrderServiceModel> getAllOrders() {
         List<Order> orders = this.orderRepository.findAll();
-        if (orders == null) {
-            throw new IllegalArgumentException("Orders was not found!");
+        if (orders.isEmpty()) {
+            return new ArrayList<>();
         }
+        orders = takeOrders(orders);
         return orders.stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -49,10 +66,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderServiceModel> getAllOrdersByCustomer(String username) {
-        List<Order> orders = this.orderRepository.findAllOrdersByCustomer_UsernameOrderByExpiredOnDesc(username);
-        if (orders == null) {
-            throw new IllegalArgumentException("Orders was not found!");
+        List<Order> orders = this.orderRepository.findAllOrdersByCustomer_UsernameOrderByOrderedOnDesc(username);
+        if (orders.isEmpty()) {
+            return new ArrayList<>();
         }
+        orders = takeOrders(orders);
         return orders.stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
@@ -62,6 +80,20 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceModel getOrderById(String id) {
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order was not found!"));
+        if (order.getOrderedOn().plusMonths(1).isAfter(LocalDate.now())) {
+            deleteOrder(order.getId());
+            throw new IllegalArgumentException("Order was not found!");
+        }
         return this.modelMapper.map(order, OrderServiceModel.class);
+    }
+
+    private List<Order> takeOrders(List<Order> orders) {
+        return orders.stream()
+                .peek(order -> {
+                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
+                        deleteOrder(order.getId());
+                    }
+                })
+                .collect(Collectors.toList());
     }
 }

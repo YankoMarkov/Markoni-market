@@ -1,33 +1,26 @@
 package org.yanmark.markoni.domain.entities;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 
 @Entity(name = "orders")
 public class Order extends BaseEntity {
 
-    private List<Product> products;
+    private Product product;
     private User customer;
-    private BigDecimal totalPrice;
-    private LocalDateTime orderedOn;
+    private LocalDate orderedOn;
 
-    public Order() {
-        this.products = new ArrayList<>();
+    @ManyToOne(targetEntity = Product.class)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    public Product getProduct() {
+        return product;
     }
 
-    @ManyToMany(targetEntity = Product.class)
-    @JoinTable(name = "orders_products",
-            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @ManyToOne(targetEntity = User.class)
@@ -40,21 +33,12 @@ public class Order extends BaseEntity {
         this.customer = customer;
     }
 
-    @Column(name = "total_price", nullable = false)
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     @Column(name = "ordered_on", nullable = false)
-    public LocalDateTime getOrderedOn() {
+    public LocalDate getOrderedOn() {
         return orderedOn;
     }
 
-    public void setOrderedOn(LocalDateTime orderedOn) {
+    public void setOrderedOn(LocalDate orderedOn) {
         this.orderedOn = orderedOn;
     }
 }

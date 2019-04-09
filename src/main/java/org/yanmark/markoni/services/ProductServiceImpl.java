@@ -7,7 +7,6 @@ import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
-import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.ProductRepository;
 
 import java.io.IOException;
@@ -66,7 +65,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductServiceModel> getAllProducts() {
         List<Product> products = this.productRepository.findAllOrdered();
-        return takeProductServices(products);
+        if (products.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return products.stream()
+                .map(product -> {
+                    if (product.getDescription().length() > 30) {
+                        product.setDescription(product.getDescription().substring(0, 30) + "...");
+                    }
+                    return this.modelMapper.map(product, ProductServiceModel.class);
+                })
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -86,7 +95,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductServiceModel> getAllProductsByName(String name) {
         List<Product> products = this.productRepository.findAllByName(name);
-        return takeProductServices(products);
+        if (products.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return products.stream()
+                .map(product -> {
+                    if (product.getDescription().length() > 30) {
+                        product.setDescription(product.getDescription().substring(0, 30) + "...");
+                    }
+                    return this.modelMapper.map(product, ProductServiceModel.class);
+                })
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private ProductServiceModel saveProductService(ProductServiceModel productService) {
@@ -97,19 +116,5 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException(e.getMessage());
         }
         return this.modelMapper.map(product, ProductServiceModel.class);
-    }
-
-    private List<ProductServiceModel> takeProductServices(List<Product> products) {
-        if (products == null) {
-            throw new IllegalArgumentException("Products was not found!");
-        }
-        return products.stream()
-                .map(product -> {
-                    if (product.getDescription().length() > 30) {
-                        product.setDescription(product.getDescription().substring(0, 30) + "...");
-                    }
-                    return this.modelMapper.map(product, ProductServiceModel.class);
-                })
-                .collect(Collectors.toUnmodifiableList());
     }
 }

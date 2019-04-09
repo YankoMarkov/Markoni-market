@@ -24,11 +24,11 @@
 						<img th:src="${product.image}" class="img-thumbnail" alt="Image">
 					</div>
 					<div class="panel-footer mt-2 d-flex justify-content-center">
-						<form th:method="post" th:action="@{/products/buy}">
+						<form th:method="post" th:action="@{/product/buy}">
 							<input type="hidden" th:value="${product.id}" name="productId"/>
 							<button type="submit" class="btn btn-primary text-white">Buy</button>
 						</form>
-						<a class="btn btn-dark text-white ml-5" th:href="@{/products/details/{id}(id=${product.id})}"
+						<a class="btn btn-dark text-white ml-5" th:href="@{/product/details/{id}(id=${product.id})}"
 						   th:text="Cancel"></a>
 					</div>
 				</div>

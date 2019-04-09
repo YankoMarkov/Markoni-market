@@ -119,11 +119,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserServiceModel> getAllUsers() {
-        List<User> users = this.userRepository.findAllOrderByUsername();
-        if (users == null) {
-            throw new IllegalArgumentException("Users was not found!");
-        }
-        return users.stream()
+        return this.userRepository.findAllOrderByUsername().stream()
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }

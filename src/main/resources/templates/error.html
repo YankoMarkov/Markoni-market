@@ -4,6 +4,7 @@
 <head>
     <title>Oops 404</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/css/reset-css.css}" rel="stylesheet"/>
     <link th:href="@{//fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister}" rel="stylesheet"/>
     <link th:href="@{/css/error-css.css}" rel="stylesheet" media="all"/>
 </head>
@@ -13,7 +14,7 @@
         <p>OOPS! - Could not Find it</p>
         <img th:src="@{/images/404-1.png}" alt="Image"/>
         <div class="sub">
-            <p th:text="${message}"></p>
+            <p th:text="${message}" style="color: red"></p>
             <p><a th:href="@{/home}">Go To Homepage</a></p>
         </div>
     </div>

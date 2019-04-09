@@ -12,6 +12,7 @@ public class ProductDetailsViewModel {
     private String description;
     private BigDecimal price;
     private int rating;
+    private Integer quantity;
     private List<String> categories;
 
     public ProductDetailsViewModel() {
@@ -64,6 +65,14 @@ public class ProductDetailsViewModel {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public List<String> getCategories() {

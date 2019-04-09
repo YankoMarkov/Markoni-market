@@ -1,27 +1,19 @@
 package org.yanmark.markoni.domain.models.services;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 public class OrderServiceModel extends BaseServiceModel {
 
-    private List<ProductServiceModel> products;
+    private ProductServiceModel product;
     private UserServiceModel customer;
-    private BigDecimal totalPrice;
-    private LocalDateTime orderedOn;
+    private LocalDate orderedOn;
 
-    public OrderServiceModel() {
-        this.products = new ArrayList<>();
+    public ProductServiceModel getProduct() {
+        return product;
     }
 
-    public List<ProductServiceModel> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ProductServiceModel> products) {
-        this.products = products;
+    public void setProduct(ProductServiceModel product) {
+        this.product = product;
     }
 
     public UserServiceModel getCustomer() {
@@ -32,19 +24,11 @@ public class OrderServiceModel extends BaseServiceModel {
         this.customer = customer;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public LocalDateTime getOrderedOn() {
+    public LocalDate getOrderedOn() {
         return orderedOn;
     }
 
-    public void setOrderedOn(LocalDateTime orderedOn) {
+    public void setOrderedOn(LocalDate orderedOn) {
         this.orderedOn = orderedOn;
     }
 }

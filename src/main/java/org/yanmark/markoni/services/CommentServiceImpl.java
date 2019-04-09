@@ -52,11 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentServiceModel> getAllComments() {
-        List<Comment> comments = this.commentRepository.findAllByOrderByTimeDesc();
-        if (comments == null) {
-            throw new IllegalArgumentException("comments was not found!");
-        }
-        return comments.stream()
+        return this.commentRepository.findAllByOrderByTimeDesc().stream()
                 .map(comment -> this.modelMapper.map(comment, CommentServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }

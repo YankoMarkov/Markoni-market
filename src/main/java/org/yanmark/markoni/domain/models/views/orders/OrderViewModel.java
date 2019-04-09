@@ -1,14 +1,13 @@
 package org.yanmark.markoni.domain.models.views.orders;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class OrderViewModel {
 
     private String id;
-    private List<String> products;
-    private String customer;
-    private BigDecimal totalPrice;
+    private String image;
+    private String product;
+    private BigDecimal price;
     private String orderedOn;
 
     public String getId() {
@@ -19,28 +18,28 @@ public class OrderViewModel {
         this.id = id;
     }
 
-    public List<String> getProducts() {
-        return products;
+    public String getImage() {
+        return image;
     }
 
-    public void setProducts(List<String> products) {
-        this.products = products;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getProduct() {
+        return product;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getOrderedOn() {

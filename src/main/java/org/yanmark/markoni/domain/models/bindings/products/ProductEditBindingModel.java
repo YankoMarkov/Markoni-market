@@ -11,7 +11,7 @@ public class ProductEditBindingModel {
     private Double weight;
     private String description;
     private BigDecimal price;
-    private int quantity;
+    private Integer quantity;
     private Set<String> categories;
 
     public ProductEditBindingModel() {
@@ -60,11 +60,11 @@ public class ProductEditBindingModel {
 
     @NotNull(message = "Quantity cannot be null.")
     @Min(1)
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

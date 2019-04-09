@@ -11,6 +11,7 @@ public class ProductEditViewModel {
     private Double weight;
     private String description;
     private BigDecimal price;
+    private Integer quantity;
     private List<String> categories;
 
     public ProductEditViewModel() {
@@ -55,6 +56,14 @@ public class ProductEditViewModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public List<String> getCategories() {

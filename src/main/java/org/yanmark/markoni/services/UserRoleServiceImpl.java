@@ -7,8 +7,6 @@ import org.yanmark.markoni.domain.entities.UserRole;
 import org.yanmark.markoni.domain.models.services.UserRoleServiceModel;
 import org.yanmark.markoni.repositories.UserRoleRepository;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,11 +31,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public Set<UserRoleServiceModel> getAllRoles() {
-        List<UserRole> roles = this.userRoleRepository.findAll();
-        if (roles == null) {
-            throw new IllegalArgumentException("Roles was not found!");
-        }
-        return roles.stream()
+        return this.userRoleRepository.findAll().stream()
                 .map(role -> this.modelMapper.map(role, UserRoleServiceModel.class))
                 .collect(Collectors.toUnmodifiableSet());
     }
