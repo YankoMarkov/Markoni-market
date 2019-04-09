@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.entities.UserRole;
 import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
@@ -138,15 +139,20 @@ public class UserServiceImpl implements UserService {
         }
         orderService.getProduct().setQuantity(productQuantity - orderQuantity);
         orderService.setProduct(this.productService.editProduct(orderService.getProduct()));
-        
-        userService.getOrders().add(orderService);
-        this.orderService.deleteOrder(orderService.getId());
+        orderService = this.orderService.updateOrder(orderService);
+        userService.getProducts().add(orderService.getProduct());
         User user = this.modelMapper.map(userService, User.class);
+//        for (Product product : user.getProducts()) {
+//            if (product.getId().equals(orderService.getProduct().getId())) {
+//                product.setQuantity(orderQuantity);
+//            }
+//        }
         try {
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+        this.orderService.deleteOrder(orderService.getId());
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 

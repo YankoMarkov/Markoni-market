@@ -20,14 +20,14 @@ public class User extends BaseEntity implements UserDetails {
     private Set<UserRole> authorities;
     private Set<Package> packages;
     private Set<Receipt> receipts;
-    private Set<Order> orders;
+    private Set<Product> products;
     private Set<Comment> comments;
 
     public User() {
         this.authorities = new HashSet<>();
         this.packages = new HashSet<>();
         this.receipts = new HashSet<>();
-        this.orders = new HashSet<>();
+        this.products = new HashSet<>();
         this.comments = new HashSet<>();
     }
 
@@ -109,13 +109,16 @@ public class User extends BaseEntity implements UserDetails {
         this.receipts = receipts;
     }
 
-    @OneToMany(targetEntity = Order.class, mappedBy = "customer", cascade = CascadeType.ALL)
-    public Set<Order> getOrders() {
-        return orders;
+    @ManyToMany(targetEntity = Product.class)
+    @JoinTable(name = "users_products",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "user", cascade = CascadeType.ALL)

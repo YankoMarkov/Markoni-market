@@ -13,6 +13,8 @@ public interface OrderService {
                                 UserServiceModel userService,
                                 Integer quantity);
 
+    OrderServiceModel updateOrder(OrderServiceModel orderService);
+
     void deleteOrder(String id);
 
     List<OrderServiceModel> getAllOrders();

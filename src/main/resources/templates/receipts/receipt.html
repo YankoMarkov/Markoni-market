@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head"/>
+</head>
+<body>
+<div class="container-fluid">
+    <header>
+        <th:block th:replace="fragments/navbar"/>
+    </header>
+    <main class="mt-3">
+        <hr class="bg-markoni hr-2"/>
+        <h1 class="text-center text-markoni">My Receipt</h1>
+        <hr class="bg-markoni w-25 hr-2"/>
+        <table class="table table-hover w-75 mx-auto">
+            <thead>
+            <tr class="row mx-auto">
+                <th class="col-md-4 text-center">Id</th>
+                <th class="col-md-1 text-center">Fee</th>
+                <th class="col-md-2 text-center">Issued On</th>
+                <th class="col-md-2 text-center">Recipient</th>
+                <th class="col-md-2 text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="receipt : ${receipts}">
+                <tr class="row mx-auto">
+                    <th class="col-md-4 text-center" th:text="${receipt.id}"></th>
+                    <td class="col-md-1 text-center" th:text="${receipt.fee}"></td>
+                    <td class="col-md-2 text-center" th:text="${receipt.issuedOn}"></td>
+                    <td class="col-md-2 text-center" th:text="${receipt.recipient}"></td>
+                    <td class="col-md-2 text-center">
+                        <a th:href="@{/receipts/details/{id}(id=${receipt.id})}"
+                           class="btn btn-secondary font-weight-bold text-white">Details</a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <hr class="bg-markoni hr-2 mt-5"/>
+    </main>
+    <footer>
+        <th:block th:replace="fragments/footer"/>
+    </footer>
+</div>
+</body>
+</html>

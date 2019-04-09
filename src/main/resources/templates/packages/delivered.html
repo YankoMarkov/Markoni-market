@@ -12,10 +12,10 @@
     </header>
     <main class="mt-3">
         <hr class="bg-markoni hr-2"/>
-        <h1 class="text-center text-markoni">Pending Shipment</h1>
+        <h1 class="text-center text-markoni">Delivered</h1>
         <hr class="bg-markoni w-25 hr-2"/>
         <div class="d-flex justify-content-between">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover mx-auto">
                 <thead>
                 <tr class="row mx-auto">
                     <th class="col-lg-1 text-center">#</th>
@@ -35,7 +35,7 @@
                         <td class="col-lg-3 text-center" th:text="${delivered.shippingAddress}"></td>
                         <td class="col-lg-2 text-center" th:text="${delivered.recipient}"></td>
                         <td class="col-lg-1 text-center">
-                            <a class="btn bg-markoni text-white" th:href="@{/packages/details(id=${delivered.id})}"
+                            <a class="btn bg-markoni text-white" th:href="@{/packages/details/{id}(id=${delivered.id})}"
                                th:text="Details"></a>
                         </td>
                     </tr>

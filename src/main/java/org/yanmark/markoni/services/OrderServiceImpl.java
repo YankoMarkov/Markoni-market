@@ -59,6 +59,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderServiceModel updateOrder(OrderServiceModel orderService) {
+        Order order = this.modelMapper.map(orderService, Order.class);
+        try {
+            order = this.orderRepository.saveAndFlush(order);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return this.modelMapper.map(order, OrderServiceModel.class);
+    }
+
+    @Override
     public void deleteOrder(String id) {
         try {
             this.orderRepository.deleteById(id);
