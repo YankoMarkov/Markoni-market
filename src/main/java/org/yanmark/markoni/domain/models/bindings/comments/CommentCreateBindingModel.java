@@ -1,5 +1,7 @@
 package org.yanmark.markoni.domain.models.bindings.comments;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -9,6 +11,8 @@ public class CommentCreateBindingModel {
     private String comment;
 
     @NotNull(message = "Rating cannot be null.")
+    @Min(value = 1, message = "Rating must be minimum 1.")
+    @Max(value = 5, message = "Rating must be maximum 1.")
     public int getRating() {
         return rating;
     }

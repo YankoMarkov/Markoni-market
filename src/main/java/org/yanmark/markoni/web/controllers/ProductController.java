@@ -83,7 +83,9 @@ public class ProductController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
-    public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView edit(@PathVariable String id,
+                             @ModelAttribute("productEdit") ProductEditBindingModel productEdit,
+                             ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductEditViewModel productEditViewModel = this.modelMapper.map(productServiceModel, ProductEditViewModel.class);
         List<String> categories = productServiceModel.getCategories().stream()

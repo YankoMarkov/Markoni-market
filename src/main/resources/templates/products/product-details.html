@@ -66,17 +66,21 @@
                             </div>
                             <div id="comment" class="container tab-pane fade"><br>
                                 <h4>Comment</h4>
-                                <form id="data-comment" th:action="@{/comments/add}" method="post">
+                                <form id="data-comment" th:action="@{/comments/add}" method="post"
+                                      th:object="${commentCreate}">
                                     <input type="hidden" name="productId" th:value="${product.id}">
-                                    <div class="form-group">
+                                    <div class="form-group"
+                                         th:classappend="${#fields.hasErrors('rating')}? 'text-danger'">
                                         <label class="form-control-label" for="new-rating">Rating</label>
                                         <input class="form-control" id="new-rating" type="number" name="rating" min="1"
-                                               max="5"/>
+                                               max="5" th:field="*{rating}"/>
+                                        <h6 th:each="error : ${#fields.errors('rating')}" th:text="${error}"></h6>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" th:classappend="${#fields.hasErrors('comment')}? 'text-danger'">
                                         <label class="form-control-label" for="new-comment">Your comment</label>
                                         <textarea class="form-control" id="new-comment" name="comment"
-                                                  rows="5"></textarea>
+                                                  rows="5" th:field="*{comment}"></textarea>
+                                        <h6 th:each="error : ${#fields.errors('comment')}" th:text="${error}"></h6>
                                     </div>
                                     <div class="button-holder d-flex justify-content-center mb-3">
                                         <button type="submit" class="btn bg-markoni text-white">Add</button>

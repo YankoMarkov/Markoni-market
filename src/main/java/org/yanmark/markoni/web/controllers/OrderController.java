@@ -47,7 +47,9 @@ public class OrderController extends BaseController {
 
     @GetMapping("/order/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView order(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView order(@PathVariable String id,
+                              @ModelAttribute("productOrder") OrderBindingModel productOrder,
+                              ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         OrderProductViewModel orderProductViewModel = this.modelMapper.map(productServiceModel, OrderProductViewModel.class);
         modelAndView.addObject("product", orderProductViewModel);
