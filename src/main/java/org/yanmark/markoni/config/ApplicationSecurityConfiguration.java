@@ -21,12 +21,34 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrfTokenRepository(csrfTokenRepository())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**").permitAll()
-                .antMatchers("/", "/users/login", "/users/register").anonymous()
-                .antMatchers("/packages/**").hasAuthority("ADMIN")
-                .antMatchers("/categories/**", "/products/orderConfirm", "/products/all", "/products/edit", "/products/delete").hasAnyAuthority("ADMIN", "MODERATOR")
-                .antMatchers("/home", "/products/details", "/products/order").authenticated()
-                .antMatchers("/users/all", "/users/changeRole").hasAuthority("ROOT")
+                .antMatchers("/css/**",
+                        "/js/**").permitAll()
+                .antMatchers("/",
+                        "/users/login",
+                        "/users/register").anonymous()
+                .antMatchers("/packages/create",
+                        "/packages/shipped",
+                        "/packages/pending",
+                        "/packages/delivered",
+                        "/orders/all").hasAuthority("ADMIN")
+                .antMatchers("/categories/**",
+                        "/products/add",
+                        "/products/all",
+                        "/products/edit",
+                        "/products/delete").hasAnyAuthority("ADMIN", "MODERATOR")
+                .antMatchers("/home",
+                        "/products/details",
+                        "/comments/add",
+                        "/orders/order",
+                        "/orders/buy",
+                        "/orders/delete",
+                        "/orders/my",
+                        "/packages/details",
+                        "/packages/acquire",
+                        "/receipts",
+                        "/receipts/details").authenticated()
+                .antMatchers("/users/all",
+                        "/users/changeRole").hasAuthority("ROOT")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

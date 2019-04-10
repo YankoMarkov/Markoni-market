@@ -11,7 +11,6 @@ import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingM
 import org.yanmark.markoni.domain.models.bindings.products.ProductEditBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
-import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.domain.models.views.products.ProductDetailsViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductEditViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductOrderViewModel;
@@ -20,7 +19,6 @@ import org.yanmark.markoni.services.UserService;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +73,10 @@ public class ProductController extends BaseController {
     public ModelAndView details(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductDetailsViewModel productDetailsViewModel = this.modelMapper.map(productServiceModel, ProductDetailsViewModel.class);
-        productDetailsViewModel.setCategories(takeCategories(productServiceModel));
+        List<String> categories = productServiceModel.getCategories().stream()
+                .map(CategoryServiceModel::getName)
+                .collect(Collectors.toList());
+        productDetailsViewModel.setCategories(categories);
         modelAndView.addObject("product", productDetailsViewModel);
         return this.view("/products/product-details", modelAndView);
     }
@@ -85,7 +86,10 @@ public class ProductController extends BaseController {
     public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductEditViewModel productEditViewModel = this.modelMapper.map(productServiceModel, ProductEditViewModel.class);
-        productEditViewModel.setCategories(takeCategories(productServiceModel));
+        List<String> categories = productServiceModel.getCategories().stream()
+                .map(CategoryServiceModel::getName)
+                .collect(Collectors.toList());
+        productEditViewModel.setCategories(categories);
         modelAndView.addObject("product", productEditViewModel);
         return this.view("/products/edit-product", modelAndView);
     }
@@ -109,7 +113,10 @@ public class ProductController extends BaseController {
     public ModelAndView delete(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductEditViewModel productEditViewModel = this.modelMapper.map(productServiceModel, ProductEditViewModel.class);
-        productEditViewModel.setCategories(takeCategories(productServiceModel));
+        List<String> categories = productServiceModel.getCategories().stream()
+                .map(CategoryServiceModel::getName)
+                .collect(Collectors.toList());
+        productEditViewModel.setCategories(categories);
         modelAndView.addObject("product", productEditViewModel);
         return this.view("/products/delete-product", modelAndView);
     }
@@ -119,11 +126,5 @@ public class ProductController extends BaseController {
     public ModelAndView deleteConfirm(@PathVariable String id) {
         this.productService.deleteProduct(id);
         return this.redirect("/products/all");
-    }
-
-    private List<String> takeCategories(ProductServiceModel productServiceModel) {
-        return productServiceModel.getCategories().stream()
-                .map(CategoryServiceModel::getName)
-                .collect(Collectors.toList());
     }
 }
