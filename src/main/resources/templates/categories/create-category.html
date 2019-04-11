@@ -17,7 +17,8 @@
 		<form class="mx-auto w-25" th:method="post" th:action="@{/categories/add}" th:object="${categoryCreate}">
 			<div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'text-danger'">
 				<label for="name" class="text-markoni">Name</label>
-				<input type="text" class="form-control" id="name" placeholder="Name..." name="name" th:field="*{name}"/>
+				<input type="text" class="form-control" id="name" placeholder="Name..." name="name"
+					   th:field="*{name}"/>
 				<h6 th:each="error : ${#fields.errors('name')}" th:text="${error}"></h6>
 			</div>
 			<hr class="bg-markoni hr-2"/>

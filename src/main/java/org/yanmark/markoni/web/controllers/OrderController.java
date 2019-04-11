@@ -16,6 +16,7 @@ import org.yanmark.markoni.domain.models.views.orders.OrderViewModel;
 import org.yanmark.markoni.services.OrderService;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -47,6 +48,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/order/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDCAA\uD835\uDCC7\uD835\uDCB9\uD835\uDC52\uD835\uDCC7")
     public ModelAndView order(@PathVariable String id,
                               @ModelAttribute("productOrder") OrderBindingModel productOrder,
                               ModelAndView modelAndView) {
@@ -88,6 +90,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1 \uD835\uDCAA\uD835\uDCC7\uD835\uDCB9\uD835\uDC52\uD835\uDCC7\uD835\uDCC8")
     public ModelAndView all(ModelAndView modelAndView) {
         List<OrderServiceModel> orderServiceModels = this.orderService.getAllOrders();
         List<OrderViewModel> orderViewModels = new ArrayList<>();
@@ -117,6 +120,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/my")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDC40\uD835\uDCCE \uD835\uDCAA\uD835\uDCC7\uD835\uDCB9\uD835\uDC52\uD835\uDCC7\uD835\uDCC8")
     public ModelAndView myOrders(Principal principal, ModelAndView modelAndView) {
         List<OrderServiceModel> orderServiceModels = this.orderService.getAllOrdersByCustomer(principal.getName());
         List<OrderViewModel> orderViewModels = new ArrayList<>();

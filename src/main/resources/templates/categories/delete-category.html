@@ -14,9 +14,8 @@
         <hr class="bg-markoni hr-2"/>
         <h1 class="text-center text-markoni">Delete Category</h1>
         <hr class="bg-markoni w-25 hr-2"/>
-        <form th:action="@{/categories/delete/{id}(id=${category.id})}" th:method="post" id="delete-categories-form"
+        <form th:action="@{/categories/delete/{id}(id=${category.id})}" th:method="post"
               class="form w-25 mx-auto">
-            <input type="hidden" name="_csrf" value="c686cd14-a7f9-4216-8009-c093b7d3df86">
             <div class="form-group">
                 <label for="delete-categories-name" class="font-weight-bold">Name</label>
                 <input type="text" class="form-control text-center" id="delete-categories-name" name="name"

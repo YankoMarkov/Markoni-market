@@ -13,6 +13,7 @@ import org.yanmark.markoni.domain.models.views.products.ProductIndexViewModel;
 import org.yanmark.markoni.services.CategoryService;
 import org.yanmark.markoni.services.HomeService;
 import org.yanmark.markoni.services.ProductService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class HomeController extends BaseController {
 
     @GetMapping("/")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("\uD835\uDC3C\uD835\uDCC3\uD835\uDCB9\uD835\uDC52\uD835\uDCCD")
     public ModelAndView index(ModelAndView modelAndView,
                               @RequestParam(required = false) String categoryId) {
         List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
@@ -56,6 +58,7 @@ public class HomeController extends BaseController {
 
     @GetMapping("/home")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDC3B\uD835\uDC5C\uD835\uDCC2\uD835\uDC52")
     public ModelAndView home(ModelAndView modelAndView,
                              @RequestParam(required = false) String categoryId) {
         List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()

@@ -20,7 +20,6 @@
 				<input type="text" class="form-control" id="username" placeholder="Username..." name="username"
 				       th:field="*{username}"/>
 				<h6 th:each="error : ${#fields.errors('username')}" th:text="${error}"></h6>
-			
 			</div>
 			<div class="form-group" th:classappend="${#fields.hasErrors('password')}? 'text-danger'">
 				<label for="password" class="text-markoni">Password</label>

@@ -11,6 +11,7 @@ import org.yanmark.markoni.domain.models.services.ReceiptServiceModel;
 import org.yanmark.markoni.domain.models.views.receipts.ReceiptAllViewModel;
 import org.yanmark.markoni.domain.models.views.receipts.ReceiptDetailsViewModel;
 import org.yanmark.markoni.services.ReceiptService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +32,7 @@ public class ReceiptController extends BaseController {
 
     @GetMapping("/receipts")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDC45\uD835\uDC52\uD835\uDCB8\uD835\uDC52\uD835\uDCBE\uD835\uDCC5\uD835\uDCC9\uD835\uDCC8")
     public ModelAndView receipt(ModelAndView modelAndView, Principal principal) {
         List<ReceiptAllViewModel> receiptAllViewModels =
                 this.receiptService.getAllReceiptByUser(principal.getName()).stream()
@@ -49,6 +51,7 @@ public class ReceiptController extends BaseController {
 
     @GetMapping("/receipts/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDC45\uD835\uDC52\uD835\uDCB8\uD835\uDC52\uD835\uDCBE\uD835\uDCC5\uD835\uDCC9 \uD835\uDC9F\uD835\uDC52\uD835\uDCC9\uD835\uDCB6\uD835\uDCBE\uD835\uDCC1\uD835\uDCC8")
     public ModelAndView details(@PathVariable String id, ModelAndView modelAndView) {
         ReceiptServiceModel receiptServiceModel = this.receiptService.getReceiptById(id);
         ReceiptDetailsViewModel receiptDetailsViewModel =

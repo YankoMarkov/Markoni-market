@@ -16,6 +16,7 @@ import org.yanmark.markoni.domain.models.views.products.ProductEditViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductOrderViewModel;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9C\uD835\uDCB9\uD835\uDCB9")
     public ModelAndView add(@ModelAttribute("productCreate") ProductCreateBindingModel productCreate) {
         return this.view("/products/create-product");
     }
@@ -59,6 +61,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
     public ModelAndView all(ModelAndView modelAndView) {
         List<ProductServiceModel> productServiceModels = this.productService.getAllProducts();
         List<ProductOrderViewModel> productAllViewModels = productServiceModels.stream()
@@ -70,6 +73,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9F\uD835\uDC52\uD835\uDCC9\uD835\uDCB6\uD835\uDCBE\uD835\uDCC1\uD835\uDCC8")
     public ModelAndView details(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductDetailsViewModel productDetailsViewModel = this.modelMapper.map(productServiceModel, ProductDetailsViewModel.class);
@@ -83,6 +87,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC38\uD835\uDCB9\uD835\uDCBE\uD835\uDCC9")
     public ModelAndView edit(@PathVariable String id,
                              @ModelAttribute("productEdit") ProductEditBindingModel productEdit,
                              ModelAndView modelAndView) {
@@ -112,6 +117,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9F\uD835\uDC52\uD835\uDCC1\uD835\uDC52\uD835\uDCC9\uD835\uDC52")
     public ModelAndView delete(@PathVariable String id, ModelAndView modelAndView) {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         ProductEditViewModel productEditViewModel = this.modelMapper.map(productServiceModel, ProductEditViewModel.class);

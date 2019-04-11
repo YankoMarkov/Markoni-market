@@ -19,6 +19,7 @@ import org.yanmark.markoni.domain.models.views.users.UserViewModel;
 import org.yanmark.markoni.services.PackageService;
 import org.yanmark.markoni.services.ReceiptService;
 import org.yanmark.markoni.services.UserService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -50,6 +51,7 @@ public class PackageController extends BaseController {
 
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDC9E\uD835\uDCC7\uD835\uDC52\uD835\uDCB6\uD835\uDCC9\uD835\uDC52")
     public ModelAndView create(@ModelAttribute("packageCreate") PackageCreateBindingModel packageCreate,
                                ModelAndView modelAndView) {
         List<UserViewModel> userViewModels = this.userService.getAllUsers().stream()
@@ -74,6 +76,7 @@ public class PackageController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDC9F\uD835\uDC52\uD835\uDCC9\uD835\uDCB6\uD835\uDCBE\uD835\uDCC1\uD835\uDCC8")
     public ModelAndView details(@PathVariable String id, ModelAndView modelAndView) {
         PackageServiceModel packageServiceModel = this.packageService.getPackageById(id);
         PackageDetailsViewModel packageDetailsViewModel = this.modelMapper.map(packageServiceModel, PackageDetailsViewModel.class);
@@ -95,6 +98,7 @@ public class PackageController extends BaseController {
 
     @GetMapping("/shipped")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDCAE\uD835\uDCBD\uD835\uDCBE\uD835\uDCC5\uD835\uDCC5\uD835\uDC52\uD835\uDCB9")
     public ModelAndView shippedPackages(ModelAndView modelAndView) {
         List<ShippedViewModel> shippedViewModels = this.packageService.getAllPackagesByStatus(Status.SHIPPED).stream()
                 .map(pack -> {
@@ -121,6 +125,7 @@ public class PackageController extends BaseController {
 
     @GetMapping("/pending")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDCAB\uD835\uDC52\uD835\uDCB9\uD835\uDCC3\uD835\uDCB9\uD835\uDCBE\uD835\uDCC3\uD835\uDC54")
     public ModelAndView pendingPackages(ModelAndView modelAndView) {
         List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
                 .map(pack -> {
@@ -145,6 +150,7 @@ public class PackageController extends BaseController {
 
     @GetMapping("/delivered")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDC9F\uD835\uDC52\uD835\uDCC1\uD835\uDCBE\uD835\uDCCB\uD835\uDC52\uD835\uDCC7\uD835\uDC52\uD835\uDCB9")
     public ModelAndView deliveredPackages(ModelAndView modelAndView) {
         List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.DELIVERED).stream()
                 .map(pack -> {

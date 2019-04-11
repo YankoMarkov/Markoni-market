@@ -11,6 +11,7 @@ import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindi
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.views.categories.CategoryViewModel;
 import org.yanmark.markoni.services.CategoryService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCCE \uD835\uDC9C\uD835\uDCB9\uD835\uDCB9")
     public ModelAndView create(@ModelAttribute("categoryCreate") CategoryCreateBindingModel categoryCreate) {
         return this.view("/categories/create-category");
     }
@@ -49,6 +51,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCCE \uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
     public ModelAndView all(ModelAndView modelAndView) {
         List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
                 .map(category -> this.modelMapper.map(category, CategoryViewModel.class))
@@ -59,7 +62,10 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
-    public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
+    @PageTitle("\uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCCE \uD835\uDC38\uD835\uDCB9\uD835\uDCBE\uD835\uDCC9")
+    public ModelAndView edit(@PathVariable String id,
+                             @ModelAttribute("categoryCreate") CategoryCreateBindingModel categoryCreate,
+                             ModelAndView modelAndView) {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryById(id);
         CategoryViewModel categoryViewModel = this.modelMapper.map(categoryServiceModel, CategoryViewModel.class);
         modelAndView.addObject("category", categoryViewModel);
@@ -80,6 +86,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
+    @PageTitle("\uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCCE \uD835\uDC9F\uD835\uDC52\uD835\uDCC1\uD835\uDC52\uD835\uDCC9\uD835\uDC52")
     public ModelAndView delete(@PathVariable String id, ModelAndView modelAndView) {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryById(id);
         CategoryViewModel categoryViewModel = this.modelMapper.map(categoryServiceModel, CategoryViewModel.class);

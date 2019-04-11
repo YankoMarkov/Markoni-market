@@ -21,6 +21,7 @@ import org.yanmark.markoni.domain.models.views.users.UserProfileViewModel;
 import org.yanmark.markoni.services.PackageService;
 import org.yanmark.markoni.services.UserRoleService;
 import org.yanmark.markoni.services.UserService;
+import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -50,6 +51,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("\uD835\uDC45\uD835\uDC52\uD835\uDC54\uD835\uDCBE\uD835\uDCC8\uD835\uDCC9\uD835\uDC52\uD835\uDCC7")
     public ModelAndView register(@ModelAttribute("userRegister") UserRegisterBindingModel userRegister) {
         return this.view("/users/register");
     }
@@ -71,12 +73,14 @@ public class UserController extends BaseController {
 
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("\uD835\uDC3F\uD835\uDC5C\uD835\uDC54\uD835\uDCBE\uD835\uDCC3")
     public ModelAndView login(@ModelAttribute("userLogin") UserLoginBindingModel userLogin) {
         return this.view("/users/login");
     }
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCBB\uD835\uDCBE\uD835\uDCC1\uD835\uDC52")
     public ModelAndView profile(Principal principal, ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         UserProfileViewModel userProfileViewModel = this.modelMapper.map(userServiceModel, UserProfileViewModel.class);
@@ -86,7 +90,10 @@ public class UserController extends BaseController {
 
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView edit(Principal principal, ModelAndView modelAndView) {
+    @PageTitle("\uD835\uDC38\uD835\uDCB9\uD835\uDCBE\uD835\uDCC9")
+    public ModelAndView edit(Principal principal,
+                             @ModelAttribute("userEdit") UserEditBindingModel userEdit,
+                             ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         UserProfileViewModel userProfileViewModel = this.modelMapper.map(userServiceModel, UserProfileViewModel.class);
         modelAndView.addObject("user", userProfileViewModel);
@@ -97,7 +104,6 @@ public class UserController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView editConfirm(@Valid @ModelAttribute("userEdit") UserEditBindingModel userEdit,
                                     BindingResult bindingResult) {
-        System.out.println();
         if (bindingResult.hasErrors()) {
             return this.view("/users/edit-profile");
         }
@@ -111,6 +117,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ROOT')")
+    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
     public ModelAndView usersAll(@ModelAttribute("allUsers") UserAllViewModel allUsers,
                                  ModelAndView modelAndView) {
         List<UserServiceModel> userServiceModels = this.userService.getAllUsers();
@@ -149,6 +156,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/storage")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("\uD835\uDCAE\uD835\uDCC9\uD835\uDC5C\uD835\uDCC7\uD835\uDCB6\uD835\uDC54\uD835\uDC52")
     public ModelAndView userAccount(Principal principal, ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         List<ProductHomeViewModel> pendingHomeModels = getProductHomeViewModels(userServiceModel, Status.PENDING);

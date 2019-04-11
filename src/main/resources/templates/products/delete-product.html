@@ -17,7 +17,6 @@
         <form th:action="@{/orders/delete/{id}(id=${product.id})}" th:method="post" th:object="${product}"
               enctype="multipart/form-data"
               id="add-product-form" class="form w-25 mx-auto">
-            <input type="hidden" name="_csrf" value="c686cd14-a7f9-4216-8009-c093b7d3df86">
             <div class="form-group">
                 <label for="name" class="text-markoni">Name</label>
                 <input type="text" class="form-control" id="name" name="name"
