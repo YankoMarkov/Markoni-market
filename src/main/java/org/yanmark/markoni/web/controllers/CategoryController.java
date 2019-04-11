@@ -10,6 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.views.categories.CategoryViewModel;
+import org.yanmark.markoni.errors.CategoryNameExistException;
+import org.yanmark.markoni.errors.CategoryNotFoundException;
+import org.yanmark.markoni.errors.ProductNameExistException;
+import org.yanmark.markoni.errors.ProductNotFoundException;
 import org.yanmark.markoni.services.CategoryService;
 import org.yanmark.markoni.web.annotations.PageTitle;
 
@@ -108,5 +112,21 @@ public class CategoryController extends BaseController {
         return this.categoryService.getAllCategories().stream()
                 .map(category -> this.modelMapper.map(category, CategoryViewModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @ExceptionHandler({CategoryNameExistException.class})
+    public ModelAndView handleCategoryNameExistException(CategoryNameExistException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
+        return modelAndView;
+    }
+
+    @ExceptionHandler({CategoryNotFoundException.class})
+    public ModelAndView handleCategoryNotFoundException(CategoryNotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
+        return modelAndView;
     }
 }

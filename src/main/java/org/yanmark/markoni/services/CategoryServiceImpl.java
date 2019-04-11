@@ -6,9 +6,10 @@ import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.Category;
 import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
+import org.yanmark.markoni.errors.CategoryNameExistException;
+import org.yanmark.markoni.errors.CategoryNotFoundException;
 import org.yanmark.markoni.repositories.CategoryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryServiceModel saveCategory(CategoryServiceModel categoryService) {
+        Category checkCategory = this.categoryRepository.findByName(categoryService.getName())
+                .orElse(null);
+        if (checkCategory != null) {
+            throw new CategoryNameExistException("Category with this name already exist!");
+        }
         Category category = this.modelMapper.map(categoryService, Category.class);
         try {
             category = this.categoryRepository.saveAndFlush(category);
@@ -53,14 +59,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryServiceModel getCategoryById(String id) {
         Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category was not found!"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category was not found with this id!"));
         return this.modelMapper.map(category, CategoryServiceModel.class);
     }
 
     @Override
     public CategoryServiceModel getCategoryByName(String name) {
         Category category = this.categoryRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Category was not found!"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category was not found with this name!"));
         return this.modelMapper.map(category, CategoryServiceModel.class);
     }
 

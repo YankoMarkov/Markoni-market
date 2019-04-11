@@ -14,6 +14,8 @@ import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.views.products.ProductDetailsViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductEditViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductOrderViewModel;
+import org.yanmark.markoni.errors.ProductNameExistException;
+import org.yanmark.markoni.errors.ProductNotFoundException;
 import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.services.UserService;
 import org.yanmark.markoni.web.annotations.PageTitle;
@@ -134,5 +136,21 @@ public class ProductController extends BaseController {
     public ModelAndView deleteConfirm(@PathVariable String id) {
         this.productService.deleteProduct(id);
         return this.redirect("/products/all");
+    }
+
+    @ExceptionHandler({ProductNameExistException.class})
+    public ModelAndView handleProductNameExistException(ProductNameExistException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
+        return modelAndView;
+    }
+
+    @ExceptionHandler({ProductNotFoundException.class})
+    public ModelAndView handleProductNotFoundException(ProductNotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.addObject("statusCode", e.getStatusCode());
+        return modelAndView;
     }
 }

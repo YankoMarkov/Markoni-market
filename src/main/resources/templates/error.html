@@ -11,8 +11,8 @@
 <body>
 <div class="wrap">
     <div class="logo">
-        <p>OOPS! - Could not Find it</p>
-        <img th:src="@{/images/404-1.png}" alt="Image"/>
+        <p style="color: red">OOPS! - Something Went Wrong</p>
+        <img th:src="'https://http.cat/' + ${statusCode}">
         <div class="sub">
             <p th:text="${message}" style="color: red"></p>
             <p><a th:href="@{/home}">Go To Homepage</a></p>

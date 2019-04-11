@@ -7,6 +7,7 @@ import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
+import org.yanmark.markoni.errors.ProductNotFoundException;
 import org.yanmark.markoni.repositories.ProductRepository;
 
 import java.io.IOException;
@@ -37,6 +38,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductServiceModel saveProduct(ProductServiceModel productService,
                                            ProductCreateBindingModel productCreate) throws IOException {
+        Product checkProduct = this.productRepository.findByName(productCreate.getName())
+                .orElse(null);
+        if (checkProduct != null) {
+            throw new ProductNotFoundException("Product with this name already exist");
+        }
         Set<CategoryServiceModel> categoriesServiceModels = this.categoryService.getAllCategories().stream()
                 .filter(category -> productCreate.getCategories().contains(category.getId()))
                 .collect(Collectors.toSet());
@@ -90,14 +96,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductServiceModel getProductByName(String name) {
         Product product = this.productRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException("Product was not found!"));
+                .orElseThrow(() -> new ProductNotFoundException("Product was not found with this name!"));
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
     @Override
     public ProductServiceModel getProductById(String id) {
         Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product was not found!"));
+                .orElseThrow(() -> new ProductNotFoundException("Product was not found with this id!"));
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
 
