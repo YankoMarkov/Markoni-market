@@ -14,14 +14,14 @@ public class UserServiceModel extends BaseServiceModel {
     private Set<UserRoleServiceModel> authorities;
     private Set<PackageServiceModel> packages;
     private Set<ReceiptServiceModel> receipts;
-    private Set<OrderServiceModel> orders;
+    private Set<OrderProductServiceModel> orderProducts;
     private List<CommentServiceModel> comments;
 
     public UserServiceModel() {
         this.authorities = new HashSet<>();
         this.packages = new HashSet<>();
         this.receipts = new HashSet<>();
-        this.orders = new HashSet<>();
+        this.orderProducts = new HashSet<>();
         this.comments = new ArrayList<>();
     }
 
@@ -81,12 +81,12 @@ public class UserServiceModel extends BaseServiceModel {
         this.receipts = receipts;
     }
 
-    public Set<OrderServiceModel> getOrders() {
-        return orders;
+    public Set<OrderProductServiceModel> getOrderProducts() {
+        return orderProducts;
     }
 
-    public void setOrders(Set<OrderServiceModel> orders) {
-        this.orders = orders;
+    public void setOrderProducts(Set<OrderProductServiceModel> orderProducts) {
+        this.orderProducts = orderProducts;
     }
 
     public List<CommentServiceModel> getComments() {

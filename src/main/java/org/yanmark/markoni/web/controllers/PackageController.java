@@ -79,12 +79,14 @@ public class PackageController extends BaseController {
     @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDC9F\uD835\uDC52\uD835\uDCC9\uD835\uDCB6\uD835\uDCBE\uD835\uDCC1\uD835\uDCC8")
     public ModelAndView details(@PathVariable String id, ModelAndView modelAndView) {
         PackageServiceModel packageServiceModel = this.packageService.getPackageById(id);
-        PackageDetailsViewModel packageDetailsViewModel = this.modelMapper.map(packageServiceModel, PackageDetailsViewModel.class);
+        PackageDetailsViewModel packageDetailsViewModel =
+                this.modelMapper.map(packageServiceModel, PackageDetailsViewModel.class);
         packageDetailsViewModel.setRecipient(packageServiceModel.getRecipient().getUsername());
         if (packageServiceModel.getStatus().equals(Status.PENDING)) {
             packageDetailsViewModel.setEstimatedDeliveryDay("N/A");
         } else {
-            if (packageServiceModel.getStatus().equals(Status.DELIVERED) || packageServiceModel.getStatus().equals(Status.ACQUIRED)) {
+            if (packageServiceModel.getStatus().equals(Status.DELIVERED) ||
+                    packageServiceModel.getStatus().equals(Status.ACQUIRED)) {
                 packageDetailsViewModel.setEstimatedDeliveryDay("Delivered");
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
@@ -100,7 +102,8 @@ public class PackageController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDCAE\uD835\uDCBD\uD835\uDCBE\uD835\uDCC5\uD835\uDCC5\uD835\uDC52\uD835\uDCB9")
     public ModelAndView shippedPackages(ModelAndView modelAndView) {
-        List<ShippedViewModel> shippedViewModels = this.packageService.getAllPackagesByStatus(Status.SHIPPED).stream()
+        List<ShippedViewModel> shippedViewModels =
+                this.packageService.getAllPackagesByStatus(Status.SHIPPED).stream()
                 .map(pack -> {
                     ShippedViewModel shippedViewModel = this.modelMapper.map(pack, ShippedViewModel.class);
                     shippedViewModel.setRecipient(pack.getRecipient().getUsername());
@@ -127,9 +130,11 @@ public class PackageController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDCAB\uD835\uDC52\uD835\uDCB9\uD835\uDCC3\uD835\uDCB9\uD835\uDCBE\uD835\uDCC3\uD835\uDC54")
     public ModelAndView pendingPackages(ModelAndView modelAndView) {
-        List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
+        List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels =
+                this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
                 .map(pack -> {
-                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel = this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
+                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
+                            this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
                     pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
                     return pendingAndDeliveredViewModel;
                 })
@@ -152,9 +157,11 @@ public class PackageController extends BaseController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PageTitle("\uD835\uDCAB\uD835\uDCB6\uD835\uDCB8\uD835\uDCC0\uD835\uDCB6\uD835\uDC54\uD835\uDC52 \uD835\uDC9F\uD835\uDC52\uD835\uDCC1\uD835\uDCBE\uD835\uDCCB\uD835\uDC52\uD835\uDCC7\uD835\uDC52\uD835\uDCB9")
     public ModelAndView deliveredPackages(ModelAndView modelAndView) {
-        List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels = this.packageService.getAllPackagesByStatus(Status.DELIVERED).stream()
+        List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels =
+                this.packageService.getAllPackagesByStatus(Status.DELIVERED).stream()
                 .map(pack -> {
-                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel = this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
+                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
+                            this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
                     pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
                     return pendingAndDeliveredViewModel;
                 })

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.entities.UserRole;
 import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
+import org.yanmark.markoni.domain.models.services.OrderProductServiceModel;
 import org.yanmark.markoni.domain.models.services.OrderServiceModel;
 import org.yanmark.markoni.domain.models.services.UserRoleServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleService userRoleService;
     private final ProductService productService;
+    private final OrderProductService orderProductService;
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -31,12 +33,14 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository,
                            UserRoleService userRoleService,
                            ProductService productService,
+                           OrderProductService orderProductService,
                            OrderService orderService,
                            ModelMapper modelMapper,
                            BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleService = userRoleService;
         this.productService = productService;
+        this.orderProductService = orderProductService;
         this.orderService = orderService;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -134,6 +138,12 @@ public class UserServiceImpl implements UserService {
         if (orderService.getQuantity() > orderService.getProduct().getQuantity()) {
             throw new IllegalArgumentException("The quantity is bigger than available!");
         }
+        OrderProductServiceModel orderProductServiceModel =
+                this.modelMapper.map(orderService.getProduct(), OrderProductServiceModel.class);
+        orderProductServiceModel.setPrice(orderService.getPrice());
+        orderProductServiceModel.setQuantity(orderService.getQuantity());
+        orderProductServiceModel = this.orderProductService.saveOrderProduct(orderProductServiceModel);
+        userService.getOrderProducts().add(orderProductServiceModel);
         User user = this.modelMapper.map(userService, User.class);
         try {
             user = this.userRepository.saveAndFlush(user);
