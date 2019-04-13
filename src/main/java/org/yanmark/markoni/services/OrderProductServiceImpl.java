@@ -30,4 +30,13 @@ public class OrderProductServiceImpl implements OrderProductService {
         }
         return this.modelMapper.map(orderProduct, OrderProductServiceModel.class);
     }
+
+    @Override
+    public void deleteOrderProduct(String id) {
+        try {
+            this.orderProductRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }

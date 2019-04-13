@@ -12,18 +12,27 @@ import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.PackageRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
+    private final OrderProductService orderProductService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public PackageServiceImpl(PackageRepository packageRepository, ModelMapper modelMapper) {
+    public PackageServiceImpl(PackageRepository packageRepository,
+                              OrderProductService orderProductService,
+                              UserService userService,
+                              ModelMapper modelMapper) {
         this.packageRepository = packageRepository;
+        this.orderProductService = orderProductService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -35,10 +44,12 @@ public class PackageServiceImpl implements PackageService {
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        packageService.getRecipient().getOrderProducts()
-                .forEach(product -> {
-                    //TODO da se iztrie ot bazata orderProducts na usera
-                });
+        Set<OrderProductServiceModel> orders = packageService.getRecipient().getOrderProducts();
+        packageService.getRecipient().setOrderProducts(new HashSet<>());
+        this.userService.updateUserProducts(packageService.getRecipient());
+        for (OrderProductServiceModel order : orders) {
+            this.orderProductService.deleteOrderProduct(order.getId());
+        }
         return this.modelMapper.map(pakage, PackageServiceModel.class);
     }
 

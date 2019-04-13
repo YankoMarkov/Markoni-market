@@ -65,6 +65,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserServiceModel updateUserProducts(UserServiceModel userService) {
+        User user = this.modelMapper.map(userService, User.class);
+        try {
+            user = this.userRepository.saveAndFlush(user);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
     public UserServiceModel updateUsersRole(UserServiceModel userService, UserRoleServiceModel userRoleService) {
         User user = this.userRepository.findById(userService.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User was not found!"));

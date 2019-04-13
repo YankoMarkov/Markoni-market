@@ -105,9 +105,10 @@ public class OrderController extends BaseController {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
                         String date = order.getOrderedOn().format(formatter);
                         orderViewModel.setOrderedOn(date);
-                        orderViewModel.setId(order.getId());
                         orderViewModel.setImage(order.getProduct().getImage());
+                        orderViewModel.setId(order.getId());
                         orderViewModel.setProduct(order.getProduct().getName());
+                        orderViewModel.setQuantity(order.getQuantity());
                         orderViewModel.setPrice(order.getPrice());
                         return orderViewModel;
                     })
@@ -138,6 +139,7 @@ public class OrderController extends BaseController {
                         orderViewModel.setOrderedOn(date);
                         orderViewModel.setId(order.getId());
                         orderViewModel.setImage(order.getProduct().getImage());
+                        orderViewModel.setQuantity(order.getQuantity());
                         orderViewModel.setProduct(order.getProduct().getName());
                         orderViewModel.setPrice(order.getPrice());
                         return orderViewModel;

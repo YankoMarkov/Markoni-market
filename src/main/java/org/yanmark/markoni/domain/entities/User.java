@@ -109,10 +109,7 @@ public class User extends BaseEntity implements UserDetails {
         this.receipts = receipts;
     }
 
-    @ManyToMany(targetEntity = OrderProduct.class)
-    @JoinTable(name = "users_order_products",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "order_product_id", referencedColumnName = "id"))
+    @OneToMany(targetEntity = OrderProduct.class, cascade = CascadeType.ALL)
     public Set<OrderProduct> getOrderProducts() {
         return orderProducts;
     }

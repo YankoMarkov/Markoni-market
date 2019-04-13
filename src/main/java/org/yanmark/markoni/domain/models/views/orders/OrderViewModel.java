@@ -7,6 +7,7 @@ public class OrderViewModel {
     private String id;
     private String image;
     private String product;
+    private Integer quantity;
     private BigDecimal price;
     private String orderedOn;
 
@@ -32,6 +33,14 @@ public class OrderViewModel {
 
     public void setProduct(String product) {
         this.product = product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public BigDecimal getPrice() {

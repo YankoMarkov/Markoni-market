@@ -25,9 +25,10 @@
                 <th class="col-md-1 text-center">#</th>
                 <th class="col-md-1 text-center">Image</th>
                 <th class="col-md-3 text-center">Name</th>
+                <th class="col-md-1 text-center">Quantity</th>
                 <th class="col-md-2 text-center">Price</th>
                 <th class="col-md-2 text-center">Date</th>
-                <th class="col-md-3 text-center">Action</th>
+                <th class="col-md-2 text-center">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -38,9 +39,10 @@
                         <img th:src="${order.image}" width="auto" height="40" alt="Product">
                     </td>
                     <td class="col-md-3 text-center" th:text="${order.product}"></td>
+                    <td class="col-md-1 text-center" th:text="${order.quantity}"></td>
                     <td class="col-md-2 text-center" th:text="${order.price}"></td>
                     <td class="col-md-2 text-center" th:text="${order.orderedOn}"></td>
-                    <td class="col-md-3 text-center">
+                    <td class="col-md-2 text-center">
                         <a th:href="@{/orders/buy/{id}(id=${order.id})}"
                            class="btn btn-success font-weight-bold text-white">Buy</a>
                         <a th:href="@{/orders/delete/{id}(id=${order.id})}"
@@ -52,10 +54,11 @@
                 <th class="col-md-1 text-center"></th>
                 <td class="col-md-1 text-center"></td>
                 <td class="col-md-3 text-center"></td>
+                <td class="col-md-1 text-center"></td>
                 <td class="col-md-2 text-center">Total: <span
                         th:text="${#numbers.formatDecimal(totalPrice, 0, 2)}"></span></td>
                 <td class="col-md-2 text-center"></td>
-                <td class="col-md-3 text-center"></td>
+                <td class="col-md-2 text-center"></td>
             </tr>
             </tbody>
         </table>
