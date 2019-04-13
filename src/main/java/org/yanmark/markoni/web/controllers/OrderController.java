@@ -68,7 +68,10 @@ public class OrderController extends BaseController {
         ProductServiceModel productServiceModel = this.productService.getProductById(productOrder.getId());
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         OrderServiceModel orderServiceModel = new OrderServiceModel();
-        this.orderService.saveOrder(orderServiceModel, productServiceModel, userServiceModel, productOrder.getQuantity());
+        this.orderService.saveOrder(productServiceModel,
+                orderServiceModel,
+                userServiceModel,
+                productOrder.getQuantity());
         return this.redirect("/orders/my");
     }
 
@@ -98,18 +101,19 @@ public class OrderController extends BaseController {
         if (!orderServiceModels.isEmpty()) {
             orderViewModels = orderServiceModels.stream()
                     .map(order -> {
-                        OrderViewModel orderViewModel = this.modelMapper.map(order, OrderViewModel.class);
+                        OrderViewModel orderViewModel = new OrderViewModel();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
                         String date = order.getOrderedOn().format(formatter);
                         orderViewModel.setOrderedOn(date);
+                        orderViewModel.setId(order.getId());
                         orderViewModel.setImage(order.getProduct().getImage());
                         orderViewModel.setProduct(order.getProduct().getName());
-                        orderViewModel.setPrice(order.getProduct().getPrice());
+                        orderViewModel.setPrice(order.getPrice());
                         return orderViewModel;
                     })
                     .collect(Collectors.toList());
-            for (OrderServiceModel orderServiceModel : orderServiceModels) {
-                totalPrice = totalPrice.add(orderServiceModel.getProduct().getPrice());
+            for (OrderViewModel orderViewModel : orderViewModels) {
+                totalPrice = totalPrice.add(orderViewModel.getPrice());
             }
         }
         modelAndView.addObject("role", "ADMIN");
@@ -128,18 +132,19 @@ public class OrderController extends BaseController {
         if (!orderServiceModels.isEmpty()) {
             orderViewModels = orderServiceModels.stream()
                     .map(order -> {
-                        OrderViewModel orderViewModel = this.modelMapper.map(order, OrderViewModel.class);
+                        OrderViewModel orderViewModel = new OrderViewModel();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
                         String date = order.getOrderedOn().format(formatter);
                         orderViewModel.setOrderedOn(date);
+                        orderViewModel.setId(order.getId());
                         orderViewModel.setImage(order.getProduct().getImage());
                         orderViewModel.setProduct(order.getProduct().getName());
-                        orderViewModel.setPrice(order.getProduct().getPrice());
+                        orderViewModel.setPrice(order.getPrice());
                         return orderViewModel;
                     })
                     .collect(Collectors.toList());
-            for (OrderServiceModel orderServiceModel : orderServiceModels) {
-                totalPrice = totalPrice.add(orderServiceModel.getProduct().getPrice());
+            for (OrderViewModel orderViewModel : orderViewModels) {
+                totalPrice = totalPrice.add(orderViewModel.getPrice());
             }
         }
         modelAndView.addObject("role", "USER");

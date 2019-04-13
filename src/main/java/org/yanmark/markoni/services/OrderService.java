@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderServiceModel saveOrder(OrderServiceModel orderService,
-                                ProductServiceModel productService,
+    OrderServiceModel saveOrder(ProductServiceModel productService,
+                                OrderServiceModel orderService,
                                 UserServiceModel userService,
                                 Integer quantity);
 

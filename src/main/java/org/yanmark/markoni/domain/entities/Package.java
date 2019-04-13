@@ -3,7 +3,7 @@ package org.yanmark.markoni.domain.entities;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "packages")
 public class Package extends BaseEntity {
 	
 	private String description;

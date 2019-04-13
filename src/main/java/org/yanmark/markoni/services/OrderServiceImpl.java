@@ -9,6 +9,7 @@ import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.OrderRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,37 +19,32 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
-                            ProductService productService,
                             ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
-        this.productService = productService;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public OrderServiceModel saveOrder(OrderServiceModel orderService,
-                                       ProductServiceModel productService,
+    public OrderServiceModel saveOrder(ProductServiceModel productService,
+                                       OrderServiceModel orderService,
                                        UserServiceModel userService,
                                        Integer quantity) {
-        List<OrderServiceModel> orderServiceModels = getAllOrdersByCustomer(userService.getUsername());
-        if (!orderServiceModels.isEmpty()) {
-            orderServiceModels
-                    .forEach(order -> {
-                        if (order.getProduct().getId().equals(productService.getId()) &&
-                                order.getCustomer().getId().equals(userService.getId())) {
-                            throw new IllegalArgumentException("The customer already has this order!");
-                        }
-                    });
-        }
+        getAllOrdersByCustomer(userService.getUsername())
+                .forEach(order -> {
+                    if (order.getProduct().getId().equals(productService.getId()) &&
+                            order.getCustomer().getId().equals(userService.getId())) {
+                        throw new IllegalArgumentException("Customer already has this order!");
+                    }
+                });
+        orderService.setProduct(productService);
         orderService.setOrderedOn(LocalDate.now());
         orderService.setCustomer(userService);
-        orderService.setProduct(productService);
         orderService.setQuantity(quantity);
+        orderService.setPrice(productService.getPrice().multiply(BigDecimal.valueOf(quantity)));
         Order order = this.modelMapper.map(orderService, Order.class);
         try {
             order = this.orderRepository.saveAndFlush(order);

@@ -40,19 +40,19 @@ public class PackageServiceImpl implements PackageService {
 
     @Override
     public PackageServiceModel createPackage(PackageServiceModel packageService, UserServiceModel userService) {
-        if (userService.getProducts().isEmpty()) {
+        if (userService.getOrders().isEmpty()) {
             throw new IllegalArgumentException("The user has no products!");
         }
         packageService.setRecipient(userService);
         packageService.setShippingAddress(userService.getAddress());
         packageService.setStatus(Status.PENDING);
         packageService.setEstimatedDeliveryDay(LocalDateTime.now());
-        double weight = userService.getProducts().stream()
-                .mapToDouble(ProductServiceModel::getWeight).sum();
+        double weight = userService.getOrders().stream()
+                .mapToDouble(order -> order.getProduct().getWeight()).sum();
         packageService.setWeight(weight);
         StringBuilder description = new StringBuilder();
-        userService.getProducts()
-                .forEach(order -> description.append(order.getName()).append(System.lineSeparator()));
+        userService.getOrders()
+                .forEach(order -> description.append(order.getProduct().getName()).append(System.lineSeparator()));
         packageService.setDescription(description.toString());
         return savePackage(packageService);
     }

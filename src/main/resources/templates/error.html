@@ -12,7 +12,7 @@
 <div class="wrap">
     <div class="logo">
         <p style="color: red">OOPS! - Something Went Wrong</p>
-        <img th:src="'https://http.cat/' + ${statusCode}">
+        <img th:src="'https://http.cat/' + ${statusCode}" alt="ERROR">
         <div class="sub">
             <p th:text="${message}" style="color: red"></p>
             <p><a th:href="@{/home}">Go To Homepage</a></p>

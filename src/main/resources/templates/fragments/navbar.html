@@ -48,10 +48,10 @@
                 <li class="nav-item active" sec:authorize="hasAuthority('ADMIN')">
                     <div class="dropdown show">
                         <a class="nav-link active dropdown-toggle" th:href="@{#}" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="adminDropdown">
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="packageDropdown">
                             Package
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <div class="dropdown-menu" aria-labelledby="packageDropdown">
                             <a class="dropdown-item" th:href="@{/packages/create}">Create</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" th:href="@{/packages/pending}">Pending</a>
@@ -63,10 +63,10 @@
                 <li class="nav-item active" sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
                     <div class="dropdown show">
                         <a class="nav-link active dropdown-toggle" th:href="@{#}" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="moderatorDropdown">
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="categoryProductDropdown">
                             Category And Product
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="moderatorDropdown">
+                        <div class="dropdown-menu" aria-labelledby="categoryProductDropdown">
                             <a class="dropdown-item" th:href="@{/categories/add}">Add Category</a>
                             <a class="dropdown-item" th:href="@{/categories/all}">All Categories</a>
                             <div class="dropdown-divider"></div>
@@ -106,7 +106,6 @@
                 </li>
                 <li class="nav-item active">
                     <form th:action="@{/logout?login}" th:method="post">
-                        <input type="hidden" name="_csrf" value="80417983-fe8b-45c7-963e-31f6915a1560">
                         <button class="logout-button nav-link">Logout</button>
                     </form>
                 </li>

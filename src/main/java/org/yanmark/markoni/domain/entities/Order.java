@@ -4,12 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name = "orders")
 public class Order extends BaseEntity {
 
     private Product product;
+    private BigDecimal price;
     private User customer;
     private LocalDate orderedOn;
     private Integer quantity;
@@ -22,6 +24,15 @@ public class Order extends BaseEntity {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Column(name = "price", nullable = false)
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @ManyToOne(targetEntity = User.class)

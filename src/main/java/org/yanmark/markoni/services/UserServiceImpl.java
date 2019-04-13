@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.entities.UserRole;
 import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
@@ -132,26 +131,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel buyOrder(OrderServiceModel orderService, UserServiceModel userService) {
-        int orderQuantity = orderService.getQuantity();
-        int productQuantity = orderService.getProduct().getQuantity();
-        if (orderQuantity > productQuantity) {
+        if (orderService.getQuantity() > orderService.getProduct().getQuantity()) {
             throw new IllegalArgumentException("The quantity is bigger than available!");
         }
-        orderService.getProduct().setQuantity(productQuantity - orderQuantity);
-        orderService.setProduct(this.productService.editProduct(orderService.getProduct()));
-        orderService = this.orderService.updateOrder(orderService);
-        userService.getProducts().add(orderService.getProduct());
         User user = this.modelMapper.map(userService, User.class);
-//        for (Product product : user.getProducts()) {
-//            if (product.getId().equals(orderService.getProduct().getId())) {
-//                product.setQuantity(orderQuantity);
-//            }
-//        }
         try {
             user = this.userRepository.saveAndFlush(user);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+        orderService.getProduct().setQuantity(orderService.getProduct().getQuantity() - orderService.getQuantity());
+        this.productService.editProduct(orderService.getProduct());
         this.orderService.deleteOrder(orderService.getId());
         return this.modelMapper.map(user, UserServiceModel.class);
     }

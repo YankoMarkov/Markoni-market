@@ -3,7 +3,7 @@ package org.yanmark.markoni.domain.entities;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "comments")
 public class Comment extends BaseEntity {
 	
 	private User user;

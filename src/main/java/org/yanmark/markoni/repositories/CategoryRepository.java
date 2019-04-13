@@ -13,6 +13,6 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
 	
 	Optional<Category> findByName(String name);
 	
-	@Query("SELECT c FROM org.yanmark.markoni.domain.entities.Category c ORDER BY c.name")
+	@Query("SELECT c FROM categories c ORDER BY c.name")
 	List<Category> findAllOrderByName();
 }
