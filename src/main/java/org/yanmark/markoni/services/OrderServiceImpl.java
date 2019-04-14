@@ -2,6 +2,7 @@ package org.yanmark.markoni.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.Order;
 import org.yanmark.markoni.domain.models.services.OrderServiceModel;
@@ -11,7 +12,6 @@ import org.yanmark.markoni.repositories.OrderRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,36 +76,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderServiceModel> getAllOrders() {
-        List<Order> orders = this.orderRepository.findAll();
-        if (orders.isEmpty()) {
-            return new ArrayList<>();
-        }
-        orders = orders.stream()
-                .peek(order -> {
-                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
-                        deleteOrder(order.getId());
-                    }
-                })
-                .collect(Collectors.toList());
-        return orders.stream()
+        return this.orderRepository.findAll().stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
     public List<OrderServiceModel> getAllOrdersByCustomer(String username) {
-        List<Order> orders = this.orderRepository.findAllOrdersByCustomer_UsernameOrderByOrderedOnDesc(username);
-        if (orders.isEmpty()) {
-            return new ArrayList<>();
-        }
-        orders = orders.stream()
-                .peek(order -> {
-                    if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
-                        deleteOrder(order.getId());
-                    }
-                })
-                .collect(Collectors.toList());
-        return orders.stream()
+        return this.orderRepository.findAllOrdersByCustomer_UsernameOrderByOrderedOnDesc(username).stream()
                 .map(order -> this.modelMapper.map(order, OrderServiceModel.class))
                 .collect(Collectors.toUnmodifiableList());
     }
@@ -114,10 +92,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceModel getOrderById(String id) {
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order was not found!"));
-        if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
-            deleteOrder(order.getId());
-            throw new IllegalArgumentException("The order had expired and was deleted!");
-        }
         return this.modelMapper.map(order, OrderServiceModel.class);
+    }
+
+    @Scheduled(fixedRate = 21600000)
+    private void deleteExpiredOrders() {
+        List<Order> orders = this.orderRepository.findAll();
+        for (Order order : orders) {
+            if (LocalDate.now().isAfter(order.getOrderedOn().plusMonths(1))) {
+                this.orderRepository.deleteById(order.getId());
+            }
+        }
     }
 }

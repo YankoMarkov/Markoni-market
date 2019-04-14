@@ -55,7 +55,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
-    @PageTitle("\uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCCE \uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
+    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1 \uD835\uDC9E\uD835\uDCB6\uD835\uDCC9\uD835\uDC52\uD835\uDC54\uD835\uDC5C\uD835\uDCC7\uD835\uDCBE\uD835\uDC52\uD835\uDCC8")
     public ModelAndView all(ModelAndView modelAndView) {
         List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
                 .map(category -> this.modelMapper.map(category, CategoryViewModel.class))

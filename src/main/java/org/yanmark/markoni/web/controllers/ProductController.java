@@ -30,15 +30,12 @@ import java.util.stream.Collectors;
 public class ProductController extends BaseController {
 
     private final ProductService productService;
-    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductController(ProductService productService,
-                             UserService userService,
                              ModelMapper modelMapper) {
         this.productService = productService;
-        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -63,7 +60,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
-    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
+    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1 \uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9\uD835\uDCC8")
     public ModelAndView all(ModelAndView modelAndView) {
         List<ProductServiceModel> productServiceModels = this.productService.getAllProducts();
         List<ProductOrderViewModel> productAllViewModels = productServiceModels.stream()

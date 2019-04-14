@@ -48,7 +48,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/order/{id}")
     @PreAuthorize("isAuthenticated()")
-    @PageTitle("\uD835\uDCAA\uD835\uDCC7\uD835\uDCB9\uD835\uDC52\uD835\uDCC7")
+    @PageTitle("\uD835\uDCAA\uD835\uDCC7\uD835\uDCB9\uD835\uDC52\uD835\uDCC7 \uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9\uD835\uDCC8")
     public ModelAndView order(@PathVariable String id,
                               @ModelAttribute("productOrder") OrderBindingModel productOrder,
                               ModelAndView modelAndView) {

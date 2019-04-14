@@ -51,7 +51,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
-    @PageTitle("\uD835\uDC45\uD835\uDC52\uD835\uDC54\uD835\uDCBE\uD835\uDCC8\uD835\uDCC9\uD835\uDC52\uD835\uDCC7")
+    @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDC45\uD835\uDC52\uD835\uDC54\uD835\uDCBE\uD835\uDCC8\uD835\uDCC9\uD835\uDC52\uD835\uDCC7")
     public ModelAndView register(@ModelAttribute("userRegister") UserRegisterBindingModel userRegister) {
         return this.view("/users/register");
     }
@@ -73,14 +73,14 @@ public class UserController extends BaseController {
 
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
-    @PageTitle("\uD835\uDC3F\uD835\uDC5C\uD835\uDC54\uD835\uDCBE\uD835\uDCC3")
+    @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDC3F\uD835\uDC5C\uD835\uDC54\uD835\uDCBE\uD835\uDCC3")
     public ModelAndView login(@ModelAttribute("userLogin") UserLoginBindingModel userLogin) {
         return this.view("/users/login");
     }
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCBB\uD835\uDCBE\uD835\uDCC1\uD835\uDC52")
+    @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCBB\uD835\uDCBE\uD835\uDCC1\uD835\uDC52")
     public ModelAndView profile(Principal principal, ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         UserProfileViewModel userProfileViewModel = this.modelMapper.map(userServiceModel, UserProfileViewModel.class);
@@ -90,7 +90,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    @PageTitle("\uD835\uDC38\uD835\uDCB9\uD835\uDCBE\uD835\uDCC9")
+    @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDC38\uD835\uDCB9\uD835\uDCBE\uD835\uDCC9")
     public ModelAndView edit(Principal principal,
                              @ModelAttribute("userEdit") UserEditBindingModel userEdit,
                              ModelAndView modelAndView) {
@@ -117,7 +117,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ROOT')")
-    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1")
+    @PageTitle("\uD835\uDC9C\uD835\uDCC1\uD835\uDCC1 \uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7\uD835\uDCC8")
     public ModelAndView usersAll(@ModelAttribute("allUsers") UserAllViewModel allUsers,
                                  ModelAndView modelAndView) {
         List<UserServiceModel> userServiceModels = this.userService.getAllUsers();
@@ -156,7 +156,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/storage")
     @PreAuthorize("isAuthenticated()")
-    @PageTitle("\uD835\uDCAE\uD835\uDCC9\uD835\uDC5C\uD835\uDCC7\uD835\uDCB6\uD835\uDC54\uD835\uDC52")
+    @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDCAE\uD835\uDCC9\uD835\uDC5C\uD835\uDCC7\uD835\uDCB6\uD835\uDC54\uD835\uDC52")
     public ModelAndView userAccount(Principal principal, ModelAndView modelAndView) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         List<ProductHomeViewModel> pendingHomeModels = getProductHomeViewModels(userServiceModel, Status.PENDING);

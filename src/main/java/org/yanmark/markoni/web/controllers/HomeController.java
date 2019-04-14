@@ -76,6 +76,7 @@ public class HomeController extends BaseController {
     }
 
     @GetMapping("/search")
+    @PageTitle("\uD835\uDCAE\uD835\uDC52\uD835\uDCB6\uD835\uDCC7\uD835\uDCB8\uD835\uDCBD")
     public ModelAndView search(ModelAndView modelAndView,
                                @RequestParam(required = false) String searchName) {
         List<CategoryViewModel> categoryViewModels = this.categoryService.getAllCategories().stream()
