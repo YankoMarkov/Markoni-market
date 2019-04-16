@@ -83,8 +83,9 @@ public class CategoryController extends BaseController {
         if (bindingResult.hasErrors()) {
             return this.view("/categories/edit-category");
         }
-        CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryById(id);
-        this.categoryService.editCategory(categoryServiceModel, categoryCreate);
+        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryCreate, CategoryServiceModel.class);
+//        CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryById(id);
+        this.categoryService.editCategory(categoryServiceModel, id);
         return this.redirect("/categories/all");
     }
 

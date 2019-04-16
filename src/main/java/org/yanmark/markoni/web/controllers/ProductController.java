@@ -108,9 +108,8 @@ public class ProductController extends BaseController {
         if (bindingResult.hasErrors()) {
             return this.view("/products/edit-product");
         }
-        ProductServiceModel productServiceModel = productService.getProductById(id);
-        this.modelMapper.map(productEdit, productServiceModel);
-        this.productService.editProduct(productServiceModel);
+        ProductServiceModel productServiceModel = this.modelMapper.map(productEdit, ProductServiceModel.class);
+        this.productService.editProduct(productServiceModel, id);
         return this.redirect("/products/details/" + id);
     }
 

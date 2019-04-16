@@ -95,8 +95,8 @@
         <th:block th:replace="fragments/footer"/>
     </footer>
 </div>
-<script>
-    fetch('/comments/fetch')
+<script th:inline="javascript">
+    fetch("/comments/fetch/" + [[${product.id}]])
         .then((response) => response.json())
         .then((json) => {
 
@@ -108,7 +108,7 @@
 
             json.forEach((comment) => comments
                 .append(`<p><span class="font-italic">User:</span> ${comment.user} <span class="ml-5 font-italic">Added on:</span> ${comment.time}</p>`)
-                .append(`<p><span class="font-italic">Comment:</span> ${comment.comment}</p>`)
+                .append(`<div id="comment-container"><p><span class="font-italic">Comment:</span> ${comment.comment}</p></div>`)
                 .append(`<hr class="bg-markoni hr-2"/>`));
         })
         .catch((err) => console.log(err));

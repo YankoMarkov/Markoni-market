@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductServiceModel saveProduct(ProductServiceModel productService, ProductCreateBindingModel productCreate) throws IOException;
+    ProductServiceModel saveProduct(ProductServiceModel productService,
+                                    ProductCreateBindingModel productCreate) throws IOException;
 
-    ProductServiceModel editProduct(ProductServiceModel productService);
+    ProductServiceModel editProduct(ProductServiceModel productService, String id);
 
     void deleteProduct(String id);
 

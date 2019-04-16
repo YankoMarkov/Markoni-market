@@ -69,8 +69,7 @@ public class PackageController extends BaseController {
             return this.view("/packages/package-create");
         }
         PackageServiceModel packageServiceModel = this.modelMapper.map(packageCreate, PackageServiceModel.class);
-        UserServiceModel userServiceModel = this.userService.getUserById(packageCreate.getRecipient());
-        this.packageService.createPackage(packageServiceModel, userServiceModel);
+        this.packageService.createPackage(packageServiceModel, packageCreate);
         return this.redirect("/packages/pending");
     }
 
@@ -104,15 +103,15 @@ public class PackageController extends BaseController {
     public ModelAndView shippedPackages(ModelAndView modelAndView) {
         List<ShippedViewModel> shippedViewModels =
                 this.packageService.getAllPackagesByStatus(Status.SHIPPED).stream()
-                .map(pack -> {
-                    ShippedViewModel shippedViewModel = this.modelMapper.map(pack, ShippedViewModel.class);
-                    shippedViewModel.setRecipient(pack.getRecipient().getUsername());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-                    String date = pack.getEstimatedDeliveryDay().format(formatter);
-                    shippedViewModel.setEstimatedDeliveryDay(date);
-                    return shippedViewModel;
-                })
-                .collect(Collectors.toList());
+                        .map(pack -> {
+                            ShippedViewModel shippedViewModel = this.modelMapper.map(pack, ShippedViewModel.class);
+                            shippedViewModel.setRecipient(pack.getRecipient().getUsername());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+                            String date = pack.getEstimatedDeliveryDay().format(formatter);
+                            shippedViewModel.setEstimatedDeliveryDay(date);
+                            return shippedViewModel;
+                        })
+                        .collect(Collectors.toList());
         modelAndView.addObject("shipping", shippedViewModels);
         return this.view("/packages/shipped", modelAndView);
     }
@@ -132,13 +131,13 @@ public class PackageController extends BaseController {
     public ModelAndView pendingPackages(ModelAndView modelAndView) {
         List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels =
                 this.packageService.getAllPackagesByStatus(Status.PENDING).stream()
-                .map(pack -> {
-                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
-                            this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
-                    pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
-                    return pendingAndDeliveredViewModel;
-                })
-                .collect(Collectors.toList());
+                        .map(pack -> {
+                            PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
+                                    this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
+                            pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
+                            return pendingAndDeliveredViewModel;
+                        })
+                        .collect(Collectors.toList());
         modelAndView.addObject("pendings", pendingAndDeliveredViewModels);
         return this.view("/packages/pending", modelAndView);
     }
@@ -159,13 +158,13 @@ public class PackageController extends BaseController {
     public ModelAndView deliveredPackages(ModelAndView modelAndView) {
         List<PendingAndDeliveredViewModel> pendingAndDeliveredViewModels =
                 this.packageService.getAllPackagesByStatus(Status.DELIVERED).stream()
-                .map(pack -> {
-                    PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
-                            this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
-                    pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
-                    return pendingAndDeliveredViewModel;
-                })
-                .collect(Collectors.toList());
+                        .map(pack -> {
+                            PendingAndDeliveredViewModel pendingAndDeliveredViewModel =
+                                    this.modelMapper.map(pack, PendingAndDeliveredViewModel.class);
+                            pendingAndDeliveredViewModel.setRecipient(pack.getRecipient().getUsername());
+                            return pendingAndDeliveredViewModel;
+                        })
+                        .collect(Collectors.toList());
         modelAndView.addObject("delivering", pendingAndDeliveredViewModels);
         return this.view("/packages/delivered", modelAndView);
     }

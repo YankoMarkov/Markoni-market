@@ -58,8 +58,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductServiceModel editProduct(ProductServiceModel productService) {
-        Product product = this.modelMapper.map(productService, Product.class);
+    public ProductServiceModel editProduct(ProductServiceModel productService, String id) {
+        Product oldProduct = this.productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product with this id was not found!"));
+        ProductServiceModel productServiceModel = this.modelMapper.map(oldProduct, ProductServiceModel.class);
+        this.modelMapper.map(productService, productServiceModel);
+        Product product = this.modelMapper.map(productServiceModel, Product.class);
         try {
             product = this.productRepository.saveAndFlush(product);
         } catch (Exception e) {

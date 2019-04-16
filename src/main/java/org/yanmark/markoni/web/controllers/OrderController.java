@@ -65,13 +65,8 @@ public class OrderController extends BaseController {
         if (bindingResult.hasErrors()) {
             return this.view("/orders/order-product");
         }
-        ProductServiceModel productServiceModel = this.productService.getProductById(productOrder.getId());
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
-        OrderServiceModel orderServiceModel = new OrderServiceModel();
-        this.orderService.saveOrder(productServiceModel,
-                orderServiceModel,
-                userServiceModel,
-                productOrder.getQuantity());
+        this.orderService.saveOrder(productOrder, userServiceModel, productOrder.getQuantity());
         return this.redirect("/orders/my");
     }
 

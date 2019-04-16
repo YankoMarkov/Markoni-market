@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.Category;
-import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.errors.CategoryNameExistException;
 import org.yanmark.markoni.errors.CategoryNotFoundException;
@@ -42,9 +41,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryServiceModel editCategory(CategoryServiceModel categoryService, CategoryCreateBindingModel categoryCreate) {
-        categoryService.setName(categoryCreate.getName());
-        return saveCategory(categoryService);
+    public CategoryServiceModel editCategory(CategoryServiceModel categoryService, String id) {
+        Category category = this.categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category with this id was not found!"));
+        CategoryServiceModel categoryServiceModel = this.modelMapper.map(category, CategoryServiceModel.class);
+        categoryServiceModel.setName(categoryService.getName());
+        return saveCategory(categoryServiceModel);
     }
 
     @Override

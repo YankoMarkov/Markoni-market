@@ -78,3 +78,8 @@ textarea {
     width: auto;
     height: 200px;
 }
+
+#comment-container {
+    width: 480px;
+    word-wrap: break-word;
+}

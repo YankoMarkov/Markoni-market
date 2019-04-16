@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException(e.getMessage());
         }
         orderService.getProduct().setQuantity(orderService.getProduct().getQuantity() - orderService.getQuantity());
-        this.productService.editProduct(orderService.getProduct());
+        this.productService.editProduct(orderService.getProduct(), orderService.getProduct().getId());
         this.orderService.deleteOrder(orderService.getId());
         return this.modelMapper.map(user, UserServiceModel.class);
     }

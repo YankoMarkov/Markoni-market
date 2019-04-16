@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.yanmark.markoni.domain.entities.Package;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.entities.User;
+import org.yanmark.markoni.domain.models.bindings.packages.PackageCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.OrderProductServiceModel;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
@@ -54,19 +55,20 @@ public class PackageServiceImpl implements PackageService {
     }
 
     @Override
-    public PackageServiceModel createPackage(PackageServiceModel packageService, UserServiceModel userService) {
-        if (userService.getOrderProducts().isEmpty()) {
+    public PackageServiceModel createPackage(PackageServiceModel packageService, PackageCreateBindingModel packageCreate) {
+        UserServiceModel userServiceModel = this.userService.getUserById(packageCreate.getRecipient());
+        if (userServiceModel.getOrderProducts().isEmpty()) {
             throw new IllegalArgumentException("The user has no products!");
         }
-        packageService.setRecipient(userService);
-        packageService.setShippingAddress(userService.getAddress());
+        packageService.setRecipient(userServiceModel);
+        packageService.setShippingAddress(userServiceModel.getAddress());
         packageService.setStatus(Status.PENDING);
         packageService.setEstimatedDeliveryDay(LocalDateTime.now());
-        double weight = userService.getOrderProducts().stream()
+        double weight = userServiceModel.getOrderProducts().stream()
                 .mapToDouble(OrderProductServiceModel::getWeight).sum();
         packageService.setWeight(weight);
         StringBuilder description = new StringBuilder();
-        userService.getOrderProducts()
+        userServiceModel.getOrderProducts()
                 .forEach(order -> description.append(order.getName()).append(System.lineSeparator()));
         packageService.setDescription(description.toString());
         return savePackage(packageService);
