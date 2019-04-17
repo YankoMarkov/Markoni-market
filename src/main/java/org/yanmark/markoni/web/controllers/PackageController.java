@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.models.bindings.packages.PackageCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
-import org.yanmark.markoni.domain.models.services.ReceiptServiceModel;
 import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.domain.models.views.packages.PackageDetailsViewModel;
 import org.yanmark.markoni.domain.models.views.packages.PendingAndDeliveredViewModel;
@@ -172,10 +171,8 @@ public class PackageController extends BaseController {
     @GetMapping("/acquire/{id}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView acquirePackage(@PathVariable String id, Principal principal) {
-        PackageServiceModel packageServiceModel = this.packageService.getPackageById(id);
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
-        ReceiptServiceModel receiptServiceModel = new ReceiptServiceModel();
-        this.receiptService.saveReceipt(receiptServiceModel, packageServiceModel, userServiceModel);
+        this.receiptService.saveReceipt(id, userServiceModel);
         return this.redirect("/home");
     }
 

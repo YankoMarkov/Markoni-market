@@ -32,16 +32,16 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public ReceiptServiceModel saveReceipt(ReceiptServiceModel receiptService,
-                                           PackageServiceModel packageService,
-                                           UserServiceModel userService) {
-        packageService.setStatus(Status.ACQUIRED);
-        packageService = this.packageService.savePackage(packageService);
-        receiptService.setFee(BigDecimal.valueOf(packageService.getWeight()).multiply(BigDecimal.valueOf(2.67)));
-        receiptService.setIssuedOn(LocalDateTime.now());
-        receiptService.setRecipient(userService);
-        receiptService.setPakage(packageService);
-        Receipt receipt = this.modelMapper.map(receiptService, Receipt.class);
+    public ReceiptServiceModel saveReceipt(String id, UserServiceModel userService) {
+        PackageServiceModel packageServiceModel = this.packageService.getPackageById(id);
+        ReceiptServiceModel receiptServiceModel = new ReceiptServiceModel();
+        packageServiceModel.setStatus(Status.ACQUIRED);
+        packageServiceModel = this.packageService.savePackage(packageServiceModel);
+        receiptServiceModel.setFee(BigDecimal.valueOf(packageServiceModel.getWeight()).multiply(BigDecimal.valueOf(2.67)));
+        receiptServiceModel.setIssuedOn(LocalDateTime.now());
+        receiptServiceModel.setRecipient(userService);
+        receiptServiceModel.setPakage(packageServiceModel);
+        Receipt receipt = this.modelMapper.map(receiptServiceModel, Receipt.class);
         try {
             receipt = this.receiptRepository.saveAndFlush(receipt);
         } catch (Exception e) {

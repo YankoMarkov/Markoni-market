@@ -1,85 +1,83 @@
 package org.yanmark.markoni.unitTest.services;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.yanmark.markoni.domain.entities.Comment;
+import org.yanmark.markoni.domain.entities.Product;
+import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.models.bindings.comments.CommentCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.CommentServiceModel;
-import org.yanmark.markoni.domain.models.services.ProductServiceModel;
-import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.CommentRepository;
 import org.yanmark.markoni.repositories.ProductRepository;
-import org.yanmark.markoni.services.*;
+import org.yanmark.markoni.repositories.UserRepository;
+import org.yanmark.markoni.services.CommentService;
 import org.yanmark.markoni.utils.TestUtils;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CommentServiceTest {
 
-    @Mock
-    private ProductRepository mockProductRepository;
-
-    @Mock
-    private CategoryService mockCategoryService;
-
-    @Mock
-    private CloudinaryService mockCloudinaryService;
-
-    private ProductService productService;
-
-    @Mock
-    private UserService mockUserService;
-
-    @Mock
+    @MockBean
     private CommentRepository mockCommentRepository;
 
-    @Mock
-    private Principal principal;
-
+    @Autowired
     private CommentService commentService;
 
+    @MockBean
+    private Principal mockPrincipal;
+
+    @MockBean
+    private UserRepository mockUserRepository;
+
+    @MockBean
+    private ProductRepository mockProductRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
-    @Before
-    public void init() {
-        modelMapper = new ModelMapper();
-        productService = new ProductServiceImpl(mockProductRepository, mockCategoryService, mockCloudinaryService, modelMapper);
-        commentService = new CommentServiceImpl(mockCommentRepository, mockUserService, productService, modelMapper);
-    }
+    @Test
+    public void saveComment_whenCommentSave_returnComment() {
+        Comment testComment = TestUtils.getTestComment();
+        Product testProduct = TestUtils.getTestProduct();
+        User testUser = TestUtils.getTestUser();
+        when(mockProductRepository.findById(anyString()))
+                .thenReturn(Optional.of(testProduct));
+        when(mockProductRepository.saveAndFlush(any(Product.class)))
+                .thenReturn(testProduct);
+        when(mockUserRepository.findByUsername(anyString()))
+                .thenReturn(Optional.of(testUser));
+        when(mockPrincipal.getName())
+                .thenReturn(testUser.getUsername());
+        when(mockCommentRepository.saveAndFlush(any(Comment.class)))
+                .thenReturn(testComment);
 
-//    @Test
-//    public void saveComment_whenCommentSave_returnComment() {
-//        Comment testcomment = TestUtils.getTestComment();
-//        String productId = testcomment.getProduct().getId();
-//        when(principal.getName())
-//                .thenReturn("testUser");
-//        when(mockProductRepository.findById(anyString()))
-//                .thenReturn(any());
-//        ProductServiceModel productServiceModel = this.productService.getProductById(productId);
-//        UserServiceModel userServiceModel = this.mockUserService.getUserByUsername(principal.getName());
-//        CommentServiceModel commentService1 = new CommentServiceModel();
-//        CommentCreateBindingModel commentCreate = new CommentCreateBindingModel();
-//
-//        CommentServiceModel commentServiceModel = commentService.saveComment(commentService1, commentCreate, principal, productId);
-//    }
+        CommentServiceModel commentServiceModel = modelMapper.map(testComment, CommentServiceModel.class);
+        CommentCreateBindingModel commentCreateBindingModel = modelMapper.map(testComment, CommentCreateBindingModel.class);
+
+        CommentServiceModel result = commentService.saveComment(commentServiceModel, commentCreateBindingModel, mockPrincipal, testProduct.getId());
+
+        assertEquals(testComment.getId(), result.getId());
+    }
 
     @Test
     public void getAllCommentsByProduct_when2Comments_return2Comments() {
-        List<Comment> testComments = TestUtils.getTestComments(2);
         when(mockCommentRepository.findAllCommentsByProduct_IdOrderByTimeDesc(anyString()))
-                .thenReturn(testComments);
+                .thenReturn(TestUtils.getTestComments(2));
 
         List<CommentServiceModel> commentServiceModels = commentService.getAllCommentsByProduct(anyString());
 
@@ -88,7 +86,6 @@ public class CommentServiceTest {
 
     @Test
     public void getAllCommentsByProduct_whenNoComments_returnNoComments() {
-        List<Comment> testComments = TestUtils.getTestComments(2);
         when(mockCommentRepository.findAllCommentsByProduct_IdOrderByTimeDesc(anyString()))
                 .thenReturn(new ArrayList<>());
 

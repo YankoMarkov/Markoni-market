@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.yanmark.markoni.domain.entities.Category;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,13 +39,13 @@ public class CategoryServiceTest {
     @Test
     public void saveCategory_whenValidCategory_returnPersistedCategory() {
         Category testCategory = TestUtils.getTestCategory();
-        when(mockCategoryRepository.saveAndFlush(Mockito.any(Category.class)))
+        when(mockCategoryRepository.saveAndFlush(any(Category.class)))
                 .thenReturn(testCategory);
 
-        CategoryServiceModel categoryServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
-        CategoryServiceModel persistedModel = categoryService.saveCategory(categoryServiceModel);
+        CategoryServiceModel givenServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
+        CategoryServiceModel returnServiceModel = categoryService.saveCategory(givenServiceModel);
 
-        assertEquals(categoryServiceModel.getId(), persistedModel.getId());
+        assertEquals(givenServiceModel.getId(), returnServiceModel.getId());
     }
 
     @Test(expected = Exception.class)
@@ -59,7 +57,7 @@ public class CategoryServiceTest {
     @Test(expected = Exception.class)
     public void saveCategory_whenCategoryExist_throwException() {
         Category testCategory = TestUtils.getTestCategory();
-        when(mockCategoryRepository.findByName(Mockito.anyString()))
+        when(mockCategoryRepository.findByName(anyString()))
                 .thenReturn(Optional.of(testCategory));
 
         CategoryServiceModel categoryServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
@@ -70,52 +68,46 @@ public class CategoryServiceTest {
 
     @Test
     public void editCategory_whenEditCategory_returnEditedCategory() {
-        Category beforeEditCategory = TestUtils.getTestCategory();
+        Category testCategory = TestUtils.getTestCategory();
         Category editCategory = new Category() {{
             setName("testCategory");
         }};
-        String categoryId = beforeEditCategory.getId();
-        when(mockCategoryRepository.findById(categoryId))
-                .thenReturn(Optional.of(beforeEditCategory));
-        when(mockCategoryRepository.saveAndFlush(Mockito.any(Category.class)))
+        when(mockCategoryRepository.findById(anyString()))
+                .thenReturn(Optional.of(testCategory));
+        when(mockCategoryRepository.saveAndFlush(any()))
                 .thenReturn(editCategory);
-        CategoryServiceModel categoryServiceModel = modelMapper.map(editCategory, CategoryServiceModel.class);
+        CategoryServiceModel givenServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
+        CategoryServiceModel returnServiceModel = categoryService.editCategory(givenServiceModel, testCategory.getId());
 
-        CategoryServiceModel editCategoryServiceModel = categoryService.editCategory(categoryServiceModel, categoryId);
-
-        assertEquals("testCategory", editCategoryServiceModel.getName());
+        assertEquals("testCategory", returnServiceModel.getName());
     }
 
     @Test
     public void deleteCategory_whenDeleteCategory_void() {
         Category testCategory = TestUtils.getTestCategory();
 
-        String categoryId = testCategory.getId();
-        categoryService.deleteCategory(categoryId);
+        categoryService.deleteCategory(testCategory.getId());
 
-        verify(mockCategoryRepository).deleteById(categoryId);
+        verify(mockCategoryRepository).deleteById(testCategory.getId());
     }
 
     @Test
     public void getCategoryById_whenFindCategoryById_returnCategory() {
         Category testCategory = TestUtils.getTestCategory();
-        String categoryId = testCategory.getId();
-        when(mockCategoryRepository.findById(categoryId))
+        when(mockCategoryRepository.findById(anyString()))
                 .thenReturn(Optional.of(testCategory));
 
-        CategoryServiceModel categoryServiceModel = categoryService.getCategoryById(categoryId);
+        CategoryServiceModel categoryServiceModel = categoryService.getCategoryById(testCategory.getId());
 
-        assertNotNull(testCategory);
-        assertEquals(categoryId, categoryServiceModel.getId());
+        assertEquals(testCategory.getId(), categoryServiceModel.getId());
         assertEquals(testCategory.getName(), categoryServiceModel.getName());
     }
 
     @Test(expected = Exception.class)
     public void getCategoryById_whenNoFindCategoryById_throwException() {
         Category testCategory = TestUtils.getTestCategory();
-        String categoryId = testCategory.getId();
 
-        categoryService.getCategoryById(categoryId);
+        categoryService.getCategoryById(testCategory.getId());
 
         verify(mockCategoryRepository).findByName(anyString());
     }
@@ -123,23 +115,20 @@ public class CategoryServiceTest {
     @Test
     public void getCategoryByName_whenFindCategoryByName_returnCategory() {
         Category testCategory = TestUtils.getTestCategory();
-        String categoryName = testCategory.getName();
-        when(mockCategoryRepository.findByName(categoryName))
+        when(mockCategoryRepository.findByName(anyString()))
                 .thenReturn(Optional.of(testCategory));
 
-        CategoryServiceModel categoryServiceModel = categoryService.getCategoryByName(categoryName);
+        CategoryServiceModel categoryServiceModel = categoryService.getCategoryByName(testCategory.getName());
 
-        assertNotNull(testCategory);
-        assertEquals(categoryName, categoryServiceModel.getName());
+        assertEquals(testCategory.getName(), categoryServiceModel.getName());
         assertEquals(testCategory.getId(), categoryServiceModel.getId());
     }
 
     @Test(expected = Exception.class)
     public void getCategoryByName_whenNoFindCategoryByName_returnCategory() {
         Category testCategory = TestUtils.getTestCategory();
-        String categoryName = testCategory.getName();
 
-        categoryService.getCategoryByName(categoryName);
+        categoryService.getCategoryByName(testCategory.getName());
 
         verify(mockCategoryRepository).findByName(anyString());
     }

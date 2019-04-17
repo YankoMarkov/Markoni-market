@@ -1,84 +1,73 @@
 package org.yanmark.markoni.unitTest.services;
 
-import org.junit.Before;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Uploader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
-import org.springframework.mock.web.MockMultipartFile;
-import org.yanmark.markoni.domain.entities.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
-import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.repositories.CategoryRepository;
 import org.yanmark.markoni.repositories.ProductRepository;
-import org.yanmark.markoni.services.*;
+import org.yanmark.markoni.services.CategoryService;
+import org.yanmark.markoni.services.CloudinaryService;
+import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.utils.TestUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ProductServiceTest {
 
-    @Mock
+    @MockBean
     private ProductRepository mockProductRepository;
 
-    @Mock
+    @MockBean
     private CategoryRepository mockCategoryRepository;
 
-    private CategoryService categoryService;
-
-    @Mock
-    private CloudinaryService mockCloudinaryService;
-
+    @Autowired
     private ProductService productService;
 
+    @MockBean
+    private Cloudinary mockCloudinary;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
-    @Before
-    public void init() {
-        modelMapper = new ModelMapper();
-        categoryService = new CategoryServiceImpl(mockCategoryRepository, modelMapper);
-        productService = new ProductServiceImpl(mockProductRepository, categoryService, mockCloudinaryService, modelMapper);
-    }
-
+    //TODO implement mock cloudinary
 //    @Test
 //    public void saveProduct_whenSaveProduct_returnPersistedProduct() throws IOException {
 //        Product testProduct = TestUtils.getTestProduct();
-//        String productName = testProduct.getName();
-//        List<Category> testCategories = TestUtils.getTestCategories(2);
-//        Category testCategory = new Category() {{
-//            setId("0x");
-//            setName("model 0");
-//        }};
 //        when(mockCategoryRepository.findAllOrderByName())
-//                .thenReturn(testCategories);
-//        MockMultipartFile file = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
-//        when(mockCloudinaryService.uploadImage(file))
-//                .thenReturn(anyString());
-//        ProductCreateBindingModel productCreateBindingModel = modelMapper.map(testProduct, ProductCreateBindingModel.class);
-//        productCreateBindingModel.setCategories(Set.of(testCategory.getId()));
-//        CategoryServiceModel categoryServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
-//        Set<CategoryServiceModel> categoriesServiceModels = new HashSet<>();
-//        categoriesServiceModels.add(categoryServiceModel);
+//                .thenReturn(TestUtils.getTestCategories(2));
+//        when(mockProductRepository.saveAndFlush(any(Product.class)))
+//                .thenReturn(testProduct);
+//
 //        ProductServiceModel productServiceModel = modelMapper.map(testProduct, ProductServiceModel.class);
-//        productServiceModel.setCategories(categoriesServiceModels);
-//        productServiceModel.setImage(anyString());
+//        ProductCreateBindingModel productCreateBindingModel = modelMapper.map(testProduct, ProductCreateBindingModel.class);
 //
-//        ProductServiceModel persistedModel = productService.saveProduct(productServiceModel, productCreateBindingModel);
+//        ProductServiceModel result = productService.saveProduct(productServiceModel, productCreateBindingModel);
 //
-//        verify(mockProductRepository).findByName(productName);
-//        assertEquals(productServiceModel.getId(), persistedModel.getId());
+//        assertEquals(testProduct.getId(), result.getId());
 //    }
 
     @Test(expected = Exception.class)
@@ -90,11 +79,12 @@ public class ProductServiceTest {
     @Test(expected = Exception.class)
     public void saveProduct_whenProductExist_throwException() throws IOException {
         Product testProduct = TestUtils.getTestProduct();
-        when(mockProductRepository.findByName(Mockito.anyString()))
+        when(mockProductRepository.findByName(anyString()))
                 .thenReturn(Optional.of(testProduct));
 
         ProductCreateBindingModel productCreateBindingModel = modelMapper.map(testProduct, ProductCreateBindingModel.class);
         ProductServiceModel productServiceModel = modelMapper.map(testProduct, ProductServiceModel.class);
+
         productService.saveProduct(productServiceModel, productCreateBindingModel);
 
         verify(mockProductRepository).saveAndFlush(any());
@@ -102,20 +92,19 @@ public class ProductServiceTest {
 
     @Test
     public void editProduct_whenEditProduct_returnEditedProduct() {
-        Product beforeEditProduct = TestUtils.getTestProduct();
+        Product testProduct = TestUtils.getTestProduct();
         Product editProduct = new Product() {{
             setWeight(3.5);
             setDescription("testDescription");
             setPrice(BigDecimal.valueOf(50));
         }};
-        String productId = beforeEditProduct.getId();
-        when(mockProductRepository.findById(productId))
-                .thenReturn(Optional.of(beforeEditProduct));
-        when(mockProductRepository.saveAndFlush(Mockito.any(Product.class)))
+        when(mockProductRepository.findById(anyString()))
+                .thenReturn(Optional.of(testProduct));
+        when(mockProductRepository.saveAndFlush(any(Product.class)))
                 .thenReturn(editProduct);
         ProductServiceModel productServiceModel = modelMapper.map(editProduct, ProductServiceModel.class);
 
-        ProductServiceModel editProductServiceModel = productService.editProduct(productServiceModel, productId);
+        ProductServiceModel editProductServiceModel = productService.editProduct(productServiceModel, testProduct.getId());
 
         assertEquals(Double.valueOf(3.5), editProductServiceModel.getWeight());
         assertEquals("testDescription", editProductServiceModel.getDescription());
@@ -126,10 +115,9 @@ public class ProductServiceTest {
     public void deleteProduct_whenDeleteProduct_void() {
         Product testProduct = TestUtils.getTestProduct();
 
-        String productId = testProduct.getId();
-        productService.deleteProduct(productId);
+        productService.deleteProduct(testProduct.getId());
 
-        verify(mockProductRepository).deleteById(productId);
+        verify(mockProductRepository).deleteById(testProduct.getId());
     }
 
     @Test
@@ -155,23 +143,20 @@ public class ProductServiceTest {
     @Test
     public void getProductByName_whenFindProductByName_returnProduct() {
         Product testProduct = TestUtils.getTestProduct();
-        String productName = testProduct.getName();
-        when(mockProductRepository.findByName(productName))
+        when(mockProductRepository.findByName(anyString()))
                 .thenReturn(Optional.of(testProduct));
 
-        ProductServiceModel productServiceModel = productService.getProductByName(productName);
+        ProductServiceModel productServiceModel = productService.getProductByName(testProduct.getName());
 
-        assertNotNull(testProduct);
-        assertEquals(productName, productServiceModel.getName());
+        assertEquals(testProduct.getName(), productServiceModel.getName());
         assertEquals(testProduct.getId(), productServiceModel.getId());
     }
 
     @Test(expected = Exception.class)
     public void getProductByName_whenNoFindProductByName_throwException() {
         Product testProduct = TestUtils.getTestProduct();
-        String productName = testProduct.getName();
 
-        productService.getProductByName(productName);
+        productService.getProductByName(testProduct.getName());
 
         verify(mockProductRepository).findByName(anyString());
     }
@@ -179,23 +164,20 @@ public class ProductServiceTest {
     @Test
     public void getProductById_whenFindProductById_returnProduct() {
         Product testProduct = TestUtils.getTestProduct();
-        String productId = testProduct.getId();
-        when(mockProductRepository.findById(productId))
+        when(mockProductRepository.findById(anyString()))
                 .thenReturn(Optional.of(testProduct));
 
-        ProductServiceModel productServiceModel = productService.getProductById(productId);
+        ProductServiceModel productServiceModel = productService.getProductById(testProduct.getId());
 
-        assertNotNull(testProduct);
-        assertEquals(productId, productServiceModel.getId());
+        assertEquals(testProduct.getId(), productServiceModel.getId());
         assertEquals(testProduct.getName(), productServiceModel.getName());
     }
 
     @Test(expected = Exception.class)
     public void getProductById_whenNoFindProductById_throwException() {
         Product testProduct = TestUtils.getTestProduct();
-        String productId = testProduct.getId();
 
-        productService.getProductById(productId);
+        productService.getProductById(testProduct.getId());
 
         verify(mockProductRepository).findById(anyString());
     }
@@ -203,7 +185,7 @@ public class ProductServiceTest {
     @Test
     public void getAllProductsByName_when1Products_return1Products() {
         String productName = "model";
-        when(mockProductRepository.findAllByName(productName))
+        when(mockProductRepository.findAllByName(anyString()))
                 .thenReturn(TestUtils.getTestProducts(2));
 
         List<ProductServiceModel> result = productService.getAllProductsByName(productName);
@@ -214,7 +196,7 @@ public class ProductServiceTest {
     @Test
     public void getAllProductsByName_whenNoProducts_returnNoProducts() {
         String productName = "model";
-        when(mockProductRepository.findAllByName(productName))
+        when(mockProductRepository.findAllByName(anyString()))
                 .thenReturn(new ArrayList<>());
 
         List<ProductServiceModel> result = productService.getAllProductsByName(productName);

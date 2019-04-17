@@ -1,9 +1,7 @@
 package org.yanmark.markoni.utils;
 
-import org.yanmark.markoni.domain.entities.Category;
-import org.yanmark.markoni.domain.entities.Comment;
-import org.yanmark.markoni.domain.entities.Product;
-import org.yanmark.markoni.domain.entities.User;
+import org.yanmark.markoni.domain.entities.Package;
+import org.yanmark.markoni.domain.entities.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -116,5 +114,49 @@ public class TestUtils {
                     setTime(LocalDateTime.now());
                 }})
                 .collect(Collectors.toList());
+    }
+
+    public static User getTestUser() {
+        return new User() {{
+            setId("1qaz2wsx");
+            setUsername("testUser");
+            setPassword("1qaz2wsx");
+            setEmail("t@t.t");
+            setAddress("testAddress");
+        }};
+    }
+
+    public static Receipt getTestReceipt() {
+        return new Receipt() {{
+            setId("1qaz2wsx");
+            setFee(BigDecimal.ONE);
+            setIssuedOn(LocalDateTime.now());
+            setPakage(new Package());
+            setRecipient(new User());
+        }};
+    }
+
+    public static List<Receipt> getTestReceipts(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(index -> new Receipt() {{
+                    setId(index + "x");
+                    setFee(BigDecimal.valueOf(index));
+                    setIssuedOn(LocalDateTime.now());
+                    setRecipient(new User());
+                    setPakage(new Package());
+                }})
+                .collect(Collectors.toList());
+    }
+
+    public static Package getTestPackage() {
+        return new Package() {{
+            setId("1qaz2wsx");
+            setDescription("testDescription");
+            setEstimatedDeliveryDay(LocalDateTime.now());
+            setRecipient(new User());
+            setShippingAddress("TestAddress");
+            setWeight(1.5);
+            setStatus(Status.ACQUIRED);
+        }};
     }
 }
