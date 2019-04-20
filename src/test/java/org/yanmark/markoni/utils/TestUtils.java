@@ -2,8 +2,11 @@ package org.yanmark.markoni.utils;
 
 import org.yanmark.markoni.domain.entities.Package;
 import org.yanmark.markoni.domain.entities.*;
+import org.yanmark.markoni.domain.models.bindings.comments.CommentEditBindingModel;
+import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +63,39 @@ public class TestUtils {
                 .collect(Collectors.toList());
     }
 
+    public static OrderProduct getTestOrderProduct() {
+        return new OrderProduct() {{
+            setId("1qaz2wsx");
+            setImage("imageTest");
+            setWeight(1.5);
+            setDescription("descriptionTest");
+            setPrice(BigDecimal.ONE);
+            setQuantity(1);
+        }};
+    }
+
+    public static Order getTestOrder() {
+        return new Order() {{
+            setId("1qaz2wsx");
+            setPrice(BigDecimal.ONE);
+            setCustomer(new User());
+            setOrderedOn(LocalDate.now());
+            setQuantity(1);
+        }};
+    }
+
+    public static List<Order> getTestOrders(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(index -> new Order() {{
+                    setId(index + "x");
+                    setQuantity(index);
+                    setOrderedOn(LocalDate.now());
+                    setCustomer(new User());
+                    setPrice(BigDecimal.ONE);
+                }})
+                .collect(Collectors.toList());
+    }
+
     public static Comment getTestComment() {
         return new Comment() {{
             setId("1qaz2wsx");
@@ -84,6 +120,15 @@ public class TestUtils {
             }});
             setComment("testComment");
             setTime(LocalDateTime.now());
+        }};
+    }
+
+    public static CommentEditBindingModel getTestEditComment() {
+        return new CommentEditBindingModel() {{
+            setId("1qaz2wsx");
+            setUser("testUser");
+            setTime("10-10-2019 22:31:00");
+            setComment("testComment");
         }};
     }
 
@@ -126,6 +171,16 @@ public class TestUtils {
         }};
     }
 
+    public static UserEditBindingModel getTestEditUser() {
+        return new UserEditBindingModel() {{
+            setUsername("testUser");
+            setPassword("1qaz2wsx");
+            setNewPassword("1qaz2wsx");
+            setConfirmNewPassword("1qaz2wsx");
+            setEmail("t@t.t");
+        }};
+    }
+
     public static Receipt getTestReceipt() {
         return new Receipt() {{
             setId("1qaz2wsx");
@@ -158,5 +213,35 @@ public class TestUtils {
             setWeight(1.5);
             setStatus(Status.ACQUIRED);
         }};
+    }
+
+    public static List<Package> getTestPackages(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(index -> new Package() {{
+                    setId(index + "x");
+                    setDescription("testDescription");
+                    setEstimatedDeliveryDay(LocalDateTime.now());
+                    setRecipient(new User());
+                    setShippingAddress("TestAddress");
+                    setWeight(1.5 + index);
+                    setStatus(Status.ACQUIRED);
+                }})
+                .collect(Collectors.toList());
+    }
+
+    public static UserRole getTestUserRole() {
+        return new UserRole() {{
+            setId("1qaz2wsx");
+            setAuthority("USER");
+        }};
+    }
+
+    public static List<UserRole> getTestUserRoles(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(index -> new UserRole() {{
+                    setId(index + "x");
+                    setAuthority("USER");
+                }})
+                .collect(Collectors.toList());
     }
 }

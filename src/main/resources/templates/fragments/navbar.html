@@ -63,7 +63,8 @@
                 <li class="nav-item active" sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
                     <div class="dropdown show">
                         <a class="nav-link active dropdown-toggle" th:href="@{#}" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="categoryProductDropdown">
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           id="categoryProductDropdown">
                             Category And Product
                         </a>
                         <div class="dropdown-menu" aria-labelledby="categoryProductDropdown">
@@ -85,6 +86,9 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active" sec:authorize="hasAuthority('ROOT')">
                     <a class="nav-link nav-link-white" th:href="@{/users/all}">All Users</a>
+                </li>
+                <li class="nav-item active" sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
+                    <a class="nav-link nav-link-white" th:href="@{/comments/all}">All Comments</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link nav-link-white" th:href="@{/home}">Home</a>

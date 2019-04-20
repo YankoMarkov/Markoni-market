@@ -1,4 +1,4 @@
-package org.yanmark.markoni.unitTest.services;
+package org.yanmark.markoni.services;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.yanmark.markoni.domain.entities.Category;
 import org.yanmark.markoni.domain.models.services.CategoryServiceModel;
 import org.yanmark.markoni.repositories.CategoryRepository;
-import org.yanmark.markoni.services.CategoryService;
-import org.yanmark.markoni.services.CategoryServiceImpl;
 import org.yanmark.markoni.utils.TestUtils;
 
 import java.util.ArrayList;

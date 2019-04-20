@@ -87,8 +87,7 @@ public class UserServiceImpl implements UserService {
             if (!roles.contains(userRole.getAuthority())) {
                 user.getAuthorities().add(userRole);
             }
-            if (roles.contains(userRole.getAuthority()) &&
-                    !userRole.getAuthority().equals("USER")) {
+            if (roles.contains(userRole.getAuthority())) {
                 UserRole role = user.getAuthorities().stream()
                         .filter(r -> r.getAuthority().equals(userRole.getAuthority()))
                         .findFirst().orElse(null);

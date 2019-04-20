@@ -1,4 +1,4 @@
-package org.yanmark.markoni.unitTest.services;
+package org.yanmark.markoni.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,6 @@ import org.yanmark.markoni.domain.models.services.ReceiptServiceModel;
 import org.yanmark.markoni.repositories.PackageRepository;
 import org.yanmark.markoni.repositories.ReceiptRepository;
 import org.yanmark.markoni.repositories.UserRepository;
-import org.yanmark.markoni.services.ReceiptService;
 import org.yanmark.markoni.utils.TestUtils;
 
 import java.util.ArrayList;

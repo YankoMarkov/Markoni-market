@@ -1,7 +1,6 @@
-package org.yanmark.markoni.unitTest.services;
+package org.yanmark.markoni.services;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.Uploader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -14,9 +13,6 @@ import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingM
 import org.yanmark.markoni.domain.models.services.ProductServiceModel;
 import org.yanmark.markoni.repositories.CategoryRepository;
 import org.yanmark.markoni.repositories.ProductRepository;
-import org.yanmark.markoni.services.CategoryService;
-import org.yanmark.markoni.services.CloudinaryService;
-import org.yanmark.markoni.services.ProductService;
 import org.yanmark.markoni.utils.TestUtils;
 
 import java.io.IOException;
