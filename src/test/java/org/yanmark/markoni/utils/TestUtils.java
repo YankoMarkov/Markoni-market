@@ -2,6 +2,7 @@ package org.yanmark.markoni.utils;
 
 import org.yanmark.markoni.domain.entities.Package;
 import org.yanmark.markoni.domain.entities.*;
+import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.bindings.comments.CommentEditBindingModel;
 import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
 
@@ -31,6 +32,12 @@ public class TestUtils {
                 .collect(Collectors.toList());
     }
 
+    public static CategoryCreateBindingModel getTestCategoryBindingModel() {
+        return new CategoryCreateBindingModel() {{
+            setName("testName");
+        }};
+    }
+
     public static Product getTestProduct() {
         Product testProduct = new Product();
         testProduct.setId("1qaz2wsx");
@@ -40,7 +47,7 @@ public class TestUtils {
         testProduct.setDescription("testDescription");
         testProduct.setPrice(BigDecimal.ONE);
         testProduct.setRating(0);
-        testProduct.setQuantity(1);
+        testProduct.setQuantity(10);
         testProduct.setComments(new HashSet<>());
         testProduct.setCategories(new HashSet<>());
         return testProduct;
@@ -56,7 +63,7 @@ public class TestUtils {
                     setDescription("description " + index);
                     setPrice(BigDecimal.valueOf(index));
                     setRating(0);
-                    setQuantity(index + 1);
+                    setQuantity(10);
                     setComments(new HashSet<>());
                     setCategories(new HashSet<>());
                 }})
@@ -66,6 +73,7 @@ public class TestUtils {
     public static OrderProduct getTestOrderProduct() {
         return new OrderProduct() {{
             setId("1qaz2wsx");
+            setName("testName");
             setImage("imageTest");
             setWeight(1.5);
             setDescription("descriptionTest");
@@ -79,6 +87,7 @@ public class TestUtils {
             setId("1qaz2wsx");
             setPrice(BigDecimal.ONE);
             setCustomer(new User());
+            setProduct(new Product());
             setOrderedOn(LocalDate.now());
             setQuantity(1);
         }};
@@ -91,6 +100,7 @@ public class TestUtils {
                     setQuantity(index);
                     setOrderedOn(LocalDate.now());
                     setCustomer(new User());
+                    setProduct(new Product());
                     setPrice(BigDecimal.ONE);
                 }})
                 .collect(Collectors.toList());
@@ -165,18 +175,38 @@ public class TestUtils {
         return new User() {{
             setId("1qaz2wsx");
             setUsername("testUser");
-            setPassword("1qaz2wsx");
+            setPassword("123");
             setEmail("t@t.t");
             setAddress("testAddress");
+            setPackages(new HashSet<>());
+            setReceipts(new HashSet<>());
+            setComments(new HashSet<>());
+            setAuthorities(new HashSet<>());
         }};
+    }
+
+    public static List<User> getTestUsers(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(index -> new User() {{
+                    setId(index + "x");
+                    setUsername("testUser" + index);
+                    setPassword("123");
+                    setEmail("t" + index + "@t.t");
+                    setAddress("testAddress");
+                    setPackages(new HashSet<>());
+                    setReceipts(new HashSet<>());
+                    setComments(new HashSet<>());
+                    setAuthorities(new HashSet<>());
+                }})
+                .collect(Collectors.toList());
     }
 
     public static UserEditBindingModel getTestEditUser() {
         return new UserEditBindingModel() {{
             setUsername("testUser");
-            setPassword("1qaz2wsx");
-            setNewPassword("1qaz2wsx");
-            setConfirmNewPassword("1qaz2wsx");
+            setPassword("123");
+            setNewPassword("1234");
+            setConfirmNewPassword("1234");
             setEmail("t@t.t");
         }};
     }

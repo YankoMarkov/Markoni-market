@@ -155,7 +155,7 @@ public class ReceiptServiceTest {
     }
 
     @Test
-    public void getAllReceiptByUser_whenUserIsNotValid_throwException() {
+    public void getAllReceiptByUser_whenUserIsNotValid_returnNoReceipts() {
         when(mockReceiptRepository.findAllByRecipient_Username(anyString()))
                 .thenReturn(new ArrayList<>());
 

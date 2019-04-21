@@ -87,7 +87,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void editProduct_whenEditProduct_returnEditedProduct() {
+    public void editProduct_whenEditProductAndValidProductId_returnEditedProduct() {
         Product testProduct = TestUtils.getTestProduct();
         Product editProduct = new Product() {{
             setWeight(3.5);
@@ -105,6 +105,23 @@ public class ProductServiceTest {
         assertEquals(Double.valueOf(3.5), editProductServiceModel.getWeight());
         assertEquals("testDescription", editProductServiceModel.getDescription());
         assertEquals(BigDecimal.valueOf(50), editProductServiceModel.getPrice());
+    }
+
+    @Test(expected = Exception.class)
+    public void editProduct_whenEditProductAndNoValidProductId_throwException() {
+        Product testProduct = TestUtils.getTestProduct();
+        Product editProduct = new Product() {{
+            setWeight(3.5);
+            setDescription("testDescription");
+            setPrice(BigDecimal.valueOf(50));
+        }};
+        when(mockProductRepository.saveAndFlush(any(Product.class)))
+                .thenReturn(editProduct);
+        ProductServiceModel productServiceModel = modelMapper.map(editProduct, ProductServiceModel.class);
+
+        productService.editProduct(productServiceModel, testProduct.getId());
+
+        verify(mockProductRepository).findById(anyString());
     }
 
     @Test
@@ -179,7 +196,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getAllProductsByName_when1Products_return1Products() {
+    public void getAllProductsByName_when2Products_return2Products() {
         String productName = "model";
         when(mockProductRepository.findAllByName(anyString()))
                 .thenReturn(TestUtils.getTestProducts(2));

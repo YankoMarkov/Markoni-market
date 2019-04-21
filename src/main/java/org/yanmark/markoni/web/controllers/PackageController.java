@@ -32,6 +32,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/packages")
 public class PackageController extends BaseController {
 
+    private static final String PACKAGES_PACKAGE_CREATE = "/packages/package-create";
+    private static final String PACKAGES_PENDING = "/packages/pending";
+    private static final String PACKAGES_PACKAGE_DETAILS = "/packages/package-details";
+    private static final String PACKAGES_SHIPPED = "/packages/shipped";
+    private static final String PACKAGES_DELIVERED = "/packages/delivered";
+
     private final PackageService packageService;
     private final UserService userService;
     private final ReceiptService receiptService;
@@ -57,7 +63,7 @@ public class PackageController extends BaseController {
                 .map(user -> this.modelMapper.map(user, UserViewModel.class))
                 .collect(Collectors.toList());
         modelAndView.addObject("users", userViewModels);
-        return this.view("/packages/package-create", modelAndView);
+        return this.view(PACKAGES_PACKAGE_CREATE, modelAndView);
     }
 
     @PostMapping("/create")
@@ -65,11 +71,11 @@ public class PackageController extends BaseController {
     public ModelAndView createConfirm(@Valid @ModelAttribute("packageCreate") PackageCreateBindingModel packageCreate,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/packages/package-create");
+            return this.view(PACKAGES_PACKAGE_CREATE);
         }
         PackageServiceModel packageServiceModel = this.modelMapper.map(packageCreate, PackageServiceModel.class);
         this.packageService.createPackage(packageServiceModel, packageCreate);
-        return this.redirect("/packages/pending");
+        return this.redirect(PACKAGES_PENDING);
     }
 
     @GetMapping("/details/{id}")
@@ -93,7 +99,7 @@ public class PackageController extends BaseController {
             }
         }
         modelAndView.addObject("package", packageDetailsViewModel);
-        return this.view("/packages/package-details", modelAndView);
+        return this.view(PACKAGES_PACKAGE_DETAILS, modelAndView);
     }
 
     @GetMapping("/shipped")
@@ -112,7 +118,7 @@ public class PackageController extends BaseController {
                         })
                         .collect(Collectors.toList());
         modelAndView.addObject("shipping", shippedViewModels);
-        return this.view("/packages/shipped", modelAndView);
+        return this.view(PACKAGES_SHIPPED, modelAndView);
     }
 
     @PostMapping("/shipped")
@@ -121,7 +127,7 @@ public class PackageController extends BaseController {
         PackageServiceModel packageServiceModel = this.packageService.getPackageById(shippedId);
         packageServiceModel.setStatus(Status.DELIVERED);
         this.packageService.savePackage(packageServiceModel);
-        return this.redirect("/packages/delivered");
+        return this.redirect(PACKAGES_DELIVERED);
     }
 
     @GetMapping("/pending")
@@ -138,7 +144,7 @@ public class PackageController extends BaseController {
                         })
                         .collect(Collectors.toList());
         modelAndView.addObject("pendings", pendingAndDeliveredViewModels);
-        return this.view("/packages/pending", modelAndView);
+        return this.view(PACKAGES_PENDING, modelAndView);
     }
 
     @PostMapping("/pending")
@@ -148,7 +154,7 @@ public class PackageController extends BaseController {
         packageServiceModel.setStatus(Status.SHIPPED);
         packageServiceModel.setEstimatedDeliveryDay(LocalDateTime.now().plusDays(getRandomDays()));
         this.packageService.savePackage(packageServiceModel);
-        return this.redirect("/packages/shipped");
+        return this.redirect(PACKAGES_SHIPPED);
     }
 
     @GetMapping("/delivered")
@@ -165,7 +171,7 @@ public class PackageController extends BaseController {
                         })
                         .collect(Collectors.toList());
         modelAndView.addObject("delivering", pendingAndDeliveredViewModels);
-        return this.view("/packages/delivered", modelAndView);
+        return this.view(PACKAGES_DELIVERED, modelAndView);
     }
 
     @GetMapping("/acquire/{id}")

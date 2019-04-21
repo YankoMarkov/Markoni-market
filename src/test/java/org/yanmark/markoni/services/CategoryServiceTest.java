@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class CategoryServiceTest {
 
     @Mock
@@ -75,9 +75,25 @@ public class CategoryServiceTest {
         when(mockCategoryRepository.saveAndFlush(any()))
                 .thenReturn(editCategory);
         CategoryServiceModel givenServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
+
         CategoryServiceModel returnServiceModel = categoryService.editCategory(givenServiceModel, testCategory.getId());
 
         assertEquals("testCategory", returnServiceModel.getName());
+    }
+
+    @Test(expected = Exception.class)
+    public void editCategory_whenNoEditCategory_throwException() {
+        Category testCategory = TestUtils.getTestCategory();
+        Category editCategory = new Category() {{
+            setName("testCategory");
+        }};
+        when(mockCategoryRepository.saveAndFlush(any(Category.class)))
+                .thenReturn(editCategory);
+        CategoryServiceModel givenServiceModel = modelMapper.map(testCategory, CategoryServiceModel.class);
+
+        categoryService.editCategory(givenServiceModel, testCategory.getId());
+
+        verify(mockCategoryRepository).findById(anyString());
     }
 
     @Test

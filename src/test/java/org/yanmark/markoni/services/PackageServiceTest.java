@@ -9,11 +9,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.yanmark.markoni.domain.entities.OrderProduct;
 import org.yanmark.markoni.domain.entities.Package;
-import org.yanmark.markoni.domain.entities.Status;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.models.bindings.packages.PackageCreateBindingModel;
 import org.yanmark.markoni.domain.models.services.PackageServiceModel;
-import org.yanmark.markoni.domain.models.services.UserServiceModel;
 import org.yanmark.markoni.repositories.OrderProductRepository;
 import org.yanmark.markoni.repositories.PackageRepository;
 import org.yanmark.markoni.repositories.UserRepository;
@@ -26,7 +24,9 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -69,8 +69,21 @@ public class PackageServiceTest {
         assertEquals(packageServiceModel.getId(), result.getId());
     }
 
+    @Test(expected = Exception.class)
+    public void savePackage_whenNoValidPackage_throwException() {
+        Package testPackage = TestUtils.getTestPackage();
+        User testUser = TestUtils.getTestUser();
+        when(mockUserRepository.saveAndFlush(any(User.class)))
+                .thenReturn(testUser);
+        PackageServiceModel packageServiceModel = modelMapper.map(testPackage, PackageServiceModel.class);
+
+        packageService.savePackage(packageServiceModel);
+
+        verify(mockPackageRepository).saveAndFlush(any(Package.class));
+    }
+
     @Test
-    public void createPackage_whenUserHasProduct_throwException() {
+    public void createPackage_whenUserHasProduct_returnPackage() {
         Package testPackage = TestUtils.getTestPackage();
         User testUser = TestUtils.getTestUser();
         OrderProduct testOrderProduct = TestUtils.getTestOrderProduct();
@@ -132,7 +145,8 @@ public class PackageServiceTest {
 //    public void getAllPackagesByUserAndStatus_whenValidUserAndStatus_return2Packages() {
 //        List<Package> testPackages = TestUtils.getTestPackages(2);
 //        User testUser = TestUtils.getTestUser();
-//        UserServiceModel userServiceModel = modelMapper.map(testUser,UserServiceModel.class);
+//        testUser.setPackages(new HashSet<>(testPackages));
+//        UserServiceModel userServiceModel = modelMapper.map(testUser, UserServiceModel.class);
 //        when(mockPackageRepository.findAllByRecipientAndStatus(testUser, any()))
 //                .thenReturn(testPackages);
 //
@@ -150,5 +164,14 @@ public class PackageServiceTest {
         PackageServiceModel packageServiceModel = packageService.getPackageById(anyString());
 
         assertEquals(testPackage.getId(), packageServiceModel.getId());
+    }
+
+    @Test(expected = Exception.class)
+    public void getPackageById_whenNoValidPackageId_returnPackages() {
+        Package testPackage = TestUtils.getTestPackage();
+
+        packageService.getPackageById(testPackage.getId());
+
+        verify(mockPackageRepository).findById(anyString());
     }
 }

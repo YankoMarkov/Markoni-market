@@ -29,6 +29,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/products")
 public class ProductController extends BaseController {
 
+    private static final String PRODUCTS_CREATE_PRODUCT = "/products/create-product";
+    private static final String PRODUCTS_ALL = "/products/all";
+    private static final String PRODUCTS_ALL_PRODUCTS = "/products/all-products";
+    private static final String PRODUCTS_PRODUCT_DETAILS = "/products/product-details";
+    private static final String PRODUCTS_EDIT_PRODUCT = "/products/edit-product";
+    private static final String PRODUCTS_DETAILS = "/products/details/";
+    private static final String PRODUCTS_DELETE_PRODUCT = "/products/delete-product";
+
     private final ProductService productService;
     private final ModelMapper modelMapper;
 
@@ -43,7 +51,7 @@ public class ProductController extends BaseController {
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
     @PageTitle("\uD835\uDCAB\uD835\uDCC7\uD835\uDC5C\uD835\uDCB9\uD835\uDCCA\uD835\uDCB8\uD835\uDCC9 \uD835\uDC9C\uD835\uDCB9\uD835\uDCB9")
     public ModelAndView add(@ModelAttribute("productCreate") ProductCreateBindingModel productCreate) {
-        return this.view("/products/create-product");
+        return this.view(PRODUCTS_CREATE_PRODUCT);
     }
 
     @PostMapping("/add")
@@ -51,11 +59,11 @@ public class ProductController extends BaseController {
     public ModelAndView addConfirm(@Valid @ModelAttribute("productCreate") ProductCreateBindingModel productCreate,
                                    BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
-            return view("/products/create-product");
+            return view(PRODUCTS_CREATE_PRODUCT);
         }
         ProductServiceModel productServiceModel = this.modelMapper.map(productCreate, ProductServiceModel.class);
         this.productService.saveProduct(productServiceModel, productCreate);
-        return this.redirect("/products/all");
+        return this.redirect(PRODUCTS_ALL);
     }
 
     @GetMapping("/all")
@@ -67,7 +75,7 @@ public class ProductController extends BaseController {
                 .map(product -> this.modelMapper.map(product, ProductOrderViewModel.class))
                 .collect(Collectors.toList());
         modelAndView.addObject("products", productAllViewModels);
-        return this.view("/products/all-products", modelAndView);
+        return this.view(PRODUCTS_ALL_PRODUCTS, modelAndView);
     }
 
     @GetMapping("/details/{id}")
@@ -81,8 +89,8 @@ public class ProductController extends BaseController {
                 .collect(Collectors.toList());
         productDetailsViewModel.setCategories(categories);
         modelAndView.addObject("product", productDetailsViewModel);
-        return this.view("/products/product-details", modelAndView);
-    }
+        return this.view(PRODUCTS_PRODUCT_DETAILS, modelAndView);
+}
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
@@ -97,7 +105,7 @@ public class ProductController extends BaseController {
                 .collect(Collectors.toList());
         productEditViewModel.setCategories(categories);
         modelAndView.addObject("product", productEditViewModel);
-        return this.view("/products/edit-product", modelAndView);
+        return this.view(PRODUCTS_EDIT_PRODUCT, modelAndView);
     }
 
     @PostMapping("/edit/{id}")
@@ -106,11 +114,11 @@ public class ProductController extends BaseController {
                                     @Valid @ModelAttribute("productEdit") ProductEditBindingModel productEdit,
                                     BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/products/edit-product");
+            return this.view(PRODUCTS_EDIT_PRODUCT);
         }
         ProductServiceModel productServiceModel = this.modelMapper.map(productEdit, ProductServiceModel.class);
         this.productService.editProduct(productServiceModel, id);
-        return this.redirect("/products/details/" + id);
+        return this.redirect(PRODUCTS_DETAILS + id);
     }
 
     @GetMapping("/delete/{id}")
@@ -124,14 +132,14 @@ public class ProductController extends BaseController {
                 .collect(Collectors.toList());
         productEditViewModel.setCategories(categories);
         modelAndView.addObject("product", productEditViewModel);
-        return this.view("/products/delete-product", modelAndView);
+        return this.view(PRODUCTS_DELETE_PRODUCT, modelAndView);
     }
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
     public ModelAndView deleteConfirm(@PathVariable String id) {
         this.productService.deleteProduct(id);
-        return this.redirect("/products/all");
+        return this.redirect(PRODUCTS_ALL);
     }
 
     @ExceptionHandler({ProductNameExistException.class})

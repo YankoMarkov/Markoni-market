@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 @Controller
 public class ReceiptController extends BaseController {
 
+    private static final String RECEIPTS_RECEIPT = "/receipts/receipt";
+    private static final String RECEIPTS_RECEIPT_DETAILS = "/receipts/receipt-details";
+
     private final ReceiptService receiptService;
     private final ModelMapper modelMapper;
 
@@ -46,7 +49,7 @@ public class ReceiptController extends BaseController {
                         })
                         .collect(Collectors.toList());
         modelAndView.addObject("receipts", receiptAllViewModels);
-        return this.view("/receipts/receipt", modelAndView);
+        return this.view(RECEIPTS_RECEIPT, modelAndView);
     }
 
     @GetMapping("/receipts/details/{id}")
@@ -64,6 +67,6 @@ public class ReceiptController extends BaseController {
         String date = receiptServiceModel.getIssuedOn().format(formatter);
         receiptDetailsViewModel.setIssuedOn(date);
         modelAndView.addObject("receipt", receiptDetailsViewModel);
-        return this.view("/receipts/receipt-details", modelAndView);
+        return this.view(RECEIPTS_RECEIPT_DETAILS, modelAndView);
     }
 }

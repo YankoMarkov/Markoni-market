@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/orders")
 public class OrderController extends BaseController {
 
+    private static final String ORDERS_ORDER_PRODUCT = "/orders/order-product";
+    private static final String ORDERS_MY = "/orders/my";
+    private static final String ORDERS_ALL_ORDERS = "/orders/all-orders";
+
     private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
@@ -55,7 +59,7 @@ public class OrderController extends BaseController {
         ProductServiceModel productServiceModel = this.productService.getProductById(id);
         OrderProductViewModel orderProductViewModel = this.modelMapper.map(productServiceModel, OrderProductViewModel.class);
         modelAndView.addObject("product", orderProductViewModel);
-        return this.view("/orders/order-product", modelAndView);
+        return this.view(ORDERS_ORDER_PRODUCT, modelAndView);
     }
 
     @PostMapping("/order")
@@ -63,11 +67,11 @@ public class OrderController extends BaseController {
     public ModelAndView orderConfirm(@Valid @ModelAttribute("productOrder") OrderBindingModel productOrder,
                                      Principal principal, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/orders/order-product");
+            return this.view(ORDERS_ORDER_PRODUCT);
         }
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         this.orderService.saveOrder(productOrder, userServiceModel, productOrder.getQuantity());
-        return this.redirect("/orders/my");
+        return this.redirect(ORDERS_MY);
     }
 
     @GetMapping("/buy/{id}")
@@ -83,7 +87,7 @@ public class OrderController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     public ModelAndView delete(@PathVariable String id) {
         this.orderService.deleteOrder(id);
-        return this.redirect("/orders/my");
+        return this.redirect(ORDERS_MY);
     }
 
     @GetMapping("/all")
@@ -115,7 +119,7 @@ public class OrderController extends BaseController {
         modelAndView.addObject("role", "ADMIN");
         modelAndView.addObject("orders", orderViewModels);
         modelAndView.addObject("totalPrice", totalPrice);
-        return this.view("/orders/all-orders", modelAndView);
+        return this.view(ORDERS_ALL_ORDERS, modelAndView);
     }
 
     @GetMapping("/my")
@@ -147,6 +151,6 @@ public class OrderController extends BaseController {
         modelAndView.addObject("role", "USER");
         modelAndView.addObject("orders", orderViewModels);
         modelAndView.addObject("totalPrice", totalPrice);
-        return this.view("/orders/all-orders", modelAndView);
+        return this.view(ORDERS_ALL_ORDERS, modelAndView);
     }
 }

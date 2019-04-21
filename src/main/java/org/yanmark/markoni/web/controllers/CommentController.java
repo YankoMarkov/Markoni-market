@@ -25,6 +25,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/comments")
 public class CommentController extends BaseController {
 
+    private static final String PRODUCTS_DETAILS = "/products/details/";
+    private static final String COMMENTS_ALL_COMMENTS = "/comments/all-comments";
+    private static final String COMMENTS_EDIT_COMMENT = "/comments/edit-comment";
+    private static final String COMMENTS_ALL = "/comments/all";
+    private static final String COMMENTS_DELETE_COMMENT = "/comments/delete-comment";
+
     private final CommentService commentService;
     private final ModelMapper modelMapper;
 
@@ -42,11 +48,11 @@ public class CommentController extends BaseController {
                                    BindingResult bindingResult,
                                    Principal principal) {
         if (bindingResult.hasErrors()) {
-            return this.redirect("/products/details/" + productId);
+            return this.redirect(PRODUCTS_DETAILS + productId);
         }
         CommentServiceModel commentServiceModel = this.modelMapper.map(commentCreate, CommentServiceModel.class);
         this.commentService.saveComment(commentServiceModel, commentCreate, principal, productId);
-        return this.redirect("/products/details/" + productId);
+        return this.redirect(PRODUCTS_DETAILS + productId);
     }
 
     @GetMapping("/all")
@@ -64,7 +70,7 @@ public class CommentController extends BaseController {
                 })
                 .collect(Collectors.toList());
         modelAndView.addObject("comments", commetnAllViewModels);
-        return this.view("/comments/all-comments", modelAndView);
+        return this.view(COMMENTS_ALL_COMMENTS, modelAndView);
     }
 
     @GetMapping("/edit/{id}")
@@ -80,7 +86,7 @@ public class CommentController extends BaseController {
         commentViewModel.setTime(date);
         commentViewModel.setUser(commentServiceModel.getUser().getUsername());
         modelAndView.addObject("comment", commentViewModel);
-        return this.view("/comments/edit-comment", modelAndView);
+        return this.view(COMMENTS_EDIT_COMMENT, modelAndView);
     }
 
     @PostMapping("/edit/{id}")
@@ -89,11 +95,11 @@ public class CommentController extends BaseController {
                                     @Valid @ModelAttribute("commentEdit") CommentEditBindingModel commentEdit,
                                     BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/comments/edit-comment");
+            return this.view(COMMENTS_EDIT_COMMENT);
         }
         CommentServiceModel commentServiceModel = this.modelMapper.map(commentEdit, CommentServiceModel.class);
         this.commentService.updateComment(commentServiceModel, commentEdit);
-        return this.redirect("/comments/all");
+        return this.redirect(COMMENTS_ALL);
     }
 
     @GetMapping("/delete/{id}")
@@ -108,14 +114,14 @@ public class CommentController extends BaseController {
         commentViewModel.setTime(date);
         commentViewModel.setUser(commentServiceModel.getUser().getUsername());
         modelAndView.addObject("comment", commentViewModel);
-        return this.view("/comments/delete-comment", modelAndView);
+        return this.view(COMMENTS_DELETE_COMMENT, modelAndView);
     }
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
     public ModelAndView deleteConfirm(@PathVariable String id) {
         this.commentService.deleteComment(id);
-        return this.redirect("/comments/all");
+        return this.redirect(COMMENTS_ALL);
     }
 
     @GetMapping("/fetch/{id}")

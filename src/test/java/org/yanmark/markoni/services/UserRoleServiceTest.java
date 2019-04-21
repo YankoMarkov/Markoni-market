@@ -49,7 +49,7 @@ public class UserRoleServiceTest {
     }
 
     @Test(expected = Exception.class)
-    public void getRoleByName_whenNoValidName_returnUserRole() {
+    public void getRoleByName_whenNoValidName_throwException() {
         UserRole testUserRole = TestUtils.getTestUserRole();
         when(mockUserRoleRepository.findByAuthority(anyString()))
                 .thenReturn(any());
@@ -71,7 +71,7 @@ public class UserRoleServiceTest {
     }
 
     @Test
-    public void getAllRoles_whenNoHasRoles_returnRoles() {
+    public void getAllRoles_whenNoHasRoles_returnNoRoles() {
         when(mockUserRoleRepository.findAll())
                 .thenReturn(new ArrayList<>());
 

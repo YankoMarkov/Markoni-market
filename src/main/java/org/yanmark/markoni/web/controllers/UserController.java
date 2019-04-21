@@ -33,6 +33,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController extends BaseController {
 
+    private static final String USERS_REGISTER = "/users/register";
+    private static final String USERS_LOGIN = "/users/login";
+    private static final String USERS_PROFILE = "/users/profile";
+    private static final String USERS_EDIT_PROFILE = "/users/edit-profile";
+    private static final String USERS_ALL_USERS = "/users/all-users";
+    private static final String USERS_ALL = "/users/all";
+    private static final String USERS_USER_STORAGE = "/users/user-storage";
+
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final PackageService packageService;
@@ -53,7 +61,7 @@ public class UserController extends BaseController {
     @PreAuthorize("isAnonymous()")
     @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDC45\uD835\uDC52\uD835\uDC54\uD835\uDCBE\uD835\uDCC8\uD835\uDCC9\uD835\uDC52\uD835\uDCC7")
     public ModelAndView register(@ModelAttribute("userRegister") UserRegisterBindingModel userRegister) {
-        return this.view("/users/register");
+        return this.view(USERS_REGISTER);
     }
 
     @PostMapping("/register")
@@ -61,21 +69,21 @@ public class UserController extends BaseController {
     public ModelAndView registerConfirm(@Valid @ModelAttribute("userRegister") UserRegisterBindingModel userRegister,
                                         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/users/register");
+            return this.view(USERS_REGISTER);
         }
         if (!userRegister.getPassword().equals(userRegister.getConfirmPassword())) {
-            return this.view("/users/register");
+            return this.view(USERS_REGISTER);
         }
         UserServiceModel userServiceModel = this.modelMapper.map(userRegister, UserServiceModel.class);
         this.userService.saveUser(userServiceModel);
-        return this.redirect("/users/login");
+        return this.redirect(USERS_LOGIN);
     }
 
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
     @PageTitle("\uD835\uDCB0\uD835\uDCC8\uD835\uDC52\uD835\uDCC7 \uD835\uDC3F\uD835\uDC5C\uD835\uDC54\uD835\uDCBE\uD835\uDCC3")
     public ModelAndView login(@ModelAttribute("userLogin") UserLoginBindingModel userLogin) {
-        return this.view("/users/login");
+        return this.view(USERS_LOGIN);
     }
 
     @GetMapping("/profile")
@@ -85,7 +93,7 @@ public class UserController extends BaseController {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         UserProfileViewModel userProfileViewModel = this.modelMapper.map(userServiceModel, UserProfileViewModel.class);
         modelAndView.addObject("userProfile", userProfileViewModel);
-        return this.view("/users/profile", modelAndView);
+        return this.view(USERS_PROFILE, modelAndView);
     }
 
     @GetMapping("/edit")
@@ -97,7 +105,7 @@ public class UserController extends BaseController {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         UserProfileViewModel userProfileViewModel = this.modelMapper.map(userServiceModel, UserProfileViewModel.class);
         modelAndView.addObject("user", userProfileViewModel);
-        return this.view("/users/edit-profile", modelAndView);
+        return this.view(USERS_EDIT_PROFILE, modelAndView);
     }
 
     @PostMapping("/edit")
@@ -105,14 +113,14 @@ public class UserController extends BaseController {
     public ModelAndView editConfirm(@Valid @ModelAttribute("userEdit") UserEditBindingModel userEdit,
                                     BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/users/edit-profile");
+            return this.view(USERS_EDIT_PROFILE);
         }
         if (!userEdit.getNewPassword().equals(userEdit.getConfirmNewPassword())) {
-            return this.view("/users/edit-profile");
+            return this.view(USERS_EDIT_PROFILE);
         }
         UserServiceModel userServiceModel = this.modelMapper.map(userEdit, UserServiceModel.class);
         this.userService.updateUser(userServiceModel, userEdit);
-        return this.redirect("/users/profile");
+        return this.redirect(USERS_PROFILE);
     }
 
     @GetMapping("/all")
@@ -133,7 +141,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toList());
 
         modelAndView.addObject("allUsers", usersViewModels);
-        return this.view("/users/all-users", modelAndView);
+        return this.view(USERS_ALL_USERS, modelAndView);
     }
 
     @PostMapping("/changeRole")
@@ -142,16 +150,16 @@ public class UserController extends BaseController {
                                    @Valid @ModelAttribute("role") RoleViewModel role,
                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return this.view("/users/all-users");
+            return this.view(USERS_ALL_USERS);
         }
         UserServiceModel userServiceModel = this.userService.getUserById(id);
         if (userServiceModel.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROOT"))) {
-            return this.redirect("/users/all");
+            return this.redirect(USERS_ALL);
         }
         UserRoleServiceModel userRoleServiceModel = this.userRoleService.getRoleByName(role.getAuthority());
         this.userService.updateUsersRole(userServiceModel, userRoleServiceModel);
-        return this.redirect("/users/all");
+        return this.redirect(USERS_ALL);
     }
 
     @GetMapping("/storage")
@@ -169,7 +177,7 @@ public class UserController extends BaseController {
                 .map(UserRoleServiceModel::getAuthority)
                 .collect(Collectors.toList());
         modelAndView.addObject("roles", roles);
-        return this.view("/users/user-storage", modelAndView);
+        return this.view(USERS_USER_STORAGE, modelAndView);
     }
 
     private List<ProductHomeViewModel> getProductHomeViewModels(UserServiceModel userServiceModel, Status status) {

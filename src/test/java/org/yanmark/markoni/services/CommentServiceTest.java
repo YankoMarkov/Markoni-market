@@ -104,6 +104,24 @@ public class CommentServiceTest {
     }
 
     @Test
+    public void getCommentById_whenValidCommentId_returnComment() {
+        Comment testComment = TestUtils.getTestComment();
+        when(mockCommentRepository.findById(anyString()))
+                .thenReturn(Optional.of(testComment));
+
+        CommentServiceModel result = commentService.getCommentById(anyString());
+
+        assertEquals(testComment.getId(), result.getId());
+    }
+
+    @Test(expected = Exception.class)
+    public void getCommentById_whenNoValidCommentId_throwException() {
+        commentService.getCommentById(anyString());
+
+        verify(mockCommentRepository).findById(anyString());
+    }
+
+    @Test
     public void getAllCommentsByProduct_when2Comments_return2Comments() {
         when(mockCommentRepository.findAllCommentsByProduct_IdOrderByTimeDesc(anyString()))
                 .thenReturn(TestUtils.getTestComments(2));
