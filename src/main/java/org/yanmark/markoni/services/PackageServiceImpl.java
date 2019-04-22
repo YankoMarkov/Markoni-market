@@ -22,17 +22,14 @@ import java.util.stream.Collectors;
 public class PackageServiceImpl implements PackageService {
 
     private final PackageRepository packageRepository;
-    private final OrderProductService orderProductService;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public PackageServiceImpl(PackageRepository packageRepository,
-                              OrderProductService orderProductService,
                               UserService userService,
                               ModelMapper modelMapper) {
         this.packageRepository = packageRepository;
-        this.orderProductService = orderProductService;
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
@@ -44,12 +41,6 @@ public class PackageServiceImpl implements PackageService {
             pakage = this.packageRepository.saveAndFlush(pakage);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
-        }
-        Set<OrderProductServiceModel> orders = packageService.getRecipient().getOrderProducts();
-        packageService.getRecipient().setOrderProducts(new HashSet<>());
-        this.userService.updateUserProducts(packageService.getRecipient());
-        for (OrderProductServiceModel order : orders) {
-            this.orderProductService.deleteOrderProduct(order.getId());
         }
         return this.modelMapper.map(pakage, PackageServiceModel.class);
     }

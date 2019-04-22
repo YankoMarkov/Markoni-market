@@ -66,6 +66,7 @@ public class CommentController extends BaseController {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
                     String date = comment.getTime().format(formatter);
                     commetnAllViewModel.setTime(date);
+                    commetnAllViewModel.setProduct(comment.getProduct().getId());
                     return commetnAllViewModel;
                 })
                 .collect(Collectors.toList());
@@ -85,6 +86,7 @@ public class CommentController extends BaseController {
         String date = commentServiceModel.getTime().format(formatter);
         commentViewModel.setTime(date);
         commentViewModel.setUser(commentServiceModel.getUser().getUsername());
+        commentViewModel.setProduct(commentServiceModel.getProduct().getId());
         modelAndView.addObject("comment", commentViewModel);
         return this.view(COMMENTS_EDIT_COMMENT, modelAndView);
     }
@@ -113,6 +115,7 @@ public class CommentController extends BaseController {
         String date = commentServiceModel.getTime().format(formatter);
         commentViewModel.setTime(date);
         commentViewModel.setUser(commentServiceModel.getUser().getUsername());
+        commentViewModel.setProduct(commentServiceModel.getProduct().getId());
         modelAndView.addObject("comment", commentViewModel);
         return this.view(COMMENTS_DELETE_COMMENT, modelAndView);
     }

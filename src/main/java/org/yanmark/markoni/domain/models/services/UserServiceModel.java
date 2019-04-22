@@ -15,14 +15,14 @@ public class UserServiceModel extends BaseServiceModel {
     private Set<PackageServiceModel> packages;
     private Set<ReceiptServiceModel> receipts;
     private Set<OrderProductServiceModel> orderProducts;
-    private List<CommentServiceModel> comments;
+    private Set<CommentServiceModel> comments;
 
     public UserServiceModel() {
         this.authorities = new HashSet<>();
         this.packages = new HashSet<>();
         this.receipts = new HashSet<>();
         this.orderProducts = new HashSet<>();
-        this.comments = new ArrayList<>();
+        this.comments = new HashSet<>();
     }
 
     public String getUsername() {
@@ -89,11 +89,11 @@ public class UserServiceModel extends BaseServiceModel {
         this.orderProducts = orderProducts;
     }
 
-    public List<CommentServiceModel> getComments() {
+    public Set<CommentServiceModel> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentServiceModel> comments) {
+    public void setComments(Set<CommentServiceModel> comments) {
         this.comments = comments;
     }
 }

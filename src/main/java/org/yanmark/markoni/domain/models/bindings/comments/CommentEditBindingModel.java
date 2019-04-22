@@ -9,6 +9,7 @@ public class CommentEditBindingModel {
     private String user;
     private String time;
     private String comment;
+    private String product;
 
     @NotNull(message = "Comment id cannot be null.")
     @NotBlank(message = "Comment id cannot be empty.")
@@ -48,5 +49,15 @@ public class CommentEditBindingModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @NotNull(message = "Product cannot be null.")
+    @NotBlank(message = "Product cannot be empty.")
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 }

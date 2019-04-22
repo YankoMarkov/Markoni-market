@@ -35,19 +35,25 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers("/categories/**",
                         "/products/add",
                         "/products/all",
-                        "/products/edit",
-                        "/products/delete").hasAnyAuthority("ADMIN", "MODERATOR")
+                        "/products/edit/**",
+                        "/products/delete/**",
+                        "/comments/all",
+                        "/comments/edit/**",
+                        "/comments/delete/**").hasAnyAuthority("ADMIN", "MODERATOR")
                 .antMatchers("/home",
-                        "/products/details",
+                        "/products/details/**",
                         "/comments/add",
-                        "/orders/order",
-                        "/orders/buy",
-                        "/orders/delete",
+                        "/comments/fetch/**",
+                        "/users/profile",
+                        "/users/edit/**",
+                        "/users/storage",
+                        "/orders/order/**",
+                        "/orders/buy/**",
+                        "/orders/delete/**",
                         "/orders/my",
-                        "/packages/details",
-                        "/packages/acquire",
-                        "/receipts",
-                        "/receipts/details").authenticated()
+                        "/packages/details/**",
+                        "/packages/acquire/**",
+                        "/receipts/**").authenticated()
                 .antMatchers("/users/all",
                         "/users/changeRole").hasAuthority("ROOT")
                 .anyRequest().authenticated()

@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc(secure = false)
+@AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class CategoryControllerTest {
 
@@ -33,7 +33,7 @@ public class CategoryControllerTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     public void testCreate_addCategory_returnAddCategoryPage() throws Exception {
         mockMvc.perform(get("/categories/add"))
                 .andExpect(view().name("/categories/create-category"))
@@ -41,11 +41,10 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser(authorities = {"ADMIN"})
     public void testCreate_addCategory_CategoryAdded() throws Exception {
-        CategoryCreateBindingModel categoryCreateBindingModel = TestUtils.getTestCategoryBindingModel();
-        mockMvc.perform(post("/categories/add"))
-                .andExpect(model().attribute("categoryCreate", categoryCreateBindingModel));
+        mockMvc.perform(post("/categories/add")
+                .param("name", "testCategory"));
 
         assertEquals(1, categoryRepository.count());
     }

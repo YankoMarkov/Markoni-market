@@ -16,6 +16,7 @@
         <hr class="bg-markoni w-25 hr-2"/>
         <form th:action="@{/comments/edit/{id}(id=${comment.id})}" th:method="post" th:object="${comment}"
               enctype="multipart/form-data" id="add-product-form" class="form w-25 mx-auto">
+            <input type="hidden" name="productId" th:field="*{product}">
             <div class="form-group" th:classappend="${#fields.hasErrors('user')}? 'text-danger'">
                 <label for="user" class="text-markoni">User</label>
                 <input type="text" class="form-control" id="user" name="user"

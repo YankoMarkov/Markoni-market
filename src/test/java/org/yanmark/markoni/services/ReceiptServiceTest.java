@@ -2,6 +2,7 @@ package org.yanmark.markoni.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,6 +11,8 @@ import org.yanmark.markoni.domain.entities.Package;
 import org.yanmark.markoni.domain.entities.Receipt;
 import org.yanmark.markoni.domain.entities.User;
 import org.yanmark.markoni.domain.models.services.ReceiptServiceModel;
+import org.yanmark.markoni.domain.models.services.UserServiceModel;
+import org.yanmark.markoni.repositories.OrderProductRepository;
 import org.yanmark.markoni.repositories.PackageRepository;
 import org.yanmark.markoni.repositories.ReceiptRepository;
 import org.yanmark.markoni.repositories.UserRepository;
@@ -41,12 +44,18 @@ public class ReceiptServiceTest {
     @MockBean
     private UserRepository mockUserRepository;
 
+    @MockBean
+    private OrderProductRepository mockOrderProductRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Test
     public void saveReceipt_whenValidPackageIdAndValidUser_returnReceipt() {
         Package testPackage = TestUtils.getTestPackage();
         User testUser = TestUtils.getTestUser();
         Receipt testReceipt = TestUtils.getTestReceipt();
-        when(mockPackageRepository.findById(anyString()))
+        when(mockPackageRepository.findById(testPackage.getId()))
                 .thenReturn(Optional.of(testPackage));
         when(mockPackageRepository.saveAndFlush(any(Package.class)))
                 .thenReturn(testPackage);
@@ -54,8 +63,9 @@ public class ReceiptServiceTest {
                 .thenReturn(testReceipt);
         when(mockUserRepository.saveAndFlush(any(User.class)))
                 .thenReturn(testUser);
+        UserServiceModel userServiceModel = modelMapper.map(testUser, UserServiceModel.class);
 
-        ReceiptServiceModel result = receiptService.saveReceipt(testPackage.getId(), any());
+        ReceiptServiceModel result = receiptService.saveReceipt(testPackage.getId(), userServiceModel);
 
         assertEquals(testReceipt.getId(), result.getId());
     }
@@ -65,7 +75,7 @@ public class ReceiptServiceTest {
         Package testPackage = TestUtils.getTestPackage();
         User testUser = TestUtils.getTestUser();
         Receipt testReceipt = TestUtils.getTestReceipt();
-        when(mockPackageRepository.findById(anyString()))
+        when(mockPackageRepository.findById(testPackage.getId()))
                 .thenReturn(Optional.of(testPackage));
         when(mockPackageRepository.saveAndFlush(any(Package.class)))
                 .thenReturn(testPackage);
@@ -73,8 +83,9 @@ public class ReceiptServiceTest {
                 .thenReturn(testReceipt);
         when(mockUserRepository.saveAndFlush(any(User.class)))
                 .thenReturn(testUser);
+        UserServiceModel userServiceModel = modelMapper.map(testUser, UserServiceModel.class);
 
-        ReceiptServiceModel result = receiptService.saveReceipt(anyString(), any());
+        ReceiptServiceModel result = receiptService.saveReceipt(anyString(), userServiceModel);
 
         assertEquals(testReceipt.getId(), result.getId());
     }
@@ -91,8 +102,9 @@ public class ReceiptServiceTest {
         User testUser = TestUtils.getTestUser();
         when(mockUserRepository.saveAndFlush(any(User.class)))
                 .thenReturn(testUser);
+        UserServiceModel userServiceModel = modelMapper.map(testUser, UserServiceModel.class);
 
-        receiptService.saveReceipt(null, any());
+        receiptService.saveReceipt(null, userServiceModel);
 
         verify(mockReceiptRepository).saveAndFlush(any(Receipt.class));
     }
@@ -100,8 +112,6 @@ public class ReceiptServiceTest {
     @Test(expected = Exception.class)
     public void saveReceipt_whenValidPackageIdAndNullUser_throwException() {
         Package testPackage = TestUtils.getTestPackage();
-        when(mockPackageRepository.saveAndFlush(any(Package.class)))
-                .thenReturn(testPackage);
 
         receiptService.saveReceipt(testPackage.getId(), null);
 

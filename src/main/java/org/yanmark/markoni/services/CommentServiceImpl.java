@@ -62,10 +62,12 @@ public class CommentServiceImpl implements CommentService {
     public CommentServiceModel updateComment(CommentServiceModel commentService,
                                              CommentEditBindingModel commentEdit) {
         UserServiceModel userServiceModel = this.userService.getUserByUsername(commentEdit.getUser());
+        ProductServiceModel productServiceModel = this.productService.getProductById(commentEdit.getProduct());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
         LocalDateTime time = LocalDateTime.parse(commentEdit.getTime(), formatter);
         commentService.setTime(time);
         commentService.setUser(userServiceModel);
+        commentService.setProduct(productServiceModel);
         Comment comment = this.modelMapper.map(commentService, Comment.class);
         try {
             comment = this.commentRepository.saveAndFlush(comment);

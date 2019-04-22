@@ -63,6 +63,9 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Product with this id was not found!"));
         ProductServiceModel productServiceModel = this.modelMapper.map(oldProduct, ProductServiceModel.class);
         this.modelMapper.map(productService, productServiceModel);
+        productServiceModel.setCategories(productService.getCategories());
+        productServiceModel.setImage(oldProduct.getImage());
+        productServiceModel.setId(oldProduct.getId());
         Product product = this.modelMapper.map(productServiceModel, Product.class);
         try {
             product = this.productRepository.saveAndFlush(product);

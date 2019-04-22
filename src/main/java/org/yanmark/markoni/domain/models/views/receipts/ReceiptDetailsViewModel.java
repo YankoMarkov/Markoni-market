@@ -6,6 +6,7 @@ public class ReceiptDetailsViewModel {
 
     private String id;
     private BigDecimal fee;
+    private BigDecimal total;
     private String issuedOn;
     private String recipient;
     private String deliveryAddress;
@@ -26,6 +27,14 @@ public class ReceiptDetailsViewModel {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public String getIssuedOn() {

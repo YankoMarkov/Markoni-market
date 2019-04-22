@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class ReceiptServiceModel extends BaseServiceModel {
 
     private BigDecimal fee;
+    private BigDecimal total;
     private LocalDateTime issuedOn;
     private UserServiceModel recipient;
     private PackageServiceModel pakage;
@@ -16,6 +17,14 @@ public class ReceiptServiceModel extends BaseServiceModel {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public LocalDateTime getIssuedOn() {

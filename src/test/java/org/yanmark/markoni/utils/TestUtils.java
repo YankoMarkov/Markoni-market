@@ -4,6 +4,7 @@ import org.yanmark.markoni.domain.entities.Package;
 import org.yanmark.markoni.domain.entities.*;
 import org.yanmark.markoni.domain.models.bindings.categories.CategoryCreateBindingModel;
 import org.yanmark.markoni.domain.models.bindings.comments.CommentEditBindingModel;
+import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
 import org.yanmark.markoni.domain.models.bindings.users.UserEditBindingModel;
 
 import java.math.BigDecimal;
@@ -68,6 +69,18 @@ public class TestUtils {
                     setCategories(new HashSet<>());
                 }})
                 .collect(Collectors.toList());
+    }
+
+    public static ProductCreateBindingModel getTestProductCreate() {
+        return new ProductCreateBindingModel(){{
+            setName("testName");
+            setImage(null);
+            setWeight(1.5);
+            setDescription("testDescription");
+            setPrice(BigDecimal.ONE);
+            setQuantity(1);
+            setCategories(new HashSet<>());
+        }};
     }
 
     public static OrderProduct getTestOrderProduct() {
@@ -215,6 +228,7 @@ public class TestUtils {
         return new Receipt() {{
             setId("1qaz2wsx");
             setFee(BigDecimal.ONE);
+            setTotal(BigDecimal.TEN);
             setIssuedOn(LocalDateTime.now());
             setPakage(new Package());
             setRecipient(new User());
@@ -225,7 +239,8 @@ public class TestUtils {
         return IntStream.range(0, count)
                 .mapToObj(index -> new Receipt() {{
                     setId(index + "x");
-                    setFee(BigDecimal.valueOf(index));
+                    setFee(BigDecimal.ONE);
+                    setTotal(BigDecimal.TEN);
                     setIssuedOn(LocalDateTime.now());
                     setRecipient(new User());
                     setPakage(new Package());

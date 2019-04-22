@@ -1,12 +1,13 @@
 package org.yanmark.markoni.services;
 
-import com.cloudinary.Cloudinary;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.yanmark.markoni.domain.entities.Product;
 import org.yanmark.markoni.domain.models.bindings.products.ProductCreateBindingModel;
@@ -29,6 +30,9 @@ import static org.mockito.Mockito.*;
 public class ProductServiceTest {
 
     @MockBean
+    private CloudinaryService mockCloudinaryService;
+
+    @MockBean
     private ProductRepository mockProductRepository;
 
     @MockBean
@@ -37,34 +41,35 @@ public class ProductServiceTest {
     @Autowired
     private ProductService productService;
 
-    @MockBean
-    private Cloudinary mockCloudinary;
-
     @Autowired
     private CategoryService categoryService;
 
     @Autowired
-    private CloudinaryService cloudinaryService;
-
-    @Autowired
     private ModelMapper modelMapper;
 
-    //TODO implement mock cloudinary
-//    @Test
-//    public void saveProduct_whenSaveProduct_returnPersistedProduct() throws IOException {
-//        Product testProduct = TestUtils.getTestProduct();
-//        when(mockCategoryRepository.findAllOrderByName())
-//                .thenReturn(TestUtils.getTestCategories(2));
-//        when(mockProductRepository.saveAndFlush(any(Product.class)))
-//                .thenReturn(testProduct);
-//
-//        ProductServiceModel productServiceModel = modelMapper.map(testProduct, ProductServiceModel.class);
-//        ProductCreateBindingModel productCreateBindingModel = modelMapper.map(testProduct, ProductCreateBindingModel.class);
-//
-//        ProductServiceModel result = productService.saveProduct(productServiceModel, productCreateBindingModel);
-//
-//        assertEquals(testProduct.getId(), result.getId());
-//    }
+    @Before
+    public void init() throws IOException {
+        when(this.mockCloudinaryService.uploadImage(any()))
+                .thenReturn("imageUrl");
+    }
+
+    @Test
+    public void saveProduct_whenSaveProduct_returnPersistedProduct() throws IOException {
+        Product testProduct = TestUtils.getTestProduct();
+        ProductCreateBindingModel testProductCreate = TestUtils.getTestProductCreate();
+        when(mockCategoryRepository.findAllOrderByName())
+                .thenReturn(TestUtils.getTestCategories(2));
+        when(mockProductRepository.saveAndFlush(any(Product.class)))
+                .thenReturn(testProduct);
+        MockMultipartFile file =
+                new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
+        testProductCreate.setImage(file);
+        ProductServiceModel productServiceModel = modelMapper.map(testProduct, ProductServiceModel.class);
+
+        ProductServiceModel result = productService.saveProduct(productServiceModel, testProductCreate);
+
+        assertEquals(testProduct.getId(), result.getId());
+    }
 
     @Test(expected = Exception.class)
     public void saveProduct_whenProductIsNull_throwException() throws IOException {

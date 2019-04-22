@@ -6,6 +6,7 @@ public class CommetnAllViewModel {
     private String user;
     private String time;
     private String comment;
+    private String product;
 
     public String getId() {
         return id;
@@ -37,5 +38,13 @@ public class CommetnAllViewModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 }

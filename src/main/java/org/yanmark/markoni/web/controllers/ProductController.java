@@ -16,13 +16,14 @@ import org.yanmark.markoni.domain.models.views.products.ProductEditViewModel;
 import org.yanmark.markoni.domain.models.views.products.ProductOrderViewModel;
 import org.yanmark.markoni.errors.ProductNameExistException;
 import org.yanmark.markoni.errors.ProductNotFoundException;
+import org.yanmark.markoni.services.CategoryService;
 import org.yanmark.markoni.services.ProductService;
-import org.yanmark.markoni.services.UserService;
 import org.yanmark.markoni.web.annotations.PageTitle;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -38,12 +39,15 @@ public class ProductController extends BaseController {
     private static final String PRODUCTS_DELETE_PRODUCT = "/products/delete-product";
 
     private final ProductService productService;
+    private final CategoryService categoryService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductController(ProductService productService,
+                             CategoryService categoryService,
                              ModelMapper modelMapper) {
         this.productService = productService;
+        this.categoryService = categoryService;
         this.modelMapper = modelMapper;
     }
 
@@ -90,7 +94,7 @@ public class ProductController extends BaseController {
         productDetailsViewModel.setCategories(categories);
         modelAndView.addObject("product", productDetailsViewModel);
         return this.view(PRODUCTS_PRODUCT_DETAILS, modelAndView);
-}
+    }
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
@@ -117,6 +121,10 @@ public class ProductController extends BaseController {
             return this.view(PRODUCTS_EDIT_PRODUCT);
         }
         ProductServiceModel productServiceModel = this.modelMapper.map(productEdit, ProductServiceModel.class);
+        Set<CategoryServiceModel> categoriesServiceModels = this.categoryService.getAllCategories().stream()
+                .filter(category -> productEdit.getCategories().contains(category.getId()))
+                .collect(Collectors.toSet());
+        productServiceModel.setCategories(categoriesServiceModels);
         this.productService.editProduct(productServiceModel, id);
         return this.redirect(PRODUCTS_DETAILS + id);
     }
